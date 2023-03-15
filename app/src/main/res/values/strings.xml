@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SwipePix</string>
+    <string name="socket_connection_error">Could not establish connection</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>
