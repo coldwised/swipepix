@@ -1,10 +1,10 @@
 package com.coldwised.swipepix.data.remote
 
-import com.coldwised.swipepix.domain.model.ImageModel
+import com.coldwised.swipepix.data.remote.dto.ImageDto
 
 interface ImagesService {
 
-    suspend fun getAllImages(): List<ImageModel>
+    suspend fun getAllImages(): List<ImageDto>
 
     companion object {
         const val BASE_URL = "http:/192.168.1.160:8080"

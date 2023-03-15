@@ -4,6 +4,7 @@ import com.coldwised.swipepix.domain.model.ImageModel
 import java.text.DateFormat
 import java.util.*
 
+@kotlinx.serialization.Serializable
 data class ImageDto(
     val url: String,
     val timeStamp: Long,
