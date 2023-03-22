@@ -5,4 +5,15 @@
     <string name="refresh_page_button_text">Повторить попытку</string>
     <string name="unknown_exception">Неизвестная ошибка. Попробуйте ещё раз</string>
     <string name="io_exception">Ошибка загрузки. Проверьте подключение к сети и повторите попытку.</string>
+    <string name="top_bar_title">Галерея</string>
+
+    <string name="theme_label_text">Тема</string>
+    <string name="theme_settings_title_text">Тема</string>
+    <string name="light_theme_text">Светлая тема</string>
+    <string name="dark_theme_text">Темная тема</string>
+    <string name="android_theme_text">Тема устройства</string>
+    <string name="use_dynamic_colors_text">Динамические цвета</string>
+    <string name="app_theme_title_text">Тема приложения:</string>
+    <string name="power_saving_mode_text">Режим энергосбережения</string>
+    <string name="power_saving_mode_theme">С учетом энергосбережения</string>
 </resources>

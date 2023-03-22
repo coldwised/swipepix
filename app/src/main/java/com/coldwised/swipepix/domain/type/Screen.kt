@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.type
+package com.coldwised.swipepix.domain.type
 
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.util.UiText

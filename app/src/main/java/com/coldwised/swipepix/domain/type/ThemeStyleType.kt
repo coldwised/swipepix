@@ -1,4 +1,4 @@
-package com.example.imagesproject.domain.type
+package com.coldwised.swipepix.domain.type
 
 enum class ThemeStyleType {
     FollowAndroidSystem,

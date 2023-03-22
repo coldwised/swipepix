@@ -10,12 +10,13 @@ import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.coldwised.swipepix.presentation.gallery_screen.ImagesViewModel
-import com.coldwised.swipepix.type.Screen
+import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.ErrorLabel
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.GalleryScreenTopBar
-import com.example.imagesproject.presentation.gallery_screen.full_screen_image.PagerScreen
+import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.LazyGridImages
 import kotlinx.collections.immutable.toImmutableList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
     navController: NavController,
@@ -40,7 +41,7 @@ fun GalleryScreen(
         ) {
             LazyGridImages(
                 lazyGridState = state.lazyGridState,
-                imagesUrlList = state.imagesList.toImmutableList(),
+                goodsList = state.goodsList.toImmutableList(),
                 onGalleryScreenEvent = viewModel::onGalleryScreenEvent
             )
         }
@@ -65,10 +66,10 @@ fun GalleryScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
-    PagerScreen(
-        paddingValues = savedPaddingValues,
-        imagesList = state.imagesList,
-        pagerScreenState = state.pagerScreenState,
-        onImageScreenEvent = viewModel::onImageScreenEvent,
-    )
+//    PagerScreen(
+//        paddingValues = savedPaddingValues,
+//        imagesList = state.goodsList,
+//        pagerScreenState = state.pagerScreenState,
+//        onImageScreenEvent = viewModel::onImageScreenEvent,
+//    )
 }

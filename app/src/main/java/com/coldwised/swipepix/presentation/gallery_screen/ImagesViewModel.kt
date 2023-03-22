@@ -3,17 +3,16 @@ package com.coldwised.swipepix.presentation.gallery_screen
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toSize
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
-import androidx.lifecycle.viewmodel.compose.saveable
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.state.ParcelableIntOffset
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.state.ParcelableSize
+import com.coldwised.swipepix.presentation.gallery_screen.full_screen.event.ImageScreenEvent
 import com.coldwised.swipepix.presentation.gallery_screen.full_screen.type.AnimationType
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.event.GalleryScreenEvent
 import com.coldwised.swipepix.presentation.gallery_screen.state.GalleryScreenState
+import com.coldwised.swipepix.util.Extension.convertPixelsToDp
 import com.coldwised.swipepix.util.Resource
+import com.coldwised.swipepix.domain.use_case.GetAppConfigurationStreamUseCase
+import com.coldwised.swipepix.domain.use_case.GetImagesUrlListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -22,19 +21,13 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 class ImagesViewModel @Inject constructor(
     private val getImagesUrlListUseCase: GetImagesUrlListUseCase,
-    savedStateHandle: SavedStateHandle,
     private val getAppConfigurationStreamUseCase: GetAppConfigurationStreamUseCase,
-    private val imageService: ImageService,
-    private val deleteImageUrlFromRoomDbUseCase: DeleteImageUrlFromRoomDbUseCase,
 ): ViewModel() {
 
-    private val _state by savedStateHandle.saveable(saver = GalleryScreenState.Saver, init = { MutableStateFlow(
-        GalleryScreenState()
-    ) })
+    private val _state = MutableStateFlow(GalleryScreenState())
     val state = _state.asStateFlow()
 
     init {
@@ -60,12 +53,6 @@ class ImagesViewModel @Inject constructor(
             }
             is ImageScreenEvent.OnBackToGallery -> {
                 onBackClicked()
-            }
-            is ImageScreenEvent.OnHideNotification -> {
-                onHideNotification()
-            }
-            is ImageScreenEvent.OnDeleteImageUrl -> {
-                deleteImageUrl(event.pagerIndex)
             }
             is ImageScreenEvent.OnDeleteDialogVisibilityChange -> {
                 changeDeleteDialogVisibility(event.visible)
@@ -136,57 +123,24 @@ class ImagesViewModel @Inject constructor(
 
     private fun onPagerIndexChanged(index: Int) {
         _state.update {
-            val url = it.imagesList[index]
-            notifyOpenedImage(url)
+            val product = it.goodsList[index]
             it.copy(
                 pagerScreenState = it.pagerScreenState.copy(
                     pagerIndex = index,
-                    topBarText = url
+                    topBarText = product.name
                 )
             )
         }
     }
 
-    private fun deleteImageUrl(pagerIndex: Int) {
-        viewModelScope.launch {
-            val stateValue = state.value
-            val imagesList = stateValue.imagesList
-            val imageUrl = imagesList[pagerIndex]
-            val newList = imagesList.minus(imageUrl)
-            val newPagerIndex = if(newList.size == pagerIndex) {
-                pagerIndex - 1
-            } else {
-                pagerIndex
-            }
-            deleteImageUrlFromRoomDbUseCase(imageUrl)
-            _state.update {
-                it.copy(
-                    imagesList = newList,
-                    pagerScreenState = it.pagerScreenState.copy(
-                        pagerIndex = newPagerIndex
-                    )
-                )
-            }
-            if(newList.isEmpty()) {
-                onHideNotification()
-            } else  {
-                onPagerIndexChanged(newPagerIndex)
-            }
-        }
-    }
-
-    private fun onHideNotification() {
-        imageService.hideNotification()
-    }
-
     private fun changeImageSize(size: Size) {
         _state.update {
             val imageState = it.pagerScreenState
-            if(imageState.painterIntrinsicSize.toSize() == size)
+            if(imageState.painterIntrinsicSize == size)
                 return
             it.copy(
                 pagerScreenState = imageState.copy(
-                    painterIntrinsicSize = ParcelableSize(size.width, size.height)
+                    painterIntrinsicSize = size
                 )
             )
         }
@@ -233,7 +187,7 @@ class ImagesViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     pagerScreenState = it.pagerScreenState.copy(
-                        imageOffset = ParcelableIntOffset(intOffset.x, intOffset.y)
+                        imageOffset = intOffset
                     )
                 )
             }
@@ -268,21 +222,19 @@ class ImagesViewModel @Inject constructor(
     private fun onImageClick(index: Int) {
         _state.update {
             val gridItemSize = it.lazyGridState.layoutInfo.visibleItemsInfo.first().size.toSize()
-            val imageUrl = it.imagesList[index]
-            notifyOpenedImage(imageUrl)
+            val product = it.goodsList[index]
             it.copy(
                 pagerScreenState = it.pagerScreenState.copy(
                     pagerIndex = index,
                     isVisible = true,
-                    topBarText = imageUrl,
-                    gridItemSize = ParcelableSize(convertPixelsToDp(gridItemSize.width, null), convertPixelsToDp(gridItemSize.height, null)),
+                    topBarText = product.name,
+                    gridItemSize = Size(convertPixelsToDp(gridItemSize.width, null), convertPixelsToDp(gridItemSize.height, null)),
                 ),
             )
         }
     }
 
     private fun onBackClicked() {
-        onHideNotification()
         val stateValue = state.value
         val imageStateValue = stateValue.pagerScreenState
         val layoutInfo = stateValue.lazyGridState.layoutInfo
@@ -346,10 +298,6 @@ class ImagesViewModel @Inject constructor(
         }
     }
 
-    private fun notifyOpenedImage(imageUrl: String) {
-        imageService.showNotification(imageUrl)
-    }
-
     fun onRefresh() {
         loadImageUrlList()
     }
@@ -368,7 +316,7 @@ class ImagesViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.update {
                             it.copy(
-                                imagesList = result.data.toImmutableList(),
+                                goodsList = result.data.toImmutableList(),
                             )
                         }
                     }
