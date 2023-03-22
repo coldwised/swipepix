@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
+import com.coldwised.swipepix.presentation.gallery_screen.full_screen.state.PagerScreenState
 import com.coldwised.swipepix.util.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.parcelize.Parcelize

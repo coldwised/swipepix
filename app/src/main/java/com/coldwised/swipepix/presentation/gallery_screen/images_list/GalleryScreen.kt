@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.coldwised.swipepix.presentation.gallery_screen.ImagesViewModel
-import com.example.imagesproject.domain.type.Screen
+import com.coldwised.swipepix.type.Screen
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.ErrorLabel
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.GalleryScreenTopBar
 import com.example.imagesproject.presentation.gallery_screen.full_screen_image.PagerScreen
