@@ -3,6 +3,7 @@ package com.coldwised.swipepix.data.repository
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.data.remote.GoodsApi
 import com.coldwised.swipepix.data.remote.dto.GoodDto
+import com.coldwised.swipepix.data.remote.dto.OfferDto
 import com.coldwised.swipepix.domain.repository.GoodsRepository
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.util.UiText
@@ -15,11 +16,16 @@ import javax.inject.Inject
 class GoodsRepositoryImpl @Inject constructor(
     private val goodsApi: GoodsApi,
 ): GoodsRepository {
-    override fun getAllGoods(): Flow<Resource<List<GoodDto>>> {
+    override fun getAllGoods(): Flow<Resource<List<OfferDto>>> {
         return flow {
             emit(
                 safeApiCall {
-                    goodsApi.getAllGoods()
+                    val f = goodsApi.getAllGoods()
+                    //val df = f.shop
+                    //val g = df
+                    val d = f.shop!!.name
+                    val ff = d
+                    listOf()
                 }
             )
         }

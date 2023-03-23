@@ -7,6 +7,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+//import retrofit2.converter.jaxb.JaxbConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
@@ -18,7 +20,7 @@ object AppModule {
     fun provideInterviewApplicationApi(): GoodsApi {
         return Retrofit.Builder()
             .baseUrl(GoodsApi.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(SimpleXmlConverterFactory.create())
             .build()
             .create()
     }
