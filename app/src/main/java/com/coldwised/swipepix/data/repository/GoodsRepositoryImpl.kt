@@ -1,14 +1,16 @@
 package com.coldwised.swipepix.data.repository
 
 import com.coldwised.swipepix.R
+import com.coldwised.swipepix.data.mappers.toOfferModel
 import com.coldwised.swipepix.data.remote.GoodsApi
-import com.coldwised.swipepix.data.remote.dto.GoodDto
-import com.coldwised.swipepix.data.remote.dto.OfferDto
+import com.coldwised.swipepix.domain.model.OfferModel
 import com.coldwised.swipepix.domain.repository.GoodsRepository
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.util.UiText
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -16,19 +18,14 @@ import javax.inject.Inject
 class GoodsRepositoryImpl @Inject constructor(
     private val goodsApi: GoodsApi,
 ): GoodsRepository {
-    override fun getAllGoods(): Flow<Resource<List<OfferDto>>> {
+    override fun getAllGoods(): Flow<Resource<List<OfferModel>>> {
         return flow {
             emit(
                 safeApiCall {
-                    val f = goodsApi.getAllGoods()
-                    //val df = f.shop
-                    //val g = df
-                    val d = f.shop!!.name
-                    val ff = d
-                    listOf()
+                    goodsApi.getAllGoods().shop?.offers?.map { it.toOfferModel() } ?: emptyList()
                 }
             )
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private inline fun <T> safeApiCall(apiCall: () -> T): Resource<T> {

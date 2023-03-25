@@ -1,7 +1,7 @@
 package com.coldwised.swipepix.data.remote
 
 import com.coldwised.swipepix.R
-import com.coldwised.swipepix.data.remote.dto.ImageDto
+import com.coldwised.swipepix.data.remote.dto.ImageModelDto
 import com.coldwised.swipepix.domain.model.ImageModel
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.util.UiText
@@ -51,8 +51,8 @@ class GallerySocketServiceImpl(
                 ?.filter { it is Frame.Text }
                 ?.map {
                     val json = (it as Frame.Text).readText()
-                    val imageDto = Json.decodeFromString<ImageDto>(json)
-                    imageDto.toImageModel()
+                    val imageModelDto = Json.decodeFromString<ImageModelDto>(json)
+                    imageModelDto.toImageModel()
                 } ?: flow {}
         } catch (e: Exception) {
             e.printStackTrace()

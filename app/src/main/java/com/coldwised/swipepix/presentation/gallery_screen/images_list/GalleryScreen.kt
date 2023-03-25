@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.coldwised.swipepix.presentation.gallery_screen.ImagesViewModel
 import com.coldwised.swipepix.domain.type.Screen
+import com.coldwised.swipepix.presentation.gallery_screen.full_screen.PagerScreen
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.ErrorLabel
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.GalleryScreenTopBar
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.LazyGridImages
@@ -66,10 +67,10 @@ fun GalleryScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
-//    PagerScreen(
-//        paddingValues = savedPaddingValues,
-//        imagesList = state.goodsList,
-//        pagerScreenState = state.pagerScreenState,
-//        onImageScreenEvent = viewModel::onImageScreenEvent,
-//    )
+    PagerScreen(
+        paddingValues = savedPaddingValues,
+        imagesList = state.goodsList,
+        pagerScreenState = state.pagerScreenState,
+        onImageScreenEvent = viewModel::onImageScreenEvent,
+    )
 }

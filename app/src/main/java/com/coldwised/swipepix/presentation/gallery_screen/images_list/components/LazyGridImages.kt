@@ -16,8 +16,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.coldwised.swipepix.R
-import com.coldwised.swipepix.data.remote.dto.GoodDto
-import com.coldwised.swipepix.data.remote.dto.OfferDto
+import com.coldwised.swipepix.domain.model.OfferModel
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.event.GalleryScreenEvent
 import kotlinx.collections.immutable.ImmutableList
 
@@ -25,7 +24,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun LazyGridImages(
     lazyGridState: LazyGridState,
-    goodsList: ImmutableList<OfferDto>,
+    goodsList: ImmutableList<OfferModel>,
     onGalleryScreenEvent: (GalleryScreenEvent) -> Unit,
 ) {
     val context = LocalContext.current
@@ -51,7 +50,7 @@ fun LazyGridImages(
             val painter = rememberAsyncImagePainter(
                 model = ImageRequest
                     .Builder(context)
-                    .data(product.name)
+                    .data(product.urlImageList[0])
                     .size(coil.size.Size.ORIGINAL)
                     .error(imageNotFoundId)
                     .placeholder(

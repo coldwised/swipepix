@@ -1,11 +1,10 @@
 package com.coldwised.swipepix.domain.repository
 
-import com.coldwised.swipepix.data.remote.dto.GoodDto
-import com.coldwised.swipepix.data.remote.dto.OfferDto
+import com.coldwised.swipepix.domain.model.OfferModel
 import com.coldwised.swipepix.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface GoodsRepository {
 
-    fun getAllGoods(): Flow<Resource<List<OfferDto>>>
+    fun getAllGoods(): Flow<Resource<List<OfferModel>>>
 }

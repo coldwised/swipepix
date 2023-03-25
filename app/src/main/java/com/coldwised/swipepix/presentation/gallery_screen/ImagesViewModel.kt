@@ -54,9 +54,6 @@ class ImagesViewModel @Inject constructor(
             is ImageScreenEvent.OnBackToGallery -> {
                 onBackClicked()
             }
-            is ImageScreenEvent.OnDeleteDialogVisibilityChange -> {
-                changeDeleteDialogVisibility(event.visible)
-            }
             is ImageScreenEvent.OnCurrentScaleChange -> {
                 changeCurrentScale(event.scale)
             }
@@ -68,16 +65,6 @@ class ImagesViewModel @Inject constructor(
             it.copy(
                 pagerScreenState = it.pagerScreenState.copy(
                     currentScale = scale
-                )
-            )
-        }
-    }
-
-    private fun changeDeleteDialogVisibility(visible: Boolean) {
-        _state.update {
-            it.copy(
-                pagerScreenState = it.pagerScreenState.copy(
-                    deleteDialogOpened = visible
                 )
             )
         }
