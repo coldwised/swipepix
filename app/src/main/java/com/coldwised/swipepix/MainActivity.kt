@@ -16,13 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.coldwised.swipepix.domain.type.Screen
-import com.coldwised.swipepix.presentation.GalleryScreen
+import com.coldwised.swipepix.presentation.gallery_screen.images_list.GalleryScreen
 import com.coldwised.swipepix.ui.theme.SwipePixTheme
 import com.coldwised.swipepix.util.Extension.isCompatibleWithApi33
 import com.coldwised.swipepix.util.Extension.shouldUseDarkTheme

@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation
+package com.coldwised.swipepix.presentation.gallery_screen.images_list
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
