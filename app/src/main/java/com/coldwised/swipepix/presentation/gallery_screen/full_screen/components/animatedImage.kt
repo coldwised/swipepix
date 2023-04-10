@@ -70,7 +70,7 @@ fun animatedImage(
                 placeholder = painterResource(id = imageNotFoundId),
                 error = painterResource(id = imageNotFoundId),
                 model = imageUrl,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillBounds,
                 contentDescription = null,
             )
         }

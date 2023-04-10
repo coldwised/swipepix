@@ -46,7 +46,7 @@ fun LazyGridImages(
                 mutableStateOf(true)
             }
             val imageNotFoundId = remember { R.drawable.image_not_found }
-            val contentScale = remember { ContentScale.Crop }
+            val contentScale = remember { ContentScale.FillBounds }
             val painter = rememberAsyncImagePainter(
                 model = ImageRequest
                     .Builder(context)
