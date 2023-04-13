@@ -14,7 +14,7 @@ data class ShopDto(
     @field:ElementList(name = "offer", inline = true)
     var offers: List<OfferDto>? = null,
 
-    @field:Path("categories")
-    @field:ElementList(name = "category", inline = true)
-    var categories: List<CategoryDto>? = null,
+//    @field:Path("categories")
+//    @field:ElementList(name = "category", inline = true)
+//    var categories: List<CategoryDto>? = null,
 )

@@ -6,6 +6,7 @@
     <string name="unknown_exception">Неизвестная ошибка. Попробуйте ещё раз</string>
     <string name="io_exception">Ошибка загрузки. Проверьте подключение к сети и повторите попытку.</string>
     <string name="top_bar_title">Галерея</string>
+    <string name="price_text">%1$.2f ₽</string>
 
     <string name="theme_label_text">Тема</string>
     <string name="theme_settings_title_text">Тема</string>
@@ -16,4 +17,5 @@
     <string name="app_theme_title_text">Тема приложения:</string>
     <string name="power_saving_mode_text">Режим энергосбережения</string>
     <string name="power_saving_mode_theme">С учетом энергосбережения</string>
+    <string name="no_comments">Нет отзывов</string>
 </resources>
