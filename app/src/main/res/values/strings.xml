@@ -18,4 +18,6 @@
     <string name="power_saving_mode_text">Режим энергосбережения</string>
     <string name="power_saving_mode_theme">С учетом энергосбережения</string>
     <string name="no_comments">Нет отзывов</string>
+	<string name="add_to_cart_text">В корзину</string>
+    <string name="remove_from_cart_text">Убрать</string>
 </resources>

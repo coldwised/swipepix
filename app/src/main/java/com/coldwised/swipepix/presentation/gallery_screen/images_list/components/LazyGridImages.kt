@@ -1,15 +1,13 @@
 package com.coldwised.swipepix.presentation.gallery_screen.images_list.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -33,11 +30,10 @@ import coil.request.ImageRequest
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.domain.model.OfferModel
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.event.GalleryScreenEvent
+import com.coldwised.swipepix.ui.theme.emptyStarbarColor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LazyGridImages(
@@ -49,7 +45,7 @@ fun LazyGridImages(
     val gridItemModifier = Modifier
         .padding(1.dp)
         .fillMaxWidth()
-        .height(220.dp)
+        .height(270.dp)
 
     LazyVerticalGrid(
         modifier = Modifier
@@ -124,61 +120,95 @@ fun LazyGridImages(
                     contentScale = contentScale,
                     contentDescription = null,
                 )
-                Row(
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .fillMaxWidth()
-                        ,
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    var isInCart by rememberSaveable {
-                        mutableStateOf(false)
-                    }
-                    Text(
-                        text = stringResource(id = R.string.price_text, product.price),
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    InputChip(
-                        modifier = Modifier.height(28.dp),
-                        selected  = isInCart,
-                        onClick = { isInCart = !isInCart },
-                        label = {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                painter = if(!isInCart) painterResource(id = R.drawable.ic_shopping_cart_24) else
-                                    painterResource(id = R.drawable.ic_remove_shopping_cart_24),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    )
-                }
+                Text(
+                    modifier = Modifier.padding(top = 8.dp),
+                    text = stringResource(id = R.string.price_text, product.price),
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 4.dp)
                         ,
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     Icon(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier
+                            .padding(end = 6.dp)
+                            .size(16.dp),
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
+                        tint = MaterialTheme.colorScheme.emptyStarbarColor
                     )
-                    Spacer(modifier = Modifier.width(2.dp))
                     Text(
                         text = stringResource(R.string.no_comments),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.emptyStarbarColor,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
                 Text(
                     text = product.name,
                     style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp),
+                    maxLines = 4,
                 )
+                var isInCart by rememberSaveable {
+                    mutableStateOf(false)
+                }
+                CustomOutlinedChip(
+                    selected =  !isInCart,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(30.dp),
+                    onClick = { isInCart = !isInCart }
+                ) {
+                    Text(
+                        text = if(!isInCart) stringResource(R.string.add_to_cart_text) else
+                            stringResource(R.string.remove_from_cart_text),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    if(isInCart) {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            painter = painterResource(id = R.drawable.ic_remove_shopping_cart_24)
+                            ,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = null
+                        )
+                    }
+                }
             }
         }
     }
+}
+
+@Composable
+fun CustomOutlinedChip(
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    content: @Composable (RowScope.() -> Unit),
+) {
+    OutlinedButton(
+        contentPadding = PaddingValues(0.dp),
+        onClick = onClick,
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+        shape = RoundedCornerShape(6.dp),
+        modifier = modifier,
+        content = {
+            content()
+        }
+    )
 }
