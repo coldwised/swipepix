@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -27,21 +28,21 @@ import coil.compose.AsyncImage
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.TransparentSystemBars
 import com.coldwised.swipepix.domain.model.OfferModel
+import com.coldwised.swipepix.presentation.gallery_screen.full_screen.components.*
 import com.coldwised.swipepix.presentation.gallery_screen.full_screen.event.ImageScreenEvent
 import com.coldwised.swipepix.presentation.gallery_screen.full_screen.state.PagerScreenState
 import com.coldwised.swipepix.presentation.gallery_screen.full_screen.type.AnimationType
 import com.coldwised.swipepix.ui.theme.SwipePixTheme
 import com.coldwised.swipepix.util.Extension.shouldUseDarkTheme
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.components.ImageScreenBottomBar
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.components.ImageScreenTopBar
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.components.animatedImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.material.math.MathUtils.lerp
 import com.mxalbert.zoomable.OverZoomConfig
 import com.mxalbert.zoomable.Zoomable
 import com.mxalbert.zoomable.rememberZoomableState
 import com.skydoves.orbital.Orbital
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -138,10 +139,9 @@ fun PagerScreen(
                         currentPage
                     ))
             }
-            val imageContent = animatedImage(
+            val imageContent = animatedItem(
                 pagerScreenState = pagerScreenState,
                 imageUrl = imageUrl,
-                isHorizontalOrientation = isHorizontalOrientation,
                 isRightLayoutDirection = isRightLayoutDirection,
                 paddingValues = paddingValues,
                 animationType = animationType,
@@ -152,17 +152,22 @@ fun PagerScreen(
             )
             Box(
                 modifier = Modifier
+                    .padding(paddingValues)
                     .background(backGroundColor)
                     .fillMaxSize()
             ) {
-                if(animationState.isAnimationInProgress) {
+                if(true) {
                     Orbital(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        imageContent()
+                        OfferDetails(
+                            image = { imageContent() },
+                            price = 1000f,
+                            name = "Fsdfkjh asdf khs adkjhsdfkj dsfkj"
+                        )
                     }
-                } else if(animationType == expandAnimationType) {
+                } else if(false) {
                     var isTouching by remember {
                         mutableStateOf(false)
                     }
@@ -236,6 +241,32 @@ fun PagerScreen(
                                             }
                                         } while (event.changes.any { it.pressed })
                                     }
+                                }
+                                .graphicsLayer {
+                                    // Calculate the absolute offset for the current page from the
+                                    // scroll position. We use the absolute value which allows us to mirror
+                                    // any effects for both directions
+                                    val pageOffset = (
+                                            (pagerState.currentPage - index) + pagerState
+                                                .currentPageOffsetFraction
+                                            ).absoluteValue
+
+                                    // We animate the scaleX + scaleY, between 85% and 100%
+                                    lerp(
+                                        0.85f,
+                                        1f,
+                                        1f - pageOffset.coerceIn(0f, 1f)
+                                    ).also { scale ->
+                                        scaleX = scale
+                                        scaleY = scale
+                                    }
+
+                                    // We animate the alpha, between 50% and 100%
+                                    alpha = lerp(
+                                        0.5f,
+                                        1f,
+                                        1f - pageOffset.coerceIn(0f, 1f)
+                                    )
                                 },
                             state = zoomableState,
                             onTap = {

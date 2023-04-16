@@ -38,7 +38,7 @@ fun ImageScreenTopBar(
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 titleContentColor = whiteColor,
-                containerColor = Color.Black.copy(alpha = 0.6f),
+                containerColor = Color.Black,
                 navigationIconContentColor = whiteColor,
             ),
             navigationIcon = {

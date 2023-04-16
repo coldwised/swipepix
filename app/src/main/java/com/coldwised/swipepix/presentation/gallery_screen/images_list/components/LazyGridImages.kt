@@ -3,6 +3,7 @@ package com.coldwised.swipepix.presentation.gallery_screen.images_list.component
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
@@ -32,7 +33,6 @@ import com.coldwised.swipepix.domain.model.OfferModel
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.event.GalleryScreenEvent
 import com.coldwised.swipepix.ui.theme.emptyStarbarColor
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -45,7 +45,7 @@ fun LazyGridImages(
     val gridItemModifier = Modifier
         .padding(1.dp)
         .fillMaxWidth()
-        .height(270.dp)
+        .height(266.dp)
 
     LazyVerticalGrid(
         modifier = Modifier
@@ -60,7 +60,7 @@ fun LazyGridImages(
                 mutableStateOf(true)
             }
             val imageNotFoundId = remember { R.drawable.image_not_found }
-            val contentScale = remember { ContentScale.FillBounds }
+            val contentScale = remember { ContentScale.Fit }
             val painter = rememberAsyncImagePainter(
                 model = ImageRequest
                     .Builder(context)
@@ -89,7 +89,7 @@ fun LazyGridImages(
                 }
             )
 
-            Column(
+            Box(
                 modifier = gridItemModifier
                     .clip(RoundedCornerShape(12.dp))
                     .clickable(onClick = {
@@ -107,58 +107,60 @@ fun LazyGridImages(
                     .padding(6.dp)
                 ,
             ) {
-                LaunchedEffect(key1 = true) {
-                    delay(500L)
-                }
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .clip(RoundedCornerShape(12.dp))
-                    ,
-                    painter = painter,
-                    contentScale = contentScale,
-                    contentDescription = null,
-                )
-                Text(
-                    modifier = Modifier.padding(top = 8.dp),
-                    text = stringResource(id = R.string.price_text, product.price),
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 4.dp)
-                        ,
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Start
+                Column(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(
+                    Image(
                         modifier = Modifier
-                            .padding(end = 6.dp)
-                            .size(16.dp),
-                        imageVector = Icons.Default.Star,
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color.White)
+                        ,
+                        painter = painter,
+                        contentScale = contentScale,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.emptyStarbarColor
                     )
                     Text(
-                        text = stringResource(R.string.no_comments),
+                        modifier = Modifier.padding(top = 8.dp),
+                        text = stringResource(id = R.string.price_text, product.price),
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp)
+                        ,
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .padding(end = 6.dp)
+                                .size(16.dp),
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.emptyStarbarColor
+                        )
+                        Text(
+                            text = stringResource(R.string.no_comments),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.emptyStarbarColor,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Text(
+                        text = product.name,
                         style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.emptyStarbarColor,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .padding(bottom = 8.dp),
+                        maxLines = 4,
                     )
                 }
-                Text(
-                    text = product.name,
-                    style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .padding(bottom = 8.dp),
-                    maxLines = 4,
-                )
                 var isInCart by rememberSaveable {
                     mutableStateOf(false)
                 }
@@ -166,7 +168,9 @@ fun LazyGridImages(
                     selected =  !isInCart,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(30.dp),
+                        .height(30.dp)
+                        .align(Alignment.BottomCenter)
+                    ,
                     onClick = { isInCart = !isInCart }
                 ) {
                     Text(
@@ -205,7 +209,7 @@ fun CustomOutlinedChip(
             contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(6.dp),
+        shape = RoundedCornerShape(8.dp),
         modifier = modifier,
         content = {
             content()
