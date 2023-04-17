@@ -40,7 +40,7 @@ fun animatedItem(
             modifier = if (animationType == AnimationType.EXPAND_ANIMATION) {
                 Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(250.dp)
             } else {
                 Modifier
                     .padding(
