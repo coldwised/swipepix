@@ -17,6 +17,11 @@ data class OfferDto(
     @field:Path("images")
     @field:ElementList(name = "image", inline = true, required = false)
     var images: List<ImageDto> = mutableListOf(),
+
+    @field:Path("params")
+    @field:ElementList(name = "param", inline = true, required = false)
+    var params: List<ParamDto> = mutableListOf(),
+
     @field:Element(name = "price", required = true)
     var price: Float = 0f,
 )

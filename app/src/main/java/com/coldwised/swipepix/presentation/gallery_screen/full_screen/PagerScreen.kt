@@ -147,7 +147,7 @@ fun PagerScreen(
                 animationType = animationType,
             )
             val backGroundColor by animateColorAsState(
-                targetValue = if (animationType == expandAnimationType) Color.Black else transparentColor,
+                targetValue = if (animationType == expandAnimationType) MaterialTheme.colorScheme.background else transparentColor,
                 animationSpec = tween(durationMillis = 270)
             )
             Box(
@@ -163,8 +163,7 @@ fun PagerScreen(
                     ) {
                         OfferDetails(
                             image = { imageContent() },
-                            price = 1000f,
-                            name = "Fsdfkjh asdf khs adkjhsdfkj dsfkj"
+                            offer = offer
                         )
                     }
                 } else if(false) {

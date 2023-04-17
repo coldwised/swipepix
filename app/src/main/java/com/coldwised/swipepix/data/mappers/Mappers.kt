@@ -7,6 +7,7 @@ fun OfferDto.toOfferModel(): OfferModel {
     return OfferModel(
         price = this.price,
         name = this.name,
-        urlImageList = if(images.isEmpty()) listOf("") else images.map { it.src }
+        urlImageList = if(images.isEmpty()) listOf("") else images.map { it.src },
+        params = params
     )
 }
