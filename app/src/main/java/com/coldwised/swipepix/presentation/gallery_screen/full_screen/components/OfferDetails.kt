@@ -61,27 +61,38 @@ fun OfferDetails(
                 }
             )
         ) {
-            Column {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+            ) {
                 Text(
+                    modifier = Modifier
+                        .padding(top = 16.dp, bottom = 8.dp)
+                        ,
                     text = offer.name,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
                 )
                 Text(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                    ,
                     text = stringResource(id = R.string.price_text, offer.price),
                     style = MaterialTheme.typography.titleLarge
                 )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 4.dp)
+                        .padding(bottom = 16.dp)
                     ,
-                    verticalAlignment = Alignment.Bottom,
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Icon(
                         modifier = Modifier
                             .padding(end = 6.dp)
-                            .size(30.dp),
+                            //.size(30.dp)
+                            ,
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.emptyStarbarColor
@@ -102,7 +113,8 @@ fun OfferDetails(
                     Row(
                         Modifier
                             .padding(bottom = 12.dp)
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = param.name,

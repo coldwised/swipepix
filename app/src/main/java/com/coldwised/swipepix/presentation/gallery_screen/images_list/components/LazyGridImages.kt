@@ -158,7 +158,7 @@ fun LazyGridImages(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
                             .padding(bottom = 8.dp),
-                        maxLines = 4,
+                        maxLines = 3,
                     )
                 }
                 var isInCart by rememberSaveable {

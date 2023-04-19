@@ -22,7 +22,7 @@ class GoodsRepositoryImpl @Inject constructor(
         return flow {
             emit(
                 safeApiCall {
-                    val file =  goodsApi.getAllGoods()
+                    val file = goodsApi.getAllGoods()
                     //val asdgf = file.shop?.categories
                     file.shop?.offers?.map { it.toOfferModel() } ?: emptyList()
                 }
