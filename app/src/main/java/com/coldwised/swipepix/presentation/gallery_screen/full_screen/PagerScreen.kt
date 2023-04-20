@@ -4,16 +4,19 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -23,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.R
@@ -40,6 +44,7 @@ import com.mxalbert.zoomable.OverZoomConfig
 import com.mxalbert.zoomable.Zoomable
 import com.mxalbert.zoomable.rememberZoomableState
 import com.skydoves.orbital.Orbital
+import com.skydoves.orbital.animateSharedElementTransition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -156,20 +161,21 @@ fun PagerScreen(
                     .background(backGroundColor)
                     .fillMaxSize()
             ) {
-                if(true) {
+                if(animationState.isAnimationInProgress) {
                     Orbital(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
                         OfferDetails(
                             image = { imageContent() },
-                            offer = offer
+                            offer = offer,
+                            animationType
                         )
                     }
-                } else if(false) {
-                    var isTouching by remember {
-                        mutableStateOf(false)
-                    }
+                } else if(animationType == expandAnimationType) {
+                    // var isTouching by remember {
+                    //     mutableStateOf(false)
+                    // }
                     val imageListSize = imagesList.size
                     HorizontalPager(
                         state = pagerState,
@@ -184,121 +190,151 @@ fun PagerScreen(
                         contentPadding = PaddingValues(0.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) { index ->
-                        val overZoomConfig = OverZoomConfig(
-                            minSnapScale = 1f,
-                            maxSnapScale = 1.7f
-                        )
-                        val zoomableState = rememberZoomableState(
-                            initialScale = 1f,
-                            minScale = 0.1f,
-                            overZoomConfig = overZoomConfig,
-                        )
-                        var imageSize by remember {
-                            mutableStateOf<Size?>(null)
+                        val pagerOffer = remember {
+                            imagesList[index]
                         }
-                        LaunchedEffect(key1 = isTouching) {
-                            val currentImageOffset = pagerState.currentPageOffsetFraction
-                            if(currentImageOffset > 0.1f || currentImageOffset < -0.1f) {
-                                coroutineScope.launch(Dispatchers.Main) {
-                                    zoomableState.animateScaleTo(1f)
+                        OfferDetails(
+                            image = {
+                                var isSuccess by remember {
+                                    mutableStateOf(true)
                                 }
-                            }
-                        }
-                        LaunchedEffect(key1 = currentPage) {
-                            if(imageSize != null && currentPage == index)
-                                onImageScreenEvent(
-                                    ImageScreenEvent.OnPagerCurrentImageChange(
-                                        imageSize!!
-                                    ))
-                        }
-                        LaunchedEffect(key1 = imageListSize) {
-                            if(imageSize != null && currentPage == index)
-                                onImageScreenEvent(
-                                    ImageScreenEvent.OnPagerCurrentImageChange(
-                                        imageSize!!
-                                    ))
-                        }
-                        val zoomableStateScale = zoomableState.scale
-                        LaunchedEffect(key1 = zoomableStateScale) {
-                            if(zoomableStateScale <= 0.5) {
-                                onImageScreenEvent(ImageScreenEvent.OnCurrentScaleChange(zoomableStateScale))
-                                if(!isTouching) {
-                                    onImageScreenEvent(ImageScreenEvent.OnBackToGallery)
-                                }
-                            }
-                        }
-                        Zoomable(
-                            modifier = Modifier
-                                .pointerInput(Unit) {
-                                    awaitEachGesture {
-                                        awaitFirstDown(requireUnconsumed = false)
-                                        do {
-                                            val event = awaitPointerEvent()
-                                            isTouching = true
-                                            if (event.type == PointerEventType.Release) {
-                                                isTouching = false
-                                            }
-                                        } while (event.changes.any { it.pressed })
-                                    }
-                                }
-                                .graphicsLayer {
-                                    // Calculate the absolute offset for the current page from the
-                                    // scroll position. We use the absolute value which allows us to mirror
-                                    // any effects for both directions
-                                    val pageOffset = (
-                                            (pagerState.currentPage - index) + pagerState
-                                                .currentPageOffsetFraction
-                                            ).absoluteValue
+                                val imageNotFoundId = R.drawable.image_not_found
 
-                                    // We animate the scaleX + scaleY, between 85% and 100%
-                                    lerp(
-                                        0.85f,
-                                        1f,
-                                        1f - pageOffset.coerceIn(0f, 1f)
-                                    ).also { scale ->
-                                        scaleX = scale
-                                        scaleY = scale
-                                    }
-
-                                    // We animate the alpha, between 50% and 100%
-                                    alpha = lerp(
-                                        0.5f,
-                                        1f,
-                                        1f - pageOffset.coerceIn(0f, 1f)
-                                    )
-                                },
-                            state = zoomableState,
-                            onTap = {
-                                onImageScreenEvent(ImageScreenEvent.OnBarsVisibilityChange)
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(250.dp)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(Color.White)
+                                    ,
+                                    onError = {
+                                        isSuccess = false
+                                    },
+                                    placeholder = painterResource(id = imageNotFoundId),
+                                    error = painterResource(id = imageNotFoundId),
+                                    model = pagerOffer.urlImageList[0],
+                                    contentScale = ContentScale.Fit,
+                                    contentDescription = null,
+                                )
                             },
-                        ) {
-                            val imageNotFoundId = remember {
-                                R.drawable.image_not_found
-                            }
-                            AsyncImage(
-                                modifier = Modifier
-                                    .then(
-                                        if (imageSize != null) {
-                                            Modifier.aspectRatio(
-                                                imageSize!!.width / imageSize!!.height,
-                                                isHorizontalOrientation
-                                            )
-                                        } else
-                                            Modifier.fillMaxSize()
-                                    ),
-                                error = painterResource(id = imageNotFoundId),
-                                model = imagesList[index].urlImageList[0],
-                                contentScale = ContentScale.Fit,
-                                placeholder = painterResource(id = imageNotFoundId),
-                                onError = { painterState ->
-                                    imageSize = painterState.painter?.intrinsicSize
-                                },
-                                onSuccess = { painterState ->
-                                    imageSize = painterState.painter.intrinsicSize
-                                },
-                                contentDescription = null,
-                            )
-                        }
+                            offer = pagerOffer,
+                            animationType
+                        )
+                        // val overZoomConfig = OverZoomConfig(
+                        //     minSnapScale = 1f,
+                        //     maxSnapScale = 1.7f
+                        // )
+                        // val zoomableState = rememberZoomableState(
+                        //     initialScale = 1f,
+                        //     minScale = 0.1f,
+                        //     overZoomConfig = overZoomConfig,
+                        // )
+                        // var imageSize by remember {
+                        //     mutableStateOf<Size?>(null)
+                        // }
+                        // LaunchedEffect(key1 = isTouching) {
+                        //     val currentImageOffset = pagerState.currentPageOffsetFraction
+                        //     if(currentImageOffset > 0.1f || currentImageOffset < -0.1f) {
+                        //         coroutineScope.launch(Dispatchers.Main) {
+                        //             zoomableState.animateScaleTo(1f)
+                        //         }
+                        //     }
+                        // }
+                        // LaunchedEffect(key1 = currentPage) {
+                        //     if(imageSize != null && currentPage == index)
+                        //         onImageScreenEvent(
+                        //             ImageScreenEvent.OnPagerCurrentImageChange(
+                        //                 imageSize!!
+                        //             ))
+                        // }
+                        // LaunchedEffect(key1 = imageListSize) {
+                        //     if(imageSize != null && currentPage == index)
+                        //         onImageScreenEvent(
+                        //             ImageScreenEvent.OnPagerCurrentImageChange(
+                        //                 imageSize!!
+                        //             ))
+                        // }
+                        // val zoomableStateScale = zoomableState.scale
+                        // LaunchedEffect(key1 = zoomableStateScale) {
+                        //     if(zoomableStateScale <= 0.5) {
+                        //         onImageScreenEvent(ImageScreenEvent.OnCurrentScaleChange(zoomableStateScale))
+                        //         if(!isTouching) {
+                        //             onImageScreenEvent(ImageScreenEvent.OnBackToGallery)
+                        //         }
+                        //     }
+                        // }
+                        // Zoomable(
+                        //     modifier = Modifier
+                        //         .pointerInput(Unit) {
+                        //             awaitEachGesture {
+                        //                 awaitFirstDown(requireUnconsumed = false)
+                        //                 do {
+                        //                     val event = awaitPointerEvent()
+                        //                     isTouching = true
+                        //                     if (event.type == PointerEventType.Release) {
+                        //                         isTouching = false
+                        //                     }
+                        //                 } while (event.changes.any { it.pressed })
+                        //             }
+                        //         }
+                        //         .graphicsLayer {
+                        //             // Calculate the absolute offset for the current page from the
+                        //             // scroll position. We use the absolute value which allows us to mirror
+                        //             // any effects for both directions
+                        //             val pageOffset = (
+                        //                     (pagerState.currentPage - index) + pagerState
+                        //                         .currentPageOffsetFraction
+                        //                     ).absoluteValue
+                        //
+                        //             // We animate the scaleX + scaleY, between 85% and 100%
+                        //             lerp(
+                        //                 0.85f,
+                        //                 1f,
+                        //                 1f - pageOffset.coerceIn(0f, 1f)
+                        //             ).also { scale ->
+                        //                 scaleX = scale
+                        //                 scaleY = scale
+                        //             }
+                        //
+                        //             // We animate the alpha, between 50% and 100%
+                        //             alpha = lerp(
+                        //                 0.5f,
+                        //                 1f,
+                        //                 1f - pageOffset.coerceIn(0f, 1f)
+                        //             )
+                        //         },
+                        //     state = zoomableState,
+                        //     onTap = {
+                        //         onImageScreenEvent(ImageScreenEvent.OnBarsVisibilityChange)
+                        //     },
+                        // ) {
+                        //     val imageNotFoundId = remember {
+                        //         R.drawable.image_not_found
+                        //     }
+                        //     AsyncImage(
+                        //         modifier = Modifier
+                        //             .then(
+                        //                 if (imageSize != null) {
+                        //                     Modifier.aspectRatio(
+                        //                         imageSize!!.width / imageSize!!.height,
+                        //                         isHorizontalOrientation
+                        //                     )
+                        //                 } else
+                        //                     Modifier.fillMaxSize()
+                        //             ),
+                        //         error = painterResource(id = imageNotFoundId),
+                        //         model = imagesList[index].urlImageList[0],
+                        //         contentScale = ContentScale.Fit,
+                        //         placeholder = painterResource(id = imageNotFoundId),
+                        //         onError = { painterState ->
+                        //             imageSize = painterState.painter?.intrinsicSize
+                        //         },
+                        //         onSuccess = { painterState ->
+                        //             imageSize = painterState.painter.intrinsicSize
+                        //         },
+                        //         contentDescription = null,
+                        //     )
+                        // }
                     }
                 }
             }

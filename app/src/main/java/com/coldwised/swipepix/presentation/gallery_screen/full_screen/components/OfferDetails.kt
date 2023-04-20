@@ -5,6 +5,7 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.data.remote.dto.OfferDto
 import com.coldwised.swipepix.domain.model.OfferModel
+import com.coldwised.swipepix.presentation.gallery_screen.full_screen.type.AnimationType
 import com.coldwised.swipepix.ui.theme.emptyStarbarColor
 import kotlinx.coroutines.delay
 
@@ -32,6 +34,7 @@ import kotlinx.coroutines.delay
 fun OfferDetails(
     image: @Composable() (() -> Unit),
     offer: OfferModel,
+    animationType: AnimationType
 ) {
     Column(
         modifier = Modifier
@@ -50,16 +53,22 @@ fun OfferDetails(
             }
         }
         AnimatedVisibility(
+            visible = animationType == AnimationType.EXPAND_ANIMATION,
             modifier = Modifier
                 .padding(top = 12.dp)
                 ,
-            visibleState = isVisible,
             enter = slideInVertically(
                 animationSpec = tween(300),
                 initialOffsetY = {
                     it * 2
                 }
-            )
+            ),
+            exit = slideOutVertically(
+                animationSpec = tween(300),
+                // targetOffsetY = {
+                //     it * 2
+                // }
+            ),
         ) {
             Column(
                 modifier = Modifier
