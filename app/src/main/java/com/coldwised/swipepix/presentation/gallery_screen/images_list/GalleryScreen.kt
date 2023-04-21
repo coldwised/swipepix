@@ -17,7 +17,6 @@ import com.coldwised.swipepix.presentation.gallery_screen.images_list.components
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.LazyGridImages
 import kotlinx.collections.immutable.toImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
     navController: NavController,
@@ -32,13 +31,12 @@ fun GalleryScreen(
             GalleryScreenTopBar(
                 onThemeSettingsClick = { navController.navigate(Screen.ThemeSettingsScreen.route) }
             )
-        }
+        },
     ) { paddingValues ->
         savedPaddingValues = paddingValues
-        Box(
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+        Box(Modifier
+            .padding(paddingValues)
+            .fillMaxSize()
         ) {
             LazyGridImages(
                 lazyGridState = state.lazyGridState,

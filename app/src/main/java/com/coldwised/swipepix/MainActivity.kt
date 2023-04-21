@@ -8,8 +8,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,7 +22,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.coldwised.swipepix.domain.type.BottomNavItem
 import com.coldwised.swipepix.domain.type.Screen
+import com.coldwised.swipepix.presentation.BottomNavigationBar
 import com.coldwised.swipepix.presentation.gallery_screen.images_list.GalleryScreen
 import com.coldwised.swipepix.ui.theme.SwipePixTheme
 import com.coldwised.swipepix.util.Extension.isCompatibleWithApi33
@@ -81,11 +85,37 @@ class MainActivity : ComponentActivity() {
                     darkTheme = shouldUseDarkTheme(themeStyle = themeStyle),
                     dynamicColor = activityState.useDynamicColors
                 ) {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        Navigation(navController)
+                    Scaffold(
+                        bottomBar = {
+                            BottomNavigationBar(
+                                items = listOf(
+                                    BottomNavItem(
+                                        screen = Screen.ImagesScreen,
+                                        iconId = R.drawable.ic_search_24,
+                                    ),
+                                    BottomNavItem(
+                                        screen = Screen.CartScreen,
+                                        iconId = R.drawable.ic_shopping_basket_24,
+                                    ),
+                                    BottomNavItem(
+                                        screen = Screen.FavoritesScreen,
+                                        iconId = R.drawable.ic_favorite_border_24,
+                                    ),
+                                    BottomNavItem(
+                                        screen = Screen.ProfileScreen,
+                                        iconId = R.drawable.ic_account_circle_24,
+                                    ),
+                                ),
+                                navController = navController,
+                            )
+                        }
+                    ) { innerPadding ->
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            Navigation(navController)
+                        }
                     }
                 }
             }

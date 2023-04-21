@@ -8,6 +8,11 @@
     <string name="top_bar_title">Галерея</string>
     <string name="price_text">%1$.2f ₽</string>
 
+    <string name="search_screen_name">Каталог</string>
+    <string name="cart_screen_name">Корзина</string>
+    <string name="favorites_screen_name">Избранное</string>
+    <string name="profile_screen_name">Профиль</string>
+
     <string name="theme_label_text">Тема</string>
     <string name="theme_settings_title_text">Тема</string>
     <string name="light_theme_text">Светлая тема</string>
@@ -20,4 +25,5 @@
     <string name="no_comments">Нет отзывов</string>
 	<string name="add_to_cart_text">В корзину</string>
     <string name="remove_from_cart_text">Убрать</string>
+	<string name="offer_сharacteristics_text">Характеристики</string>
 </resources>
