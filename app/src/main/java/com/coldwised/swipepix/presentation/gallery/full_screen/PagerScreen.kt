@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery_screen.full_screen
+package com.coldwised.swipepix.presentation.gallery.full_screen
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.domain.model.OfferModel
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.components.*
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.event.ImageScreenEvent
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.state.PagerScreenState
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.type.AnimationType
+import com.coldwised.swipepix.presentation.gallery.full_screen.components.*
+import com.coldwised.swipepix.presentation.gallery.full_screen.event.ImageScreenEvent
+import com.coldwised.swipepix.presentation.gallery.full_screen.state.PagerScreenState
+import com.coldwised.swipepix.presentation.gallery.full_screen.type.AnimationType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skydoves.orbital.Orbital
 import kotlinx.coroutines.launch
@@ -133,7 +133,7 @@ fun PagerScreen(
         )
         Box(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(top = paddingValues.calculateTopPadding())
                 .background(backGroundColor)
                 .fillMaxSize()
         ) {

@@ -1,8 +1,8 @@
-package com.coldwised.swipepix.presentation.gallery_screen.state
+package com.coldwised.swipepix.presentation.gallery.state
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import com.coldwised.swipepix.domain.model.OfferModel
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.state.PagerScreenState
+import com.coldwised.swipepix.presentation.gallery.full_screen.state.PagerScreenState
 import com.coldwised.swipepix.util.UiText
 
 data class GalleryScreenState(

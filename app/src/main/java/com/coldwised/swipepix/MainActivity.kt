@@ -9,10 +9,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +22,8 @@ import androidx.navigation.compose.rememberNavController
 import com.coldwised.swipepix.domain.type.BottomNavItem
 import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.BottomNavigationBar
-import com.coldwised.swipepix.presentation.gallery_screen.images_list.GalleryScreen
+import com.coldwised.swipepix.presentation.cart.CartScreen
+import com.coldwised.swipepix.presentation.gallery.images_list.GalleryScreen
 import com.coldwised.swipepix.ui.theme.SwipePixTheme
 import com.coldwised.swipepix.util.Extension.isCompatibleWithApi33
 import com.coldwised.swipepix.util.Extension.shouldUseDarkTheme
@@ -54,7 +52,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
     }
 
-    @OptIn(ExperimentalPermissionsApi::class)
+    @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("onCreate", "onCreateMain")
@@ -111,7 +109,7 @@ class MainActivity : ComponentActivity() {
                         }
                     ) { innerPadding ->
                         Surface(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()).fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
                             Navigation(navController)
@@ -160,6 +158,27 @@ fun Navigation(navHostController: NavHostController) {
             route = Screen.ThemeSettingsScreen.route
         ) {
             ThemeSettingsScreen(
+                navController = navHostController
+            )
+        }
+        composable(
+            route = Screen.CartScreen.route
+        ) {
+            CartScreen(
+                navController = navHostController
+            )
+        }
+        composable(
+            route = Screen.FavoritesScreen.route
+        ) {
+            CartScreen(
+                navController = navHostController
+            )
+        }
+        composable(
+            route = Screen.ProfileScreen.route
+        ) {
+            CartScreen(
                 navController = navHostController
             )
         }

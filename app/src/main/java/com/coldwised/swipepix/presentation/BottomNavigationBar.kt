@@ -4,13 +4,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,11 +27,12 @@ fun BottomNavigationBar(
 	val routeName = backStackEntry?.destination?.route?.substringBefore('/') ?: return
 	NavigationBar(
 		modifier = modifier
-			.navigationBarsPadding()
+			//.navigationBarsPadding()
 			//.height(78.dp)
 			.shadow(4.dp),
 		//windowInsets = WindowInsets(top = 0.dp, bottom = 0.dp),
 	) {
+		val colorScheme = MaterialTheme.colorScheme
 		items.forEach { item ->
 			val selected = item.screen.route == backStackEntry.destination.route
 				|| item.screen.subRoutes?.contains(
@@ -49,6 +49,11 @@ fun BottomNavigationBar(
 						}
 					}
 				},
+				colors = NavigationBarItemDefaults.colors(
+					selectedTextColor = colorScheme.primary,
+					selectedIconColor = colorScheme.primary,
+					//indicatorColor = Color.Transparent
+				),
 				icon = {
 					Icon(
 						painter = painterResource(id = item.iconId),

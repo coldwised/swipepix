@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery_screen.images_list
+package com.coldwised.swipepix.presentation.gallery.images_list
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.coldwised.swipepix.presentation.gallery_screen.ImagesViewModel
+import com.coldwised.swipepix.presentation.gallery.ImagesViewModel
 import com.coldwised.swipepix.domain.type.Screen
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.PagerScreen
-import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.ErrorLabel
-import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.GalleryScreenTopBar
-import com.coldwised.swipepix.presentation.gallery_screen.images_list.components.LazyGridImages
+import com.coldwised.swipepix.presentation.gallery.full_screen.PagerScreen
+import com.coldwised.swipepix.presentation.gallery.images_list.components.ErrorLabel
+import com.coldwised.swipepix.presentation.gallery.images_list.components.GalleryScreenTopBar
+import com.coldwised.swipepix.presentation.gallery.images_list.components.LazyGridImages
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
@@ -35,7 +35,7 @@ fun GalleryScreen(
     ) { paddingValues ->
         savedPaddingValues = paddingValues
         Box(Modifier
-            .padding(paddingValues)
+            .padding(top = paddingValues.calculateTopPadding())
             .fillMaxSize()
         ) {
             LazyGridImages(

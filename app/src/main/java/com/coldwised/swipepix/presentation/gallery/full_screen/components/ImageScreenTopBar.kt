@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery_screen.full_screen.components
+package com.coldwised.swipepix.presentation.gallery.full_screen.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween

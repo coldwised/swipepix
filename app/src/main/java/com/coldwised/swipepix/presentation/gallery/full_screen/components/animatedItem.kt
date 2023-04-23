@@ -1,11 +1,10 @@
-package com.coldwised.swipepix.presentation.gallery_screen.full_screen.components
+package com.coldwised.swipepix.presentation.gallery.full_screen.components
 
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -15,8 +14,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.R
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.state.PagerScreenState
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.type.AnimationType
+import com.coldwised.swipepix.presentation.gallery.full_screen.state.PagerScreenState
+import com.coldwised.swipepix.presentation.gallery.full_screen.type.AnimationType
 import com.skydoves.orbital.OrbitalScope
 import com.skydoves.orbital.animateSharedElementTransition
 import com.skydoves.orbital.rememberContentWithOrbitalScope

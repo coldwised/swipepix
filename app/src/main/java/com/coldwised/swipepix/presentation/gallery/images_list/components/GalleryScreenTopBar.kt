@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery_screen.images_list.components
+package com.coldwised.swipepix.presentation.gallery.images_list.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

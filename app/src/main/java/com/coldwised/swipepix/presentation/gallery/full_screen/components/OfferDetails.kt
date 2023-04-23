@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery_screen.full_screen.components
+package com.coldwised.swipepix.presentation.gallery.full_screen.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.domain.model.OfferModel
-import com.coldwised.swipepix.presentation.gallery_screen.full_screen.type.AnimationType
+import com.coldwised.swipepix.presentation.gallery.full_screen.type.AnimationType
 import com.coldwised.swipepix.ui.theme.emptyStarbarColor
 
 @Composable

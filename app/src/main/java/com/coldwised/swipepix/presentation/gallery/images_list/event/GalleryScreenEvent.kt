@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery_screen.images_list.event
+package com.coldwised.swipepix.presentation.gallery.images_list.event
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.geometry.Size

@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery_screen.full_screen.state
+package com.coldwised.swipepix.presentation.gallery.full_screen.state
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntOffset
