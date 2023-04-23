@@ -13,7 +13,8 @@ import com.coldwised.swipepix.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreenTopBar(
-    onThemeSettingsClick: () -> Unit
+    onThemeSettingsClick: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     TopAppBar(
         title = {
@@ -21,6 +22,7 @@ fun GalleryScreenTopBar(
                 text = stringResource(R.string.top_bar_title),
             )
         },
+        scrollBehavior = scrollBehavior,
         actions = {
             Column {
                 var menuVisible by remember {

@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -17,6 +18,7 @@ import com.coldwised.swipepix.presentation.gallery.images_list.components.Galler
 import com.coldwised.swipepix.presentation.gallery.images_list.components.LazyGridImages
 import kotlinx.collections.immutable.toImmutableList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
     navController: NavController,
@@ -26,17 +28,22 @@ fun GalleryScreen(
     var savedPaddingValues by remember {
         mutableStateOf(PaddingValues(0.dp))
     }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             GalleryScreenTopBar(
-                onThemeSettingsClick = { navController.navigate(Screen.ThemeSettingsScreen.route) }
+                onThemeSettingsClick = { navController.navigate(Screen.ThemeSettingsScreen.route) },
+                scrollBehavior = scrollBehavior
             )
         },
     ) { paddingValues ->
         savedPaddingValues = paddingValues
-        Box(Modifier
-            .padding(top = paddingValues.calculateTopPadding())
-            .fillMaxSize()
+        Box(
+            Modifier
+                .padding(top = paddingValues.calculateTopPadding())
+                .fillMaxSize()
         ) {
             LazyGridImages(
                 lazyGridState = state.lazyGridState,
@@ -70,5 +77,6 @@ fun GalleryScreen(
         imagesList = state.goodsList,
         pagerScreenState = state.pagerScreenState,
         onImageScreenEvent = viewModel::onImageScreenEvent,
+        scrollBehavior = scrollBehavior
     )
 }

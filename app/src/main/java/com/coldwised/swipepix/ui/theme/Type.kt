@@ -120,7 +120,7 @@ val Typography = Typography(
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         letterSpacing = 0.1.sp,
         platformStyle = PlatformTextStyle(

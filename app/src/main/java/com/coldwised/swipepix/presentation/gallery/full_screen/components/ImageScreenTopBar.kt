@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import com.coldwised.swipepix.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -17,6 +16,7 @@ fun ImageScreenTopBar(
     isVisible: Boolean,
     title: String,
     onBackClicked: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     AnimatedVisibility(
         visible = isVisible,
@@ -28,7 +28,6 @@ fun ImageScreenTopBar(
         )
     ) {
         val iconsDefault = Icons.Default
-        val whiteColor = Color.White
         TopAppBar(
             title = {
                     Text(
@@ -36,11 +35,6 @@ fun ImageScreenTopBar(
                         style = MaterialTheme.typography.bodySmall
                     )
             },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                titleContentColor = whiteColor,
-                containerColor = Color.Black,
-                navigationIconContentColor = whiteColor,
-            ),
             navigationIcon = {
                 IconButton(
                     onClick = onBackClicked
@@ -50,7 +44,8 @@ fun ImageScreenTopBar(
                         imageVector = iconsDefault.ArrowBack
                     )
                 }
-            }
+            },
+            scrollBehavior = scrollBehavior
         )
     }
 }

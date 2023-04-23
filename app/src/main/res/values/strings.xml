@@ -26,4 +26,5 @@
 	<string name="add_to_cart_text">В корзину</string>
     <string name="remove_from_cart_text">Убрать</string>
 	<string name="offer_сharacteristics_text">Характеристики</string>
+    <string name="offer_cart_button_text">В корзину — %1$.2f ₽</string>
 </resources>

@@ -45,7 +45,6 @@ fun LazyGridImages(
     val gridItemModifier = Modifier
         .padding(1.dp)
         .fillMaxWidth()
-        .height(266.dp)
 
     LazyVerticalGrid(
         modifier = Modifier
@@ -88,8 +87,7 @@ fun LazyGridImages(
                     }
                 }
             )
-
-            Box(
+            Column(
                 modifier = gridItemModifier
                     .clip(RoundedCornerShape(12.dp))
                     .clickable(onClick = {
@@ -105,62 +103,58 @@ fun LazyGridImages(
                         onGalleryScreenEvent(GalleryScreenEvent.OnImageClick(index))
                     })
                     .padding(6.dp)
-                ,
             ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color.White)
+                    ,
+                    painter = painter,
+                    contentScale = contentScale,
+                    contentDescription = null,
+                )
+                Text(
+                    modifier = Modifier.padding(top = 8.dp),
+                    text = stringResource(id = R.string.price_text, product.price),
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 4.dp)
+                    ,
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Start
                 ) {
-                    Image(
+                    Icon(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Color.White)
-                        ,
-                        painter = painter,
-                        contentScale = contentScale,
+                            .padding(end = 6.dp)
+                            .size(16.dp),
+                        imageVector = Icons.Default.Star,
                         contentDescription = null,
+                        tint = MaterialTheme.colorScheme.emptyStarbarColor
                     )
                     Text(
-                        modifier = Modifier.padding(top = 8.dp),
-                        text = stringResource(id = R.string.price_text, product.price),
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 4.dp)
-                        ,
-                        verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .padding(end = 6.dp)
-                                .size(16.dp),
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.emptyStarbarColor
-                        )
-                        Text(
-                            text = stringResource(R.string.no_comments),
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.emptyStarbarColor,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                    Text(
-                        text = product.name,
+                        text = stringResource(R.string.no_comments),
                         style = MaterialTheme.typography.bodySmall,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .padding(bottom = 8.dp),
-                        maxLines = 3,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.emptyStarbarColor,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
+                Text(
+                    text = product.name,
+                    style = MaterialTheme.typography.bodySmall,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp),
+                    maxLines = 3,
+                    minLines = 3
+                )
                 var isInCart by rememberSaveable {
                     mutableStateOf(false)
                 }
@@ -169,7 +163,6 @@ fun LazyGridImages(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(30.dp)
-                        .align(Alignment.BottomCenter)
                     ,
                     onClick = { isInCart = !isInCart }
                 ) {
@@ -177,6 +170,7 @@ fun LazyGridImages(
                         text = if(!isInCart) stringResource(R.string.add_to_cart_text) else
                             stringResource(R.string.remove_from_cart_text),
                         style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     if(isInCart) {

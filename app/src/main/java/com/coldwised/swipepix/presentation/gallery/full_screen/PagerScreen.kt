@@ -17,10 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ScaleFactor
+import androidx.compose.ui.layout.lerp
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.R
@@ -31,16 +34,17 @@ import com.coldwised.swipepix.presentation.gallery.full_screen.state.PagerScreen
 import com.coldwised.swipepix.presentation.gallery.full_screen.type.AnimationType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skydoves.orbital.Orbital
-import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PagerScreen(
     imagesList: List<OfferModel>,
     pagerScreenState: PagerScreenState,
     paddingValues: PaddingValues,
     onImageScreenEvent: (ImageScreenEvent) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     if(!pagerScreenState.isVisible || imagesList.isEmpty()) {
         return
@@ -57,9 +61,7 @@ fun PagerScreen(
     val pagerState = rememberPagerState(
         initialPage = pagerIndex
     )
-    val unknownException = stringResource(id = R.string.unknown_exception)
     val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
     val transparentColor = remember {
         Color.Transparent
     }
@@ -67,22 +69,13 @@ fun PagerScreen(
     val offer = imagesList[pagerIndex]
     val imageUrl = offer.urlImageList[0]
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+        ,
         containerColor = transparentColor,
         snackbarHost = {
             SnackbarHost(snackbarHostState)
-        },
-        bottomBar = {
-            ImageScreenBottomBar(
-                imageUrl = imageUrl,
-                price = offer.price,
-                isVisible = topBarVisible,
-                onErrorOccurred = {
-                    coroutineScope.launch {
-                        snackbarHostState.showSnackbar(message = unknownException)
-                    }
-                }
-            )
         },
         topBar = {
             ImageScreenTopBar(
@@ -91,6 +84,7 @@ fun PagerScreen(
                 onBackClicked = {
                     onImageScreenEvent(ImageScreenEvent.OnBackToGallery)
                 },
+                scrollBehavior = scrollBehavior
             )
         }
     ) {
@@ -145,7 +139,8 @@ fun PagerScreen(
                     OfferDetails(
                         image = { imageContent() },
                         offer = offer,
-                        animationType
+                        animationType = animationType,
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             } else if(animationType == expandAnimationType) {
@@ -170,6 +165,34 @@ fun PagerScreen(
                         imagesList[index]
                     }
                     OfferDetails(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .graphicsLayer {
+                                // Calculate the absolute offset for the current page from the
+                                // scroll position. We use the absolute value which allows us to mirror
+                                // any effects for both directions
+                                val pageOffset = (
+                                        (pagerState.currentPage - index) + pagerState
+                                            .currentPageOffsetFraction
+                                        ).absoluteValue
+
+                                // We animate the scaleX + scaleY, between 85% and 100%
+                                lerp(
+                                    ScaleFactor(0.85f, 0.85f),
+                                    ScaleFactor(1f, 1f),
+                                    1f - pageOffset.coerceIn(0f, 1f)
+                                ).also { scale ->
+                                    scaleX = scale.scaleX
+                                    scaleY = scale.scaleY
+                                }
+
+                                // We animate the alpha, between 50% and 100%
+                                alpha = lerp(
+                                    ScaleFactor(0.5f, 0.5f),
+                                    ScaleFactor(1f, 1f),
+                                    1f - pageOffset.coerceIn(0f, 1f)
+                                ).scaleX
+                            },
                         image = {
                             var isSuccess by remember {
                                 mutableStateOf(true)
@@ -194,7 +217,7 @@ fun PagerScreen(
                             )
                         },
                         offer = pagerOffer,
-                        animationType
+                        animationType = animationType,
                     )
                     // val overZoomConfig = OverZoomConfig(
                     //     minSnapScale = 1f,
@@ -253,32 +276,32 @@ fun PagerScreen(
                     //                 } while (event.changes.any { it.pressed })
                     //             }
                     //         }
-                    //         .graphicsLayer {
-                    //             // Calculate the absolute offset for the current page from the
-                    //             // scroll position. We use the absolute value which allows us to mirror
-                    //             // any effects for both directions
-                    //             val pageOffset = (
-                    //                     (pagerState.currentPage - index) + pagerState
-                    //                         .currentPageOffsetFraction
-                    //                     ).absoluteValue
-                    //
-                    //             // We animate the scaleX + scaleY, between 85% and 100%
-                    //             lerp(
-                    //                 0.85f,
-                    //                 1f,
-                    //                 1f - pageOffset.coerceIn(0f, 1f)
-                    //             ).also { scale ->
-                    //                 scaleX = scale
-                    //                 scaleY = scale
-                    //             }
-                    //
-                    //             // We animate the alpha, between 50% and 100%
-                    //             alpha = lerp(
-                    //                 0.5f,
-                    //                 1f,
-                    //                 1f - pageOffset.coerceIn(0f, 1f)
-                    //             )
-                    //         },
+//                             .graphicsLayer {
+//                                 // Calculate the absolute offset for the current page from the
+//                                 // scroll position. We use the absolute value which allows us to mirror
+//                                 // any effects for both directions
+//                                 val pageOffset = (
+//                                         (pagerState.currentPage - index) + pagerState
+//                                             .currentPageOffsetFraction
+//                                         ).absoluteValue
+//
+//                                 // We animate the scaleX + scaleY, between 85% and 100%
+//                                 lerp(
+//                                     0.85f,
+//                                     1f,
+//                                     1f - pageOffset.coerceIn(0f, 1f)
+//                                 ).also { scale ->
+//                                     scaleX = scale
+//                                     scaleY = scale
+//                                 }
+//
+//                                 // We animate the alpha, between 50% and 100%
+//                                 alpha = lerp(
+//                                     0.5f,
+//                                     1f,
+//                                     1f - pageOffset.coerceIn(0f, 1f)
+//                                 )
+//                             },
                     //     state = zoomableState,
                     //     onTap = {
                     //         onImageScreenEvent(ImageScreenEvent.OnBarsVisibilityChange)

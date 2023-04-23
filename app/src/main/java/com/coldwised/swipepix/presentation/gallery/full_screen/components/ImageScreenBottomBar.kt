@@ -12,19 +12,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.coldwised.swipepix.Constants
+import com.coldwised.swipepix.R
 import com.coldwised.swipepix.util.Extension.trySystemAction
 
 
@@ -73,7 +67,7 @@ private fun getIntentChooser(context: Context, intent: Intent, chooserTitle: Cha
 }
 
 @Composable
-fun ImageScreenBottomBar(imageUrl: String, isVisible: Boolean, price: Float, onErrorOccurred: () -> Unit) {
+fun OfferFloatingButton(isVisible: Boolean, price: Float) {
     AnimatedVisibility(
         visible = isVisible,
         enter = fadeIn(
@@ -83,47 +77,31 @@ fun ImageScreenBottomBar(imageUrl: String, isVisible: Boolean, price: Float, onE
             animationSpec = tween(Constants.TOP_BAR_VISIBILITY_EXIT_ANIMATION_TIME)
         )
     ) {
-        BottomAppBar(
-            containerColor = Color.Black.copy(alpha = 0.6f)
+        val verticalScroll = rememberScrollState()
+        var fabExtended by remember { mutableStateOf(true) }
+
+        LaunchedEffect(verticalScroll) {
+            var prev = 0
+            snapshotFlow { verticalScroll.value }
+                .collect {
+                    fabExtended = it <= prev
+                    prev = it
+                }
+        }
+        AnimatedVisibility(
+            modifier = Modifier
+                .fillMaxWidth()
+                    ,
+            visible = fabExtended
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                val context = LocalContext.current
-                val intentExtraText = Intent.EXTRA_TEXT
-                val intent = remember {
-                    val targetIntent = Intent(Intent.ACTION_SEND)
-                    targetIntent.type = "text/plain"
-                    targetIntent.putExtra(Intent.EXTRA_SUBJECT, "subject")
-                    targetIntent.putExtra(intentExtraText, imageUrl)
-                }
-                var chooserIntent: Intent? = null
-                Text(
-                    text = "Цена товара: $price",
-                    color = Color.White
-                )
-                IconButton(
-                    onClick = {
-                        if(chooserIntent == null) {
-                            chooserIntent = getIntentChooser(context, intent.putExtra(intentExtraText, imageUrl))
-                        }
-                        if(!trySystemAction {
-                            context.startActivity(chooserIntent)
-                        }) {
-                            onErrorOccurred()
-                        }
-                    }
-                ) {
-                    Icon(
-                        tint = Color.White,
-                        imageVector = Icons.Filled.Share,
-                        contentDescription = null
+            ExtendedFloatingActionButton(
+                content = {
+                    Text(
+                        text = stringResource(R.string.offer_cart_button_text, price)
                     )
-                }
-            }
+                },
+                onClick = { /*TODO*/ }
+            )
         }
     }
 }
