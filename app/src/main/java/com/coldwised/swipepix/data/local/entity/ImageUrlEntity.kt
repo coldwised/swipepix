@@ -2,9 +2,9 @@ package com.coldwised.swipepix.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.coldwised.swipepix.Constants.IMAGES_URL_TABLE_NAME
+import com.coldwised.swipepix.Constants
 
-@Entity(tableName = IMAGES_URL_TABLE_NAME)
+@Entity(tableName = Constants.CART_PRODUCTS_TABLE)
 data class ImageUrlEntity(
     var imageUrl: String,
     var location: String? = null,
