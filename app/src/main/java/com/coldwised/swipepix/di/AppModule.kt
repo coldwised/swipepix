@@ -1,6 +1,7 @@
 package com.coldwised.swipepix.di
 
 import com.coldwised.swipepix.data.remote.GoodsApi
+import com.coldwised.swipepix.data.remote.ShopServiceApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +22,16 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl(GoodsApi.BASE_URL)
             .addConverterFactory(SimpleXmlConverterFactory.create())
+            .build()
+            .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideShopApi(): ShopServiceApi {
+        return Retrofit.Builder()
+            .baseUrl(ShopServiceApi.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()
     }
