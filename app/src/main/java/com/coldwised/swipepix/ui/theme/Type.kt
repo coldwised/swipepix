@@ -93,30 +93,20 @@ val Typography = Typography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp,
-        lineHeight = 28.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
 
         ),
-        lineHeightStyle = LineHeightStyle(
-            alignment = LineHeightStyle.Alignment.Center,
-            trim = LineHeightStyle.Trim.FirstLineTop
-        )
     ),
     titleMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
         letterSpacing = 0.1.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
 
         ),
-        lineHeightStyle = LineHeightStyle(
-            alignment = LineHeightStyle.Alignment.Center,
-            trim = LineHeightStyle.Trim.FirstLineTop
-        )
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily.Default,
@@ -135,7 +125,6 @@ val Typography = Typography(
         letterSpacing = 0.5.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
-
         ),
     ),
     bodyMedium = TextStyle(

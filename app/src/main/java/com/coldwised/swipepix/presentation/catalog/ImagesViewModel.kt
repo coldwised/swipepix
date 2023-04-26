@@ -1,14 +1,14 @@
-package com.coldwised.swipepix.presentation.gallery
+package com.coldwised.swipepix.presentation.catalog
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.coldwised.swipepix.presentation.gallery.full_screen.event.ImageScreenEvent
-import com.coldwised.swipepix.presentation.gallery.full_screen.type.AnimationType
-import com.coldwised.swipepix.presentation.gallery.images_list.event.GalleryScreenEvent
-import com.coldwised.swipepix.presentation.gallery.state.GalleryScreenState
+import com.coldwised.swipepix.presentation.catalog.full_screen.event.ImageScreenEvent
+import com.coldwised.swipepix.presentation.catalog.full_screen.type.AnimationType
+import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
+import com.coldwised.swipepix.presentation.catalog.state.GalleryScreenState
 import com.coldwised.swipepix.util.Extension.convertPixelsToDp
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.domain.use_case.GetAppConfigurationStreamUseCase

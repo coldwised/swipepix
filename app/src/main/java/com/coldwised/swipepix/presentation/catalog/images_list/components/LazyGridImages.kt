@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery.images_list.components
+package com.coldwised.swipepix.presentation.catalog.images_list.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
@@ -30,7 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.domain.model.OfferModel
-import com.coldwised.swipepix.presentation.gallery.images_list.event.GalleryScreenEvent
+import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
 import com.coldwised.swipepix.ui.theme.emptyStarbarColor
 import kotlinx.collections.immutable.ImmutableList
 

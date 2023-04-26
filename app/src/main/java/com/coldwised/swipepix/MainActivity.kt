@@ -23,7 +23,7 @@ import com.coldwised.swipepix.domain.type.BottomNavItem
 import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.BottomNavigationBar
 import com.coldwised.swipepix.presentation.cart.CartScreen
-import com.coldwised.swipepix.presentation.gallery.images_list.GalleryScreen
+import com.coldwised.swipepix.presentation.catalog.images_list.GalleryScreen
 import com.coldwised.swipepix.ui.theme.SwipePixTheme
 import com.coldwised.swipepix.util.Extension.isCompatibleWithApi33
 import com.coldwised.swipepix.util.Extension.shouldUseDarkTheme

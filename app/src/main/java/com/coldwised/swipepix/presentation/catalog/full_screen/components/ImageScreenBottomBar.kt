@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery.full_screen.components
+package com.coldwised.swipepix.presentation.catalog.full_screen.components
 
 import android.content.ComponentName
 import android.content.Context

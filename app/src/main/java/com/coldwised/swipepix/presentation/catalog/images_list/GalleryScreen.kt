@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery.images_list
+package com.coldwised.swipepix.presentation.catalog.images_list
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -10,12 +10,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.coldwised.swipepix.presentation.gallery.ImagesViewModel
+import com.coldwised.swipepix.presentation.catalog.ImagesViewModel
 import com.coldwised.swipepix.domain.type.Screen
-import com.coldwised.swipepix.presentation.gallery.full_screen.PagerScreen
-import com.coldwised.swipepix.presentation.gallery.images_list.components.ErrorLabel
-import com.coldwised.swipepix.presentation.gallery.images_list.components.GalleryScreenTopBar
-import com.coldwised.swipepix.presentation.gallery.images_list.components.LazyGridImages
+import com.coldwised.swipepix.presentation.catalog.full_screen.PagerScreen
+import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorLabel
+import com.coldwised.swipepix.presentation.catalog.images_list.components.GalleryScreenTopBar
+import com.coldwised.swipepix.presentation.catalog.images_list.components.LazyGridImages
 import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,25 +51,25 @@ fun GalleryScreen(
                 onGalleryScreenEvent = viewModel::onGalleryScreenEvent
             )
         }
-    }
-    if(state.error != null) {
-        ErrorLabel(
-            error = state.error,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .background(MaterialTheme.colorScheme.background)
-            ,
-            onRefreshClick = viewModel::onRefresh
-        )
-    }
-    if(state.isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        if(state.error != null) {
+            ErrorLabel(
+                error = state.error,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .background(MaterialTheme.colorScheme.background)
+                ,
+                onRefreshClick = viewModel::onRefresh
+            )
+        }
+        if(state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
         }
     }
     PagerScreen(

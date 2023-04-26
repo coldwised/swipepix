@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.gallery.full_screen.type
+package com.coldwised.swipepix.presentation.catalog.full_screen.type
 
 enum class AnimationType {
     HIDE_ANIMATION,
