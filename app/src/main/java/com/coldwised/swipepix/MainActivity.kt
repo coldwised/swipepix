@@ -23,6 +23,7 @@ import com.coldwised.swipepix.domain.type.BottomNavItem
 import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.BottomNavigationBar
 import com.coldwised.swipepix.presentation.cart.CartScreen
+import com.coldwised.swipepix.presentation.catalog.categories.CategoriesScreen
 import com.coldwised.swipepix.presentation.catalog.images_list.GalleryScreen
 import com.coldwised.swipepix.ui.theme.SwipePixTheme
 import com.coldwised.swipepix.util.Extension.isCompatibleWithApi33
@@ -142,13 +143,13 @@ fun TransparentSystemBars(isDarkTheme: Boolean) {
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
-    val imagesScreenRoute = remember { Screen.ImagesScreen.route }
+    val categoriesScreenRoute = remember { Screen.CategoriesScreen.route }
     NavHost(
         navController = navHostController,
-        startDestination = imagesScreenRoute
+        startDestination = categoriesScreenRoute
     ) {
         composable(
-            route = imagesScreenRoute
+            route = categoriesScreenRoute
         ) {
             GalleryScreen(
                 navController = navHostController
@@ -172,6 +173,13 @@ fun Navigation(navHostController: NavHostController) {
             route = Screen.FavoritesScreen.route
         ) {
             CartScreen(
+                navController = navHostController
+            )
+        }
+        composable(
+            route = Screen.CategoriesScreen.route
+        ) {
+            CategoriesScreen(
                 navController = navHostController
             )
         }
