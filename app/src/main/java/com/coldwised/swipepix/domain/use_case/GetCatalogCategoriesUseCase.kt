@@ -9,7 +9,9 @@ import javax.inject.Inject
 class GetCatalogCategoriesUseCase @Inject constructor(
     private val repository: ShopRepository
 ) {
-    operator fun invoke(): Flow<Resource<List<CategoryDto>>> {
-        return repository.getCatalogCategories()
+    operator fun invoke(parentId: String? = null): Flow<Resource<List<CategoryDto>>> {
+        return if(parentId == null)
+            repository.getCatalogCategories() else
+                repository.getChildCategories(parentId)
     }
 }

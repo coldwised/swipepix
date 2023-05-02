@@ -25,6 +25,16 @@ class ShopRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getChildCategories(parentId: String): Flow<Resource<List<CategoryDto>>> {
+        return flow {
+            emit(
+                safeApiCall {
+                    shopApi.getChildCategories(parentId)
+                }
+            )
+        }
+    }
+
     private inline fun <T> safeApiCall(apiCall: () -> T): Resource<T> {
         return try {
             val data = apiCall()

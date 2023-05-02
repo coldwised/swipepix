@@ -44,14 +44,14 @@ fun CategoriesScreen(
 				CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
 			}
 			if(!state.isLoading && state.error == null) {
-				//CategoriesList(state.categories)
+				CategoriesList(state.categories, viewModel::onCategoryClick)
 			}
 		}
 	}
 }
 
 @Composable
-fun CategoriesList(categories: List<CategoryDto>, onItemClick: (Int) -> Unit) {
+fun CategoriesList(categories: List<CategoryDto>, onItemClick: (CategoryDto) -> Unit) {
 	LazyVerticalGrid(
 		modifier = Modifier
 			.fillMaxSize(),
@@ -62,7 +62,7 @@ fun CategoriesList(categories: List<CategoryDto>, onItemClick: (Int) -> Unit) {
 			Card(
 				modifier = Modifier
 					.clickable {
-						onItemClick(category.id)
+						onItemClick(category)
 					}
 			) {
 				Column {

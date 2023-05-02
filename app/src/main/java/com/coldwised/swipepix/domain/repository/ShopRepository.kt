@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ShopRepository {
     fun getCatalogCategories(): Flow<Resource<List<CategoryDto>>>
+
+    fun getChildCategories(parentId: String): Flow<Resource<List<CategoryDto>>>
 }
