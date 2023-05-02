@@ -9,6 +9,7 @@ interface ShopServiceApi {
     suspend fun getCatalogCategories(): List<CategoryDto>
 
     companion object {
-        const val BASE_URL = "http:/192.168.1.160:8080"
+        //const val BASE_URL = "http:/192.168.1.160:8080"
+        const val BASE_URL = "http:/192.168.91.120:8080"
     }
 }
