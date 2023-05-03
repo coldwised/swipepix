@@ -27,7 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.R
-import com.coldwised.swipepix.domain.model.OfferModel
+import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.full_screen.components.*
 import com.coldwised.swipepix.presentation.catalog.full_screen.event.ImageScreenEvent
 import com.coldwised.swipepix.presentation.catalog.full_screen.state.PagerScreenState
@@ -40,13 +40,13 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PagerScreen(
-    imagesList: List<OfferModel>,
+    products: List<ProductDto>,
     pagerScreenState: PagerScreenState,
     paddingValues: PaddingValues,
     onImageScreenEvent: (ImageScreenEvent) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    if(!pagerScreenState.isVisible || imagesList.isEmpty()) {
+    if(!pagerScreenState.isVisible || products.isEmpty()) {
         return
     }
     BackHandler {
@@ -66,8 +66,8 @@ fun PagerScreen(
         Color.Transparent
     }
     val topBarVisible = pagerScreenState.topBarVisible
-    val offer = imagesList[pagerIndex]
-    val imageUrl = offer.urlImageList[0]
+    val offer = products[pagerIndex]
+    val imageUrl = offer.images[0]
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -138,7 +138,7 @@ fun PagerScreen(
                 ) {
                     OfferDetails(
                         image = { imageContent() },
-                        offer = offer,
+                        product = offer,
                         animationType = animationType,
                         modifier = Modifier.fillMaxSize(),
                     )
@@ -147,7 +147,7 @@ fun PagerScreen(
                 // var isTouching by remember {
                 //     mutableStateOf(false)
                 // }
-                val imageListSize = imagesList.size
+                val imageListSize = products.size
                 HorizontalPager(
                     state = pagerState,
                     pageCount = imageListSize,
@@ -162,7 +162,7 @@ fun PagerScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) { index ->
                     val pagerOffer = remember {
-                        imagesList[index]
+                        products[index]
                     }
                     OfferDetails(
                         modifier = Modifier
@@ -211,12 +211,12 @@ fun PagerScreen(
                                 },
                                 placeholder = painterResource(id = imageNotFoundId),
                                 error = painterResource(id = imageNotFoundId),
-                                model = pagerOffer.urlImageList[0],
+                                model = pagerOffer.images[0],
                                 contentScale = ContentScale.Fit,
                                 contentDescription = null,
                             )
                         },
-                        offer = pagerOffer,
+                        product = pagerOffer,
                         animationType = animationType,
                     )
                     // val overZoomConfig = OverZoomConfig(

@@ -3,6 +3,7 @@ package com.coldwised.swipepix.data.repository
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.data.remote.ShopServiceApi
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
+import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.domain.repository.ShopRepository
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.util.UiText
@@ -32,6 +33,16 @@ class ShopRepositoryImpl @Inject constructor(
             emit(
                 safeApiCall {
                     shopApi.getChildCategories(parentId)
+                }
+            )
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override fun getProductsByCategory(categoryId: String): Flow<Resource<List<ProductDto>>> {
+        return flow {
+            emit(
+                safeApiCall {
+                    shopApi.getProductsByCategory(categoryId)
                 }
             )
         }.flowOn(Dispatchers.IO)

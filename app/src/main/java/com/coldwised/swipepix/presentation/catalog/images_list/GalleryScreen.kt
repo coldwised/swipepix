@@ -74,7 +74,7 @@ fun GalleryScreen(
     }
     PagerScreen(
         paddingValues = savedPaddingValues,
-        imagesList = state.goodsList,
+        products = state.goodsList,
         pagerScreenState = state.pagerScreenState,
         onImageScreenEvent = viewModel::onImageScreenEvent,
         scrollBehavior = scrollBehavior

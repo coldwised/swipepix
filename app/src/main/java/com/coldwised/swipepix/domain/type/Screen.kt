@@ -5,7 +5,7 @@ import com.coldwised.swipepix.util.UiText
 
 
 enum class Screen(val route: String, val screenName: UiText, val subRoutes: List<String>? = null) {
-    ImagesScreen("ImagesScreen", UiText.StringResource(R.string.search_screen_name)),
+    ProductsScreen("ImagesScreen", UiText.StringResource(R.string.search_screen_name)),
     CategoriesScreen("CatalogCategories", UiText.StringResource(R.string.search_screen_name)),
     CartScreen("CartScreen", UiText.StringResource(R.string.cart_screen_name)),
     FavoritesScreen("CartScreen", UiText.StringResource(R.string.favorites_screen_name)),

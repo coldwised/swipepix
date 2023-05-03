@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -144,13 +145,14 @@ fun TransparentSystemBars(isDarkTheme: Boolean) {
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
-    val categoriesScreenRoute = remember { "${Screen.CategoriesScreen.route}?${Constants.PARENT_CATEGORY_ID_PARAM}={${Constants.PARENT_CATEGORY_ID_PARAM}" }
+    val categoriesScreenRoute = remember { "${Screen.CategoriesScreen.route}?${Constants.PARENT_CATEGORY_ID_PARAM}={${Constants.PARENT_CATEGORY_ID_PARAM}}" }
     NavHost(
         navController = navHostController,
         startDestination = categoriesScreenRoute
     ) {
         composable(
-            route = Screen.ImagesScreen.route
+            route = "${Screen.ProductsScreen.route}/{${Constants.PARENT_CATEGORY_ID_PARAM}}",
+            arguments = listOf(navArgument(Constants.PARENT_CATEGORY_ID_PARAM) { type = NavType.StringType })
         ) {
             GalleryScreen(
                 navController = navHostController

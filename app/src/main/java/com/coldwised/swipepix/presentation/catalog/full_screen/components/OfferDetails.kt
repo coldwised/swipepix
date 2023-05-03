@@ -19,14 +19,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.coldwised.swipepix.R
-import com.coldwised.swipepix.domain.model.OfferModel
+import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.full_screen.type.AnimationType
 import com.coldwised.swipepix.ui.theme.emptyStarbarColor
 
 @Composable
 fun OfferDetails(
     image: @Composable() (() -> Unit),
-    offer: OfferModel,
+    product: ProductDto,
     animationType: AnimationType,
     modifier: Modifier,
 ) {
@@ -76,7 +76,7 @@ fun OfferDetails(
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 8.dp)
                         ,
-                        text = offer.name,
+                        text = product.name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -84,7 +84,7 @@ fun OfferDetails(
                         modifier = Modifier
                             .padding(bottom = 8.dp)
                         ,
-                        text = stringResource(id = R.string.price_text, offer.price),
+                        text = stringResource(id = R.string.price_text, product.price),
                         style = MaterialTheme.typography.titleLarge
                     )
                     Row(
@@ -116,7 +116,7 @@ fun OfferDetails(
                         text = stringResource(R.string.offer_сharacteristics_text),
                         style = MaterialTheme.typography.titleMedium
                     )
-                    for(param in offer.params) {
+                    for(param in product.params) {
                         Row(
                             Modifier
                                 .padding(bottom = 12.dp)
@@ -124,13 +124,13 @@ fun OfferDetails(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = param.name,
+                                text = param.first,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.emptyStarbarColor
                             )
                             Spacer(modifier = Modifier.width(70.dp))
                             Text(
-                                text = param.value,
+                                text = param.second,
                                 style = MaterialTheme.typography.titleSmall
                             )
                         }
@@ -166,7 +166,7 @@ fun OfferDetails(
                 shape = RoundedCornerShape(6.dp),
                 content = {
                     Text(
-                        text = stringResource(R.string.offer_cart_button_text, offer.price),
+                        text = stringResource(R.string.offer_cart_button_text, product.price),
                         style = MaterialTheme.typography.titleSmall
                     )
                 },

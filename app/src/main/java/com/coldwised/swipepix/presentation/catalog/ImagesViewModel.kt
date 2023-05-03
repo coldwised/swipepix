@@ -3,8 +3,10 @@ package com.coldwised.swipepix.presentation.catalog
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coldwised.swipepix.Constants
 import com.coldwised.swipepix.presentation.catalog.full_screen.event.ImageScreenEvent
 import com.coldwised.swipepix.presentation.catalog.full_screen.type.AnimationType
 import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
@@ -12,7 +14,7 @@ import com.coldwised.swipepix.presentation.catalog.state.GalleryScreenState
 import com.coldwised.swipepix.util.Extension.convertPixelsToDp
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.domain.use_case.GetAppConfigurationStreamUseCase
-import com.coldwised.swipepix.domain.use_case.GetImagesUrlListUseCase
+import com.coldwised.swipepix.domain.use_case.GetProductsByCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -23,14 +25,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ImagesViewModel @Inject constructor(
-    private val getImagesUrlListUseCase: GetImagesUrlListUseCase,
+    private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
     private val getAppConfigurationStreamUseCase: GetAppConfigurationStreamUseCase,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private val _state = MutableStateFlow(GalleryScreenState())
     val state = _state.asStateFlow()
 
+    private val categoryId: String? = savedStateHandle[Constants.PARENT_CATEGORY_ID_PARAM]
+
     init {
+        _state.update {
+            it.copy(
+                categoryId = categoryId.orEmpty()
+            )
+        }
         init()
     }
 
@@ -82,8 +92,8 @@ class ImagesViewModel @Inject constructor(
 
     private fun onAnimate(animationType: AnimationType) {
         viewModelScope.launch {
-            val _state = _state
-            _state.update {
+            val state = _state
+            state.update {
                 val pagerScreenState = it.pagerScreenState
                 it.copy(
                     pagerScreenState = pagerScreenState.copy(
@@ -95,7 +105,7 @@ class ImagesViewModel @Inject constructor(
                 )
             }
             delay(400)
-            _state.update {
+            state.update {
                 val pagerScreenState = it.pagerScreenState
                 it.copy(
                     pagerScreenState = pagerScreenState.copy(
@@ -291,31 +301,31 @@ class ImagesViewModel @Inject constructor(
 
     private fun loadImageUrlList() {
         viewModelScope.launch {
-            val _state = _state
-            _state.update {
+            val state = _state
+            state.update {
                 it.copy(
                     isLoading = true,
                     error = null,
                 )
             }
-            getImagesUrlListUseCase().collect { result ->
+            getProductsByCategoryUseCase(state.value.categoryId).collect { result ->
                 when(result) {
                     is Resource.Success -> {
-                        _state.update {
+                        state.update {
                             it.copy(
                                 goodsList = result.data.toImmutableList(),
                             )
                         }
                     }
                     is Resource.Error -> {
-                        _state.update {
+                        state.update {
                             it.copy(
                                 error = result.message,
                             )
                         }
                     }
                 }
-                _state.update {
+                state.update {
                     it.copy(
                         isLoading = false,
                     )
