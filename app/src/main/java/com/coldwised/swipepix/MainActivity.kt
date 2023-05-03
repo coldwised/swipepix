@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.coldwised.swipepix.domain.type.BottomNavItem
 import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.BottomNavigationBar
@@ -89,7 +90,7 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(
                                 items = listOf(
                                     BottomNavItem(
-                                        screen = Screen.ImagesScreen,
+                                        screen = Screen.CategoriesScreen,
                                         iconId = R.drawable.ic_search_24,
                                     ),
                                     BottomNavItem(
@@ -143,13 +144,13 @@ fun TransparentSystemBars(isDarkTheme: Boolean) {
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
-    val categoriesScreenRoute = remember { Screen.CategoriesScreen.route }
+    val categoriesScreenRoute = remember { "${Screen.CategoriesScreen.route}?${Constants.PARENT_CATEGORY_ID_PARAM}={${Constants.PARENT_CATEGORY_ID_PARAM}" }
     NavHost(
         navController = navHostController,
         startDestination = categoriesScreenRoute
     ) {
         composable(
-            route = categoriesScreenRoute
+            route = Screen.ImagesScreen.route
         ) {
             GalleryScreen(
                 navController = navHostController
@@ -177,7 +178,8 @@ fun Navigation(navHostController: NavHostController) {
             )
         }
         composable(
-            route = Screen.CategoriesScreen.route
+            route = categoriesScreenRoute,
+            arguments = listOf(navArgument(Constants.PARENT_CATEGORY_ID_PARAM) { nullable = true })
         ) {
             CategoriesScreen(
                 navController = navHostController

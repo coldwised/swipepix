@@ -6,8 +6,10 @@ import com.coldwised.swipepix.data.remote.dto.CategoryDto
 import com.coldwised.swipepix.domain.repository.ShopRepository
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.util.UiText
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -22,7 +24,7 @@ class ShopRepositoryImpl @Inject constructor(
                     shopApi.getCatalogCategories()
                 }
             )
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun getChildCategories(parentId: String): Flow<Resource<List<CategoryDto>>> {
@@ -32,7 +34,7 @@ class ShopRepositoryImpl @Inject constructor(
                     shopApi.getChildCategories(parentId)
                 }
             )
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private inline fun <T> safeApiCall(apiCall: () -> T): Resource<T> {

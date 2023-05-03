@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
+import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.catalog.categories.component.CategoriesTopBar
 
 @Composable
@@ -44,14 +45,14 @@ fun CategoriesScreen(
 				CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
 			}
 			if(!state.isLoading && state.error == null) {
-				CategoriesList(state.categories, viewModel::onCategoryClick)
+				CategoriesList(state.categories, navController)
 			}
 		}
 	}
 }
 
 @Composable
-fun CategoriesList(categories: List<CategoryDto>, onItemClick: (CategoryDto) -> Unit) {
+fun CategoriesList(categories: List<CategoryDto>, navController: NavController) {
 	LazyVerticalGrid(
 		modifier = Modifier
 			.fillMaxSize(),
@@ -62,7 +63,11 @@ fun CategoriesList(categories: List<CategoryDto>, onItemClick: (CategoryDto) -> 
 			Card(
 				modifier = Modifier
 					.clickable {
-						onItemClick(category)
+						if(category.childCategories.isEmpty()) {
+							navController.navigate(Screen.ImagesScreen.withArgs(category.id))
+						} else {
+							navController.navigate(Screen.CategoriesScreen.withArgs(category.id))
+						}
 					}
 			) {
 				Column {
