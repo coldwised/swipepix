@@ -7,5 +7,4 @@ object Constants {
     const val SERVICE_PARAM_IMAGE_URL = "image_url"
     const val CART_PRODUCTS_TABLE = "cart_products_table"
     const val IMAGES_URL_TABLE_NAME_NEW = "image_url_table_new"
-    const val PARENT_CATEGORY_ID_PARAM = "parentCategoryId"
 }

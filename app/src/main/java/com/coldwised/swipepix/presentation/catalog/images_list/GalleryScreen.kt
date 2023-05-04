@@ -9,9 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.coldwised.swipepix.presentation.catalog.ImagesViewModel
-import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.catalog.full_screen.PagerScreen
 import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorLabel
 import com.coldwised.swipepix.presentation.catalog.images_list.components.GalleryScreenTopBar
@@ -21,7 +19,7 @@ import kotlinx.collections.immutable.toImmutableList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
-    navController: NavController,
+    onThemeSettingsClick: () -> Unit,
     viewModel: ImagesViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.collectAsState().value
@@ -34,7 +32,7 @@ fun GalleryScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             GalleryScreenTopBar(
-                onThemeSettingsClick = { navController.navigate(Screen.ThemeSettingsScreen.route) },
+                onThemeSettingsClick = onThemeSettingsClick,
                 scrollBehavior = scrollBehavior
             )
         },

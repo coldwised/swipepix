@@ -18,15 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
-import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.catalog.categories.component.CategoriesTopBar
 
 @Composable
 fun CategoriesScreen(
-	navController: NavController,
+	onCategoryClick: (CategoryDto) -> Unit,
 	viewModel: CategoriesViewModel = hiltViewModel()
 ) {
 	Scaffold(
@@ -44,14 +42,14 @@ fun CategoriesScreen(
 				CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
 			}
 			if(!state.isLoading && state.error == null) {
-				CategoriesList(state.categories, navController)
+				CategoriesList(state.categories, onCategoryClick)
 			}
 		}
 	}
 }
 
 @Composable
-fun CategoriesList(categories: List<CategoryDto>, navController: NavController) {
+fun CategoriesList(categories: List<CategoryDto>, onCategoryClick: (CategoryDto) -> Unit) {
 	LazyColumn(
 		modifier = Modifier
 			.fillMaxSize(),
@@ -60,11 +58,7 @@ fun CategoriesList(categories: List<CategoryDto>, navController: NavController) 
 			Column(
 				modifier = Modifier
 					.clickable {
-						if(category.childCategories.isEmpty()) {
-							navController.navigate(Screen.ProductsScreen.withArgs(category.id))
-						} else {
-							navController.navigate(Screen.CategoriesScreen.withArgs(category.id))
-						}
+						onCategoryClick(category)
 					},
 			) {
 				ListItem(
