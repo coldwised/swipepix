@@ -22,14 +22,19 @@ import coil.compose.AsyncImage
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
 import com.coldwised.swipepix.presentation.catalog.categories.component.CategoriesTopBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(
 	onCategoryClick: (CategoryDto) -> Unit,
+	onThemeSettingsClick: () -> Unit,
+	categoryId: String? = null,
 	viewModel: CategoriesViewModel = hiltViewModel()
 ) {
 	Scaffold(
 		topBar = {
-			CategoriesTopBar()
+			CategoriesTopBar(
+				onThemeSettingsClick = onThemeSettingsClick
+			)
 		}
 	) { innerPadding ->
 		val state = viewModel.state.collectAsState().value

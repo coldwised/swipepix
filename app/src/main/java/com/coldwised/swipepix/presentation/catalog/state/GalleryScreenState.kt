@@ -6,7 +6,6 @@ import com.coldwised.swipepix.presentation.catalog.full_screen.state.PagerScreen
 import com.coldwised.swipepix.util.UiText
 
 data class GalleryScreenState(
-    val categoryId: String = "",
     val isLoading: Boolean = false,
     val goodsList: List<ProductDto> = emptyList(),
     val error: UiText? = null,

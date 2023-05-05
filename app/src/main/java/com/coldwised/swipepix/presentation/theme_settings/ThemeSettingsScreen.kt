@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.presentation.theme_settings.components.ThemeStyleSection
 import com.coldwised.swipepix.util.Extension.isCompatibleWithDynamicColors
@@ -18,7 +17,7 @@ import com.coldwised.swipepix.util.Extension.isCompatibleWithDynamicColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThemeSettingsScreen(
-    navController: NavController,
+    onBackClick: () -> Unit,
     viewModel: ThemeSettingsViewModel = hiltViewModel()
 ) {
     val screenState = viewModel.state.collectAsState().value
@@ -32,9 +31,7 @@ fun ThemeSettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            navController.navigateUp()
-                        }
+                        onClick = onBackClick
                     ) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowLeft,

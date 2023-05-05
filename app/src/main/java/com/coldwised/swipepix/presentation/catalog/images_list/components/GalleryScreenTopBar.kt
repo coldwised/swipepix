@@ -14,7 +14,7 @@ import com.coldwised.swipepix.R
 @Composable
 fun GalleryScreenTopBar(
     onThemeSettingsClick: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
 ) {
     TopAppBar(
         title = {

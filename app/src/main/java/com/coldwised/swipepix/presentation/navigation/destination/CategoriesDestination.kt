@@ -1,26 +1,43 @@
 package com.coldwised.swipepix.presentation.navigation.destination
 
+import android.net.Uri
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.coldwised.swipepix.presentation.catalog.categories.CategoriesScreen
 
+const val CATEGORIES_SCREEN_ROUTE = "categories"
+private const val ID_KEY = "id"
+
 fun NavGraphBuilder.categories(
-	onThemeSettingsClick: () -> Unit
+	onNavigateToThemeSettings: () -> Unit,
+	onNavigateToProducts: (String) -> Unit,
+	onNavigateToCategories: (String) -> Unit,
 ) {
 	composable(
-		route = "Categories?id={id}",
-		arguments = listOf(navArgument("id") { nullable = true; type = NavType.StringType })
-	) {
+		route = "$CATEGORIES_SCREEN_ROUTE?$ID_KEY={$ID_KEY}",
+		arguments = listOf(navArgument(ID_KEY) { nullable = true; type = NavType.StringType })
+	) { navBackStackEntry ->
+		val arguments = navBackStackEntry.arguments
+		val encodedId = arguments?.getString(ID_KEY)
+		val id = Uri.decode(encodedId)
 		CategoriesScreen(
+			categoryId = id,
 			onCategoryClick = {
 				if(it.childCategories.isEmpty()) {
-					nav
+					onNavigateToProducts(it.id)
 				} else {
-					nav
+					onNavigateToCategories(it.id)
 				}
-			}
+			},
+			onThemeSettingsClick = onNavigateToThemeSettings
 		)
 	}
+}
+
+fun NavController.navigateToCategories(id: String?) {
+	val encodedId: String? = Uri.encode(id)
+	navigate("$CATEGORIES_SCREEN_ROUTE?$ID_KEY=$encodedId")
 }
