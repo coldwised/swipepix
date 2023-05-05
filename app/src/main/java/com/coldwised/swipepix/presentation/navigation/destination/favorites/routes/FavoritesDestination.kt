@@ -1,20 +1,20 @@
-package com.coldwised.swipepix.presentation.navigation.destination
+package com.coldwised.swipepix.presentation.navigation.destination.favorites.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.coldwised.swipepix.presentation.favorites.FavoritesScreen
 
-private const val BASE_ROUTE = "favorites"
+const val FAVORITES_SCREEN_ROUTE = "favorites"
 fun NavGraphBuilder.favorites(
 ) {
 	composable(
-		route = BASE_ROUTE,
+		route = FAVORITES_SCREEN_ROUTE,
 	) {
 		FavoritesScreen()
 	}
 }
 
 fun NavController.navigateToFavorites() {
-	navigate(BASE_ROUTE)
+	navigate(FAVORITES_SCREEN_ROUTE)
 }

@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.navigation.destination
+package com.coldwised.swipepix.presentation.navigation.destination.catalog.routes
 
 import android.net.Uri
 import androidx.navigation.NavController

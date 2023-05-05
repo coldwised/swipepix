@@ -4,6 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.coldwised.swipepix.presentation.navigation.destination.*
+import com.coldwised.swipepix.presentation.navigation.destination.cart.cartGraph
+import com.coldwised.swipepix.presentation.navigation.destination.catalog.CATALOG_GRAPH_NAME
+import com.coldwised.swipepix.presentation.navigation.destination.catalog.catalogGraph
+import com.coldwised.swipepix.presentation.navigation.destination.favorites.favoritesGraph
 
 @Composable
 fun AppNavigation(
@@ -11,20 +15,14 @@ fun AppNavigation(
 ) {
 	NavHost(
 		navController = navController,
-		startDestination = CATEGORIES_SCREEN_ROUTE
+		startDestination = CATALOG_GRAPH_NAME
 	) {
-		products(
-			onThemeSettingsClick = navController::navigateToThemeSettings
-		)
-		categories(
-			onNavigateToThemeSettings = navController::navigateToThemeSettings,
-			onNavigateToProducts = navController::navigateToProducts,
-			onNavigateToCategories = navController::navigateToCategories,
-		)
+		catalogGraph(navController)
+		favoritesGraph(navController)
+		cartGraph(navController)
 		themeSettings(
 			onBackClick = navController::navigateUp
 		)
-		cart()
-		favorites()
+		profile()
 	}
 }

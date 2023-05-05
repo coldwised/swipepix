@@ -1,20 +1,20 @@
-package com.coldwised.swipepix.presentation.navigation.destination
+package com.coldwised.swipepix.presentation.navigation.destination.cart.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.coldwised.swipepix.presentation.cart.CartScreen
 
-private const val BASE_ROUTE = "cart"
+const val CART_PREVIEW_ROUTE = "cart_preview"
 fun NavGraphBuilder.cart(
 ) {
 	composable(
-		route = BASE_ROUTE,
+		route = CART_PREVIEW_ROUTE,
 	) {
 		CartScreen()
 	}
 }
 
 fun NavController.navigateToCart() {
-	navigate(BASE_ROUTE)
+	navigate(CART_PREVIEW_ROUTE)
 }

@@ -3,10 +3,8 @@ package com.coldwised.swipepix.presentation.catalog
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toSize
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.coldwised.swipepix.Constants
 import com.coldwised.swipepix.presentation.catalog.full_screen.event.ImageScreenEvent
 import com.coldwised.swipepix.presentation.catalog.full_screen.type.AnimationType
 import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
@@ -27,20 +25,12 @@ import javax.inject.Inject
 class ImagesViewModel @Inject constructor(
     private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
     private val getAppConfigurationStreamUseCase: GetAppConfigurationStreamUseCase,
-    savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private val _state = MutableStateFlow(GalleryScreenState())
     val state = _state.asStateFlow()
 
-    private val categoryId: String? = savedStateHandle[Constants.PARENT_CATEGORY_ID_PARAM]
-
     init {
-        _state.update {
-            it.copy(
-                categoryId = categoryId.orEmpty()
-            )
-        }
         init()
     }
 
@@ -308,7 +298,7 @@ class ImagesViewModel @Inject constructor(
                     error = null,
                 )
             }
-            getProductsByCategoryUseCase(state.value.categoryId).collect { result ->
+            getProductsByCategoryUseCase("666666666666666666666666666666666666666666666666666666666666666666666666666666").collect { result ->
                 when(result) {
                     is Resource.Success -> {
                         state.update {

@@ -14,13 +14,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.coldwised.swipepix.domain.type.BottomNavItem
-import com.coldwised.swipepix.domain.type.Screen
 import com.coldwised.swipepix.presentation.BottomNavigationBar
 import com.coldwised.swipepix.presentation.navigation.AppNavigation
+import com.coldwised.swipepix.presentation.navigation.destination.PROFILE_SCREEN_ROUTE
+import com.coldwised.swipepix.presentation.navigation.destination.cart.CART_GRAPH_NAME
+import com.coldwised.swipepix.presentation.navigation.destination.cart.navigateToCartGraph
+import com.coldwised.swipepix.presentation.navigation.destination.catalog.CATALOG_GRAPH_NAME
+import com.coldwised.swipepix.presentation.navigation.destination.catalog.navigateToCatalogGraph
+import com.coldwised.swipepix.presentation.navigation.destination.favorites.FAVORITES_GRAPH_NAME
+import com.coldwised.swipepix.presentation.navigation.destination.favorites.navigateToFavoritesGraph
+import com.coldwised.swipepix.presentation.navigation.destination.navigateToProfile
 import com.coldwised.swipepix.ui.theme.SwipePixTheme
 import com.coldwised.swipepix.util.Extension.isCompatibleWithApi33
 import com.coldwised.swipepix.util.Extension.shouldUseDarkTheme
@@ -35,20 +43,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var navHostController: NavHostController
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("onCreate", "onDestroy")
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("onCreate", "onCreateMain")
@@ -84,20 +79,28 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(
                                 items = listOf(
                                     BottomNavItem(
-                                        screen = Screen.CategoriesScreen,
+                                        name = stringResource(id = R.string.catalog_screen_name),
+                                        route = CATALOG_GRAPH_NAME,
                                         iconId = R.drawable.ic_search_24,
+                                        onClick = navController::navigateToCatalogGraph
                                     ),
                                     BottomNavItem(
-                                        screen = Screen.CartScreen,
+                                        name = stringResource(id = R.string.cart_screen_name),
+                                        route = CART_GRAPH_NAME,
                                         iconId = R.drawable.ic_shopping_basket_24,
+                                        onClick = navController::navigateToCartGraph
                                     ),
                                     BottomNavItem(
-                                        screen = Screen.FavoritesScreen,
+                                        name = stringResource(id = R.string.favorites_screen_name),
+                                        route = FAVORITES_GRAPH_NAME,
                                         iconId = R.drawable.ic_favorite_border_24,
+                                        onClick = navController::navigateToFavoritesGraph
                                     ),
                                     BottomNavItem(
-                                        screen = Screen.ProfileScreen,
+                                        name = stringResource(id = R.string.profile_screen_name),
+                                        route = PROFILE_SCREEN_ROUTE,
                                         iconId = R.drawable.ic_account_circle_24,
+                                        onClick = navController::navigateToProfile
                                     ),
                                 ),
                                 navController = navController,
@@ -105,7 +108,9 @@ class MainActivity : ComponentActivity() {
                         }
                     ) { innerPadding ->
                         Surface(
-                            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()).fillMaxSize(),
+                            modifier = Modifier
+                                .padding(bottom = innerPadding.calculateBottomPadding())
+                                .fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
                             AppNavigation(navController)

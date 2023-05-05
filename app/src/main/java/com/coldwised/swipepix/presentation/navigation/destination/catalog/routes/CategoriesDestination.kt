@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.navigation.destination
+package com.coldwised.swipepix.presentation.navigation.destination.catalog.routes
 
 import android.net.Uri
 import androidx.navigation.NavController
@@ -8,8 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.coldwised.swipepix.presentation.catalog.categories.CategoriesScreen
 
-const val CATEGORIES_SCREEN_ROUTE = "categories"
+private const val BASE_ROUTE = "categories"
 private const val ID_KEY = "id"
+const val CATEGORIES_SCREEN_ROUTE = "$BASE_ROUTE?$ID_KEY={$ID_KEY}"
 
 fun NavGraphBuilder.categories(
 	onNavigateToThemeSettings: () -> Unit,
@@ -17,7 +18,7 @@ fun NavGraphBuilder.categories(
 	onNavigateToCategories: (String) -> Unit,
 ) {
 	composable(
-		route = "$CATEGORIES_SCREEN_ROUTE?$ID_KEY={$ID_KEY}",
+		route = "$BASE_ROUTE?$ID_KEY={$ID_KEY}",
 		arguments = listOf(navArgument(ID_KEY) { nullable = true; type = NavType.StringType })
 	) { navBackStackEntry ->
 		val arguments = navBackStackEntry.arguments
@@ -39,5 +40,5 @@ fun NavGraphBuilder.categories(
 
 fun NavController.navigateToCategories(id: String?) {
 	val encodedId: String? = Uri.encode(id)
-	navigate("$CATEGORIES_SCREEN_ROUTE?$ID_KEY=$encodedId")
+	navigate("$BASE_ROUTE?$ID_KEY=$encodedId")
 }
