@@ -1,6 +1,7 @@
 package com.coldwised.swipepix.presentation.navigation.destination.catalog
 
 import androidx.navigation.*
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.coldwised.swipepix.presentation.navigation.destination.catalog.routes.*
 import com.coldwised.swipepix.presentation.navigation.destination.navigateToThemeSettings
 
@@ -24,5 +25,10 @@ fun NavGraphBuilder.catalogGraph(
 	}
 }
 fun NavController.navigateToCatalogGraph() {
-	navigate(CATALOG_GRAPH_NAME)
+	navigate(CATALOG_GRAPH_NAME) {
+		popUpTo(graph.findStartDestination().id) {
+			inclusive = true
+		}
+		launchSingleTop = true
+	}
 }

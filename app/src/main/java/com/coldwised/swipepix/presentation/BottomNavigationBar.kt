@@ -8,6 +8,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.coldwised.swipepix.domain.type.BottomNavItem
 
@@ -17,8 +18,8 @@ fun BottomNavigationBar(
 	navController: NavController,
 	modifier: Modifier = Modifier,
 ) {
-	val backStackEntry = navController.currentBackStackEntryAsState().value
-	val route = backStackEntry?.destination?.route ?: return
+	val backStackEntry = navController.currentBackStackEntryAsState().value ?: return
+	val currentDestination = backStackEntry.destination
 	NavigationBar(
 		modifier = modifier
 			//.navigationBarsPadding()
@@ -28,7 +29,9 @@ fun BottomNavigationBar(
 	) {
 		val colorScheme = MaterialTheme.colorScheme
 		items.forEach { item ->
-			val selected = route.startsWith(item.route)
+			val selected = currentDestination.hierarchy.any {
+				it.route == item.route
+			}
 			NavigationBarItem(
 				//interactionSource = NoRippleInteractionSource(),
 				selected = selected,
@@ -36,7 +39,6 @@ fun BottomNavigationBar(
 				colors = NavigationBarItemDefaults.colors(
 					selectedTextColor = colorScheme.primary,
 					selectedIconColor = colorScheme.primary,
-					//indicatorColor = Color.Transparent
 				),
 				icon = {
 					Icon(
