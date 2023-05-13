@@ -2,7 +2,6 @@ package com.coldwised.swipepix.presentation
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
@@ -10,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.coldwised.swipepix.domain.type.BottomNavItem
 
 @Composable
@@ -18,7 +18,7 @@ fun BottomNavigationBar(
 	navController: NavController,
 	modifier: Modifier = Modifier,
 ) {
-	val currentDestination = navController.currentDestination ?: return
+	val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 	NavigationBar(
 		modifier = modifier
 			//.navigationBarsPadding()
@@ -28,9 +28,9 @@ fun BottomNavigationBar(
 	) {
 		val colorScheme = MaterialTheme.colorScheme
 		items.forEach { item ->
-			val selected = currentDestination.hierarchy.any {
+			val selected = currentDestination?.hierarchy?.any {
 				it.route == item.route
-			}
+			} ?: false
 			NavigationBarItem(
 				//interactionSource = NoRippleInteractionSource(),
 				selected = selected,

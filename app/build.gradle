@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
@@ -93,7 +93,7 @@ dependencies {
     implementation "io.ktor:ktor-client-serialization:$ktor_version"
     implementation "io.ktor:ktor-client-websockets:$ktor_version"
     implementation "io.ktor:ktor-client-logging:$ktor_version"
-    implementation "ch.qos.logback:logback-classic:1.2.11"
+//    implementation "ch.qos.logback:logback-classic:1.4.6"
 
     //Coil compose
     implementation "io.coil-kt:coil-compose:2.2.2"
