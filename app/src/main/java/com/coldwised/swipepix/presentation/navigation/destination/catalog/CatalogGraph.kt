@@ -1,8 +1,6 @@
 package com.coldwised.swipepix.presentation.navigation.destination.catalog
 
 import androidx.navigation.*
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.coldwised.swipepix.presentation.navigation.destination.catalog.routes.*
 import com.coldwised.swipepix.presentation.navigation.destination.navigateToThemeSettings
 
@@ -26,25 +24,17 @@ fun NavGraphBuilder.catalogGraph(
 	}
 }
 fun NavController.navigateToCatalogGraph() {
-	navigate(CATEGORIES_SCREEN_ROUTE) {
-		val existingNode = graph.findNode(CATEGORIES_SCREEN_ROUTE)
-		existingNode?.let {
-			graph.remove(existingNode)
+	val route = CATALOG_GRAPH_NAME
+	navigate(route) {
+		val backQueue = backQueue
+		for(i in backQueue.indices) {
+			if(backQueue[i].destination.route == route) {
+				val entriesToDelete = backQueue.subList(i, backQueue.size)
+				val savedEntries = entriesToDelete.drop(2)
+				backQueue.removeAll(entriesToDelete)
+				backQueue.addAll(savedEntries)
+				break
+			}
 		}
-		launchSingleTop = true
-		// currentDestination.parent.rem
-		// val isExisting = currentDestination?.parent?.hierarchy?.any {
-		// 	it.route == CATEGORIES_SCREEN_ROUTE
-		// }
-		// launchSingleTop = true
-		// val asdf = graph.findStartDestination()
-		// popUpTo(graph.findStartDestination().id) {
-		// 	this.
-		// 	inclusive = false
-		// }
-		// popUpTo(graph.findStartDestination().id) {
-		// 	//inclusive = true
-		// }
-		//launchSingleTop = true
 	}
 }
