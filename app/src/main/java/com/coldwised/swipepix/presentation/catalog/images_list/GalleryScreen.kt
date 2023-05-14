@@ -23,6 +23,9 @@ fun GalleryScreen(
     onThemeSettingsClick: () -> Unit,
     viewModel: ImagesViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(key1 = true) {
+        viewModel.onStart(categoryId)
+    }
     val state = viewModel.state.collectAsState().value
     var savedPaddingValues by remember {
         mutableStateOf(PaddingValues(0.dp))
@@ -58,7 +61,7 @@ fun GalleryScreen(
                     .padding(horizontal = 16.dp)
                     .background(MaterialTheme.colorScheme.background)
                 ,
-                onRefreshClick = viewModel::onRefresh
+                onRefreshClick = { viewModel.onStart(categoryId) }
             )
         }
         if(state.isLoading) {

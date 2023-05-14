@@ -285,11 +285,11 @@ class ImagesViewModel @Inject constructor(
         }
     }
 
-    fun onRefresh() {
-        loadImageUrlList()
+    fun onStart(categoryId: String) {
+        loadImageUrlList(categoryId)
     }
 
-    private fun loadImageUrlList() {
+    private fun loadImageUrlList(categoryId: String) {
         viewModelScope.launch {
             val state = _state
             state.update {
@@ -298,7 +298,7 @@ class ImagesViewModel @Inject constructor(
                     error = null,
                 )
             }
-            getProductsByCategoryUseCase("666666666666666666666666666666666666666666666666666666666666666666666666666666").collect { result ->
+            getProductsByCategoryUseCase(categoryId).collect { result ->
                 when(result) {
                     is Resource.Success -> {
                         state.update {
@@ -336,6 +336,5 @@ class ImagesViewModel @Inject constructor(
                 }
             }
         }
-        loadImageUrlList()
     }
 }

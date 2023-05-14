@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,14 +22,36 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
 import com.coldwised.swipepix.presentation.catalog.categories.component.CategoriesTopBar
+import com.coldwised.swipepix.util.UiText
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(
+internal fun CategoriesScreen(
 	onCategoryClick: (CategoryDto) -> Unit,
 	onThemeSettingsClick: () -> Unit,
 	categoryId: String? = null,
 	viewModel: CategoriesViewModel = hiltViewModel()
+) {
+	LaunchedEffect(key1 = true) {
+		viewModel.loadCategories(categoryId)
+	}
+	val state = viewModel.state.collectAsState().value
+	CategoriesScreen(
+		onCategoryClick = onCategoryClick,
+		onThemeSettingsClick = onThemeSettingsClick,
+		isLoading = state.isLoading,
+		error = state.error,
+		categories = state.categories.orEmpty(),
+	)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CategoriesScreen(
+	onThemeSettingsClick: () -> Unit,
+	onCategoryClick: (CategoryDto) -> Unit,
+	isLoading: Boolean,
+	error: UiText?,
+	categories: List<CategoryDto>,
 ) {
 	Scaffold(
 		topBar = {
@@ -37,17 +60,16 @@ fun CategoriesScreen(
 			)
 		}
 	) { innerPadding ->
-		val state = viewModel.state.collectAsState().value
 		Box(
 			modifier = Modifier
 				.padding(innerPadding)
 				.fillMaxSize()
 		) {
-			if(state.isLoading) {
+			if(isLoading) {
 				CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
 			}
-			if(!state.isLoading && state.error == null) {
-				CategoriesList(state.categories, onCategoryClick)
+			if(!isLoading && error == null) {
+				CategoriesList(categories, onCategoryClick)
 			}
 		}
 	}
@@ -68,16 +90,18 @@ fun CategoriesList(categories: List<CategoryDto>, onCategoryClick: (CategoryDto)
 			) {
 				ListItem(
 					leadingContent = {
-						AsyncImage(
-							modifier = Modifier
-								.clip(RoundedCornerShape(6.dp))
-								.size(40.dp)
-								.background(Color.White)
-							,
-							model = category.image,
-							contentScale = ContentScale.FillBounds,
-							contentDescription = null,
-						)
+						category.image?.let {
+							AsyncImage(
+								modifier = Modifier
+									.clip(RoundedCornerShape(6.dp))
+									.size(40.dp)
+									.background(Color.White)
+								,
+								model = it,
+								contentScale = ContentScale.FillBounds,
+								contentDescription = null,
+							)
+						}
 					},
 					headlineContent = {
 						Text(

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.coldwised.swipepix.domain.use_case.GetCatalogCategoriesUseCase
 import com.coldwised.swipepix.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,11 +19,20 @@ class CategoriesViewModel @Inject constructor(
     private val _state = MutableStateFlow(CategoriesScreenState())
     val state = _state.asStateFlow()
 
-    init {
-        loadCategories(null)
-    }
-
     fun loadCategories(parentId: String?) {
+        val state = _state
+        if(state.value.categories != null)
+            return
+        viewModelScope.launch {
+            delay(200)
+            if(state.value.categories == null) {
+                state.update {
+                    it.copy(
+                        isLoading = true
+                    )
+                }
+            }
+        }
         viewModelScope.launch {
             getCatalogCategoriesUseCase(parentId).collect { result ->
                 when(result) {

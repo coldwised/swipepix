@@ -14,7 +14,7 @@ fun NavGraphBuilder.products(
 	onThemeSettingsClick: () -> Unit
 ) {
 	composable(
-		route = "$BASE_ROUTE/$ID_KEY",
+		route = "$BASE_ROUTE/{$ID_KEY}",
 		arguments = listOf(navArgument(ID_KEY) { type = NavType.StringType; nullable = false })
 	) { navBackStackEntry ->
 		val arguments = navBackStackEntry.arguments
