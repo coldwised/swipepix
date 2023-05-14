@@ -32,13 +32,12 @@ import com.coldwised.swipepix.R
 import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
 import com.coldwised.swipepix.ui.theme.emptyStarbarColor
-import kotlinx.collections.immutable.ImmutableList
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LazyGridImages(
     lazyGridState: LazyGridState,
-    goodsList: ImmutableList<ProductDto>,
+    goodsList: List<ProductDto>,
     onGalleryScreenEvent: (GalleryScreenEvent) -> Unit,
 ) {
     val context = LocalContext.current
@@ -95,11 +94,16 @@ fun LazyGridImages(
                         val layoutInfo = lazyGridState.layoutInfo
                         val visibleItems = layoutInfo.visibleItemsInfo
                         val lastElement = visibleItems.last()
-                        val currentGridItemOffset = visibleItems.find { it.index == index }?.offset ?: IntOffset.Zero
+                        val currentGridItemOffset =
+                            visibleItems.find { it.index == index }?.offset ?: IntOffset.Zero
                         val offset = layoutInfo.viewportSize.height - lastElement.size.height
                         onGalleryScreenEvent(GalleryScreenEvent.OnSavePainterIntrinsicSize(size))
                         onGalleryScreenEvent(GalleryScreenEvent.OnSaveGridItemOffsetToScroll(offset))
-                        onGalleryScreenEvent(GalleryScreenEvent.OnSaveCurrentGridItemOffset(currentGridItemOffset))
+                        onGalleryScreenEvent(
+                            GalleryScreenEvent.OnSaveCurrentGridItemOffset(
+                                currentGridItemOffset
+                            )
+                        )
                         onGalleryScreenEvent(GalleryScreenEvent.OnImageClick(index))
                     })
                     .padding(6.dp)

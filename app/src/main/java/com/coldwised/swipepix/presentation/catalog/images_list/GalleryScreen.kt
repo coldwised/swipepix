@@ -14,7 +14,6 @@ import com.coldwised.swipepix.presentation.catalog.full_screen.PagerScreen
 import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorLabel
 import com.coldwised.swipepix.presentation.catalog.images_list.components.GalleryScreenTopBar
 import com.coldwised.swipepix.presentation.catalog.images_list.components.LazyGridImages
-import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +48,7 @@ fun GalleryScreen(
         ) {
             LazyGridImages(
                 lazyGridState = state.lazyGridState,
-                goodsList = state.goodsList.toImmutableList(),
+                goodsList = state.goodsList,
                 onGalleryScreenEvent = viewModel::onGalleryScreenEvent
             )
         }
