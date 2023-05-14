@@ -60,7 +60,7 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
+        fontSize = 18.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         ),
@@ -68,7 +68,7 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
+        fontSize = 14.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         ),
@@ -76,7 +76,7 @@ val Typography = Typography(
     titleSmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
+        fontSize = 12.sp,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         ),

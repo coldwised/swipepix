@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.data.remote.dto.ProductDto
@@ -61,9 +60,9 @@ fun OfferDetails(
                     .padding(top = 12.dp)
                 ,
                 enter = slideInVertically(
-                    animationSpec = tween(300),
+                    animationSpec = tween(200),
                     initialOffsetY = {
-                        it * 2
+                        it / 2
                     }
                 ),
             ) {
@@ -82,39 +81,40 @@ fun OfferDetails(
                     )
                     Text(
                         modifier = Modifier
-                            .padding(bottom = 8.dp)
+                            .padding(bottom = 26.dp)
                         ,
                         text = stringResource(id = R.string.price_text, product.price),
                         style = MaterialTheme.typography.titleLarge
                     )
                     Row(
                         modifier = Modifier
+                            .padding(bottom = 6.dp)
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp)
                         ,
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start
                     ) {
-                        Icon(
-                            modifier = Modifier
-                                .padding(end = 6.dp)
-                            //.size(30.dp)
-                            ,
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.emptyStarbarColor
-                        )
-                        Text(
-                            text = stringResource(R.string.no_comments),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.emptyStarbarColor,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        for(i in 0..4) {
+                            Icon(
+                                modifier = Modifier
+                                .size(16.dp)
+                                ,
+                                imageVector = Icons.Default.Star,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.emptyStarbarColor
+                            )
+                        }
                     }
                     Text(
+                        modifier = Modifier.padding(bottom = 18.dp),
+                        text = stringResource(R.string.no_comments),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.emptyStarbarColor,
+                    )
+                    Text(
+                        modifier = Modifier.padding(bottom = 16.dp),
                         text = stringResource(R.string.offer_сharacteristics_text),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleLarge,
                     )
                     for(param in product.params) {
                         Row(
@@ -122,16 +122,23 @@ fun OfferDetails(
                                 .padding(bottom = 12.dp)
                                 .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
+                                modifier = Modifier
+                                    .padding(end = 6.dp)
+                                    .weight(0.5f)
+                                        ,
                                 text = param.first,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.emptyStarbarColor
                             )
-                            Spacer(modifier = Modifier.width(70.dp))
                             Text(
+                                modifier = Modifier
+                                    .weight(0.5f)
+                                ,
                                 text = param.second,
-                                style = MaterialTheme.typography.titleSmall
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
@@ -142,7 +149,7 @@ fun OfferDetails(
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .align(Alignment.BottomCenter)
-                    ,
+            ,
             visible = fabExtended,
             enter = slideInVertically(
                 animationSpec = tween(300),

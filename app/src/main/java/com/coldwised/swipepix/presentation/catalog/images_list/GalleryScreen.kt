@@ -29,7 +29,7 @@ fun GalleryScreen(
     var savedPaddingValues by remember {
         mutableStateOf(PaddingValues(0.dp))
     }
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
