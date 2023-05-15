@@ -3,7 +3,7 @@ package com.coldwised.swipepix.di
 import android.app.Application
 import androidx.room.Room
 import com.coldwised.swipepix.data.local.AppDatabase
-import com.coldwised.swipepix.data.local.ImageUrlDao
+import com.coldwised.swipepix.data.local.dao.CartProductsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,9 +24,9 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideImageUrlDao(
+    fun provideCartProductsDao(
         db: AppDatabase,
-    ): ImageUrlDao {
-        return db.imageUrlDao
+    ): CartProductsDao {
+        return db.cartProductsDao
     }
 }
