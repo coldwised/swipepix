@@ -81,10 +81,11 @@ fun OfferDetails(
                     )
                     Text(
                         modifier = Modifier
-                            .padding(bottom = 26.dp)
+                            .padding(bottom = 10.dp)
                         ,
                         text = stringResource(id = R.string.price_text, product.price),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
                     )
                     Row(
                         modifier = Modifier
@@ -106,7 +107,7 @@ fun OfferDetails(
                         }
                     }
                     Text(
-                        modifier = Modifier.padding(bottom = 18.dp),
+                        modifier = Modifier.padding(bottom = 22.dp),
                         text = stringResource(R.string.no_comments),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.emptyStarbarColor,
