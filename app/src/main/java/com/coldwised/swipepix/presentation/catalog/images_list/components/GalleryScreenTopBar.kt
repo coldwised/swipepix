@@ -3,6 +3,7 @@ package com.coldwised.swipepix.presentation.catalog.images_list.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,6 +14,7 @@ import com.coldwised.swipepix.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreenTopBar(
+    onBackClick: () -> Unit,
     onThemeSettingsClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
 ) {
@@ -21,6 +23,14 @@ fun GalleryScreenTopBar(
             Text(
                 text = stringResource(R.string.top_bar_title),
             )
+        },
+        navigationIcon = {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                )
+            }
         },
         scrollBehavior = scrollBehavior,
         actions = {

@@ -11,7 +11,8 @@ import com.coldwised.swipepix.presentation.catalog.images_list.GalleryScreen
 private const val ID_KEY = "id"
 private const val BASE_ROUTE = "products"
 fun NavGraphBuilder.products(
-	onThemeSettingsClick: () -> Unit
+	onThemeSettingsClick: () -> Unit,
+	onNavigateBack: () -> Unit,
 ) {
 	composable(
 		route = "$BASE_ROUTE/{$ID_KEY}",
@@ -21,6 +22,7 @@ fun NavGraphBuilder.products(
 		val encodedId = arguments?.getString(ID_KEY)
 		val id = Uri.decode(encodedId)
 		GalleryScreen(
+			onBackClick = onNavigateBack,
 			categoryId = id,
 			onThemeSettingsClick = onThemeSettingsClick
 		)

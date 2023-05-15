@@ -7,7 +7,7 @@ import com.coldwised.swipepix.util.UiText
 
 data class GalleryScreenState(
     val isLoading: Boolean = false,
-    val goodsList: List<ProductDto> = emptyList(),
+    val goodsList: List<ProductDto>? = null,
     val error: UiText? = null,
     val lazyGridState: LazyGridState = LazyGridState(firstVisibleItemIndex = 0, firstVisibleItemScrollOffset = 0),
     val itemOffsetToScroll: Int = 0,

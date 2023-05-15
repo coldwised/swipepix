@@ -38,6 +38,9 @@ fun BottomNavigationBar(
 				colors = NavigationBarItemDefaults.colors(
 					selectedTextColor = colorScheme.primary,
 					selectedIconColor = colorScheme.primary,
+					indicatorColor = colorScheme.primaryContainer,
+					unselectedTextColor = colorScheme.outline,
+					unselectedIconColor = colorScheme.outline,
 				),
 				icon = {
 					Icon(

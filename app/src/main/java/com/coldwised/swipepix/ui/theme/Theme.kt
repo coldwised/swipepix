@@ -93,3 +93,6 @@ private var isDarkTheme: Boolean = false
 
 val ColorScheme.emptyStarbarColor: Color
     @Composable get() = if(!isDarkTheme) Color(0xFF8F8D8D) else Color(0xFFA8A8A8)
+
+val ColorScheme.productCardColor: Color
+    @Composable get() = if(!isDarkTheme) Color(0xFFFFFFFF) else Color(0xFF20242B)

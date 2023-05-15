@@ -44,7 +44,6 @@ fun PagerScreen(
     pagerScreenState: PagerScreenState,
     paddingValues: PaddingValues,
     onImageScreenEvent: (ImageScreenEvent) -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     if(!pagerScreenState.isVisible || products.isEmpty()) {
         return
@@ -65,6 +64,7 @@ fun PagerScreen(
     val transparentColor = remember {
         Color.Transparent
     }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val topBarVisible = pagerScreenState.topBarVisible
     val offer = products[pagerIndex]
     val imageUrl = offer.images[0]
@@ -201,6 +201,7 @@ fun PagerScreen(
 
                             AsyncImage(
                                 modifier = Modifier
+                                    .padding(horizontal = 16.dp)
                                     .fillMaxWidth()
                                     .height(250.dp)
                                     .clip(RoundedCornerShape(12.dp))

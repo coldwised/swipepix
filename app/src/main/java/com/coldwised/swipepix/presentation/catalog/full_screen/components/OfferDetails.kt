@@ -60,7 +60,7 @@ fun OfferDetails(
                     .padding(top = 12.dp)
                 ,
                 enter = slideInVertically(
-                    animationSpec = tween(200),
+                    animationSpec = tween(400),
                     initialOffsetY = {
                         it / 2
                     }
@@ -112,6 +112,19 @@ fun OfferDetails(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.emptyStarbarColor,
                     )
+                    product.description?.let { description ->
+                        Text(
+                            modifier = Modifier.padding(bottom = 16.dp),
+                            text = stringResource(R.string.product_description),
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                        Text(
+                            text = description
+                        )
+                    }
+                    if(product.params.isEmpty()) {
+                        return@AnimatedVisibility
+                    }
                     Text(
                         modifier = Modifier.padding(bottom = 16.dp),
                         text = stringResource(R.string.offer_сharacteristics_text),
@@ -122,7 +135,7 @@ fun OfferDetails(
                             Modifier
                                 .padding(bottom = 12.dp)
                                 .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.Top,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(

@@ -33,11 +33,13 @@ fun animatedItem(
         var isSuccess by remember {
             mutableStateOf(true)
         }
-        val imageNotFoundId = R.drawable.image_not_found
+        val imageNotFoundId = remember { R.drawable.image_not_found }
+        val imageWidth = remember { pagerScreenState.gridItemSize.width.dp }
 
         AsyncImage(
             modifier = if (animationType == AnimationType.EXPAND_ANIMATION) {
                 Modifier
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .height(250.dp)
             } else {
@@ -51,14 +53,15 @@ fun animatedItem(
                     )
                     .offset { pagerScreenState.imageOffset }
                     .size(
-                        pagerScreenState.gridItemSize.width.dp,
+                        width = imageWidth,
+                        height = imageWidth - 20.dp
                     )
-                    .padding(7.dp)
+                    .padding(horizontal = 14.dp, vertical = 4.dp)
             }
                 .animateSharedElementTransition(
                     scope,
-                    SpringSpec(stiffness = 1200f),
-                    SpringSpec(stiffness = 1200f)
+                    SpringSpec(stiffness = 400f),
+                    SpringSpec(stiffness = 400f)
                 )
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.White)

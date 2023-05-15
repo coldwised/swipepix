@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
@@ -32,6 +33,7 @@ import com.coldwised.swipepix.R
 import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
 import com.coldwised.swipepix.ui.theme.emptyStarbarColor
+import com.coldwised.swipepix.ui.theme.productCardColor
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -42,7 +44,7 @@ fun LazyGridImages(
 ) {
     val context = LocalContext.current
     val gridItemModifier = Modifier
-        .padding(1.dp)
+        .padding(4.dp)
         .fillMaxWidth()
 
     LazyVerticalGrid(
@@ -88,7 +90,9 @@ fun LazyGridImages(
             )
             Column(
                 modifier = gridItemModifier
+                    .shadow(shape = RoundedCornerShape(12.dp), elevation = 1.dp, clip = true)
                     .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.productCardColor)
                     .clickable(onClick = {
                         val size = painter.intrinsicSize
                         val layoutInfo = lazyGridState.layoutInfo
@@ -98,29 +102,33 @@ fun LazyGridImages(
                             visibleItems.find { it.index == index }?.offset ?: IntOffset.Zero
                         val offset = layoutInfo.viewportSize.height - lastElement.size.height
                         onGalleryScreenEvent(GalleryScreenEvent.OnSavePainterIntrinsicSize(size))
-                        onGalleryScreenEvent(GalleryScreenEvent.OnSaveGridItemOffsetToScroll(offset))
+                        onGalleryScreenEvent(
+                            GalleryScreenEvent.OnSaveGridItemOffsetToScroll(
+                                offset
+                            )
+                        )
                         onGalleryScreenEvent(
                             GalleryScreenEvent.OnSaveCurrentGridItemOffset(
                                 currentGridItemOffset
                             )
                         )
                         onGalleryScreenEvent(GalleryScreenEvent.OnImageClick(index))
-                    })
-                    .padding(6.dp)
+                    }),
             ) {
                 Image(
                     modifier = Modifier
+                        .background(Color.White)
+                        .padding(horizontal = 10.dp)
                         .fillMaxWidth()
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color.White)
                     ,
                     painter = painter,
                     contentScale = contentScale,
                     contentDescription = null,
                 )
                 Text(
-                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp, start = 10.dp, end = 10.dp),
                     text = stringResource(id = R.string.price_text, product.price).replace(',', ' '),
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
@@ -129,7 +137,7 @@ fun LazyGridImages(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 4.dp)
+                        .padding(bottom = 4.dp, start = 10.dp, end = 10.dp)
                     ,
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.Start
@@ -155,7 +163,7 @@ fun LazyGridImages(
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
-                        .padding(bottom = 8.dp),
+                        .padding(bottom = 12.dp, start = 10.dp, end = 10.dp),
                     maxLines = 3,
                     minLines = 3
                 )
@@ -165,6 +173,7 @@ fun LazyGridImages(
                 CustomOutlinedChip(
                     selected =  !isInCart,
                     modifier = Modifier
+                        .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
                         .fillMaxWidth()
                         .height(30.dp)
                     ,
@@ -207,7 +216,7 @@ fun CustomOutlinedChip(
             contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(9.dp),
         modifier = modifier,
         content = {
             content()

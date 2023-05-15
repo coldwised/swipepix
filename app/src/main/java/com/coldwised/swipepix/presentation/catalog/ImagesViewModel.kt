@@ -14,7 +14,6 @@ import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.domain.use_case.GetAppConfigurationStreamUseCase
 import com.coldwised.swipepix.domain.use_case.GetProductsByCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -94,7 +93,7 @@ class ImagesViewModel @Inject constructor(
                     )
                 )
             }
-            delay(400)
+            delay(500)
             state.update {
                 val pagerScreenState = it.pagerScreenState
                 it.copy(
@@ -110,7 +109,7 @@ class ImagesViewModel @Inject constructor(
 
     private fun onPagerIndexChanged(index: Int) {
         _state.update {
-            val product = it.goodsList[index]
+            val product = it.goodsList?.get(index) ?: return
             it.copy(
                 pagerScreenState = it.pagerScreenState.copy(
                     pagerIndex = index,
@@ -209,7 +208,7 @@ class ImagesViewModel @Inject constructor(
     private fun onImageClick(index: Int) {
         _state.update {
             val gridItemSize = it.lazyGridState.layoutInfo.visibleItemsInfo.first().size.toSize()
-            val product = it.goodsList[index]
+            val product = it.goodsList?.get(index) ?: return
             it.copy(
                 pagerScreenState = it.pagerScreenState.copy(
                     pagerIndex = index,
@@ -267,7 +266,7 @@ class ImagesViewModel @Inject constructor(
                     )
                 )
             }
-            delay(350)
+            delay(500)
             _state.update {
                 val pagerScreenState = it.pagerScreenState
                 it.copy(
@@ -303,7 +302,7 @@ class ImagesViewModel @Inject constructor(
                     is Resource.Success -> {
                         state.update {
                             it.copy(
-                                goodsList = result.data.toImmutableList(),
+                                goodsList = result.data,
                             )
                         }
                     }
