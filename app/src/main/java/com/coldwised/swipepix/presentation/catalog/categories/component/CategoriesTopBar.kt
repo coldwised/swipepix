@@ -3,6 +3,7 @@ package com.coldwised.swipepix.presentation.catalog.categories.component
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,6 +19,8 @@ import com.coldwised.swipepix.R
 @Composable
 fun CategoriesTopBar(
 	onThemeSettingsClick: () -> Unit,
+	onBackClick: () -> Unit,
+	backIconVisible: Boolean,
 	scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
 ) {
 	TopAppBar(
@@ -25,6 +28,16 @@ fun CategoriesTopBar(
 			Text(
 				stringResource(R.string.categories_topbar_title),
 			)
+		},
+		navigationIcon = {
+			if(backIconVisible) {
+				IconButton(onClick = onBackClick) {
+					Icon(
+						imageVector = Icons.Default.ArrowBack,
+						contentDescription = null
+					)
+				}
+			}
 		},
 		scrollBehavior = scrollBehavior,
 		actions = {

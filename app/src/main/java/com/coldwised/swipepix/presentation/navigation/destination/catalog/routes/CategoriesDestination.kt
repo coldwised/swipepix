@@ -16,6 +16,7 @@ fun NavGraphBuilder.categories(
 	onNavigateToThemeSettings: () -> Unit,
 	onNavigateToProducts: (String) -> Unit,
 	onNavigateToCategories: (String) -> Unit,
+	onNavigateBack: () -> Unit,
 ) {
 	composable(
 		route = "$BASE_ROUTE?$ID_KEY={$ID_KEY}",
@@ -33,7 +34,8 @@ fun NavGraphBuilder.categories(
 					onNavigateToCategories(it.id)
 				}
 			},
-			onThemeSettingsClick = onNavigateToThemeSettings
+			onThemeSettingsClick = onNavigateToThemeSettings,
+			onBackClick = onNavigateBack
 		)
 	}
 }

@@ -27,6 +27,7 @@ import com.coldwised.swipepix.util.UiText
 @Composable
 internal fun CategoriesScreen(
 	onCategoryClick: (CategoryDto) -> Unit,
+	onBackClick: () -> Unit,
 	onThemeSettingsClick: () -> Unit,
 	categoryId: String? = null,
 	viewModel: CategoriesViewModel = hiltViewModel()
@@ -38,6 +39,8 @@ internal fun CategoriesScreen(
 	CategoriesScreen(
 		onCategoryClick = onCategoryClick,
 		onThemeSettingsClick = onThemeSettingsClick,
+		onBackClick = onBackClick,
+		backIconVisible = categoryId != null,
 		isLoading = state.isLoading,
 		error = state.error,
 		categories = state.categories.orEmpty(),
@@ -49,14 +52,18 @@ internal fun CategoriesScreen(
 private fun CategoriesScreen(
 	onThemeSettingsClick: () -> Unit,
 	onCategoryClick: (CategoryDto) -> Unit,
+	onBackClick: () -> Unit,
 	isLoading: Boolean,
+	backIconVisible: Boolean,
 	error: UiText?,
 	categories: List<CategoryDto>,
 ) {
 	Scaffold(
 		topBar = {
 			CategoriesTopBar(
-				onThemeSettingsClick = onThemeSettingsClick
+				onThemeSettingsClick = onThemeSettingsClick,
+				onBackClick = onBackClick,
+				backIconVisible = backIconVisible,
 			)
 		}
 	) { innerPadding ->

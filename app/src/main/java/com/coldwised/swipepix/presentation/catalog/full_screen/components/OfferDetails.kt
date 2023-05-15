@@ -83,7 +83,7 @@ fun OfferDetails(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
                         ,
-                        text = stringResource(id = R.string.price_text, product.price),
+                        text = stringResource(id = R.string.price_text, product.price).replace(',', ' '),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
@@ -174,8 +174,8 @@ fun OfferDetails(
                 shape = RoundedCornerShape(6.dp),
                 content = {
                     Text(
-                        text = stringResource(R.string.offer_cart_button_text, product.price),
-                        style = MaterialTheme.typography.titleSmall
+                        text = stringResource(R.string.offer_cart_button_text, product.price).replace(',', ' '),
+                        style = MaterialTheme.typography.titleMedium
                     )
                 },
                 onClick = { /*TODO*/ }

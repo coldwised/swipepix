@@ -120,8 +120,8 @@ fun LazyGridImages(
                     contentDescription = null,
                 )
                 Text(
-                    modifier = Modifier.padding(top = 8.dp),
-                    text = stringResource(id = R.string.price_text, product.price),
+                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+                    text = stringResource(id = R.string.price_text, product.price).replace(',', ' '),
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -136,8 +136,8 @@ fun LazyGridImages(
                 ) {
                     Icon(
                         modifier = Modifier
-                            .padding(end = 6.dp)
-                            .size(16.dp),
+                            .padding(end = 2.dp)
+                            .size(14.dp),
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.emptyStarbarColor

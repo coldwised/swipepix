@@ -6,7 +6,7 @@
     <string name="unknown_exception">Неизвестная ошибка. Попробуйте ещё раз</string>
     <string name="io_exception">Ошибка загрузки. Проверьте подключение к сети и повторите попытку.</string>
     <string name="top_bar_title">Галерея</string>
-    <string name="price_text">%1$.0f ₽</string>
+    <string name="price_text">%1$,.0f ₽</string>
 
     <string name="catalog_screen_name">Каталог</string>
     <string name="cart_screen_name">Корзина</string>
@@ -26,7 +26,7 @@
 	<string name="add_to_cart_text">В корзину</string>
     <string name="remove_from_cart_text">Убрать</string>
 	<string name="offer_сharacteristics_text">Характеристики</string>
-    <string name="offer_cart_button_text">В корзину  —  %1$.0f ₽</string>
+    <string name="offer_cart_button_text">В корзину  —  %1$,.0f ₽</string>
     <string name="cart_topbar_title">Корзина</string>
 	<string name="categories_topbar_title">Каталог</string>
 </resources>
