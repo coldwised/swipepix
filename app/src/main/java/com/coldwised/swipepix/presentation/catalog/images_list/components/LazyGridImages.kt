@@ -176,7 +176,7 @@ fun LazyGridImages(
                     mutableStateOf(false)
                 }
                 CustomOutlinedChip(
-                    selected =  !isInCart,
+                    selected = !isInCart,
                     modifier = Modifier
                         .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
                         .fillMaxWidth()

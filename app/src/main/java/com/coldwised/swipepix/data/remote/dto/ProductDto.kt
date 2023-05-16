@@ -6,6 +6,7 @@ data class ProductDto(
     val rating: Float?,
     val name: String,
     val description: String?,
+    val inCart: Boolean = false,
     val price: Float,
     val country: String?,
     val categoryId: String,

@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coldwised.swipepix.domain.use_case.AddProductToCartUseCase
 import com.coldwised.swipepix.presentation.catalog.full_screen.event.ImageScreenEvent
 import com.coldwised.swipepix.presentation.catalog.full_screen.type.AnimationType
 import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
@@ -13,6 +14,7 @@ import com.coldwised.swipepix.util.Extension.convertPixelsToDp
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.domain.use_case.GetAppConfigurationStreamUseCase
 import com.coldwised.swipepix.domain.use_case.GetProductsByCategoryUseCase
+import com.coldwised.swipepix.domain.use_case.RemoveProductFromCartUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,6 +26,8 @@ import javax.inject.Inject
 class ImagesViewModel @Inject constructor(
     private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
     private val getAppConfigurationStreamUseCase: GetAppConfigurationStreamUseCase,
+    private val addProductToCartUseCase: AddProductToCartUseCase,
+    private val removeProductFromCartUseCase: RemoveProductFromCartUseCase,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(GalleryScreenState())
@@ -56,6 +60,24 @@ class ImagesViewModel @Inject constructor(
             is ImageScreenEvent.OnCurrentScaleChange -> {
                 changeCurrentScale(event.scale)
             }
+            is ImageScreenEvent.OnAddToCart -> {
+                addProductToCart(event.productId)
+            }
+            is ImageScreenEvent.OnRemoveFromCart -> {
+                removeProductFromCart(event.productId)
+            }
+        }
+    }
+
+    private fun removeProductFromCart(id: String) {
+        viewModelScope.launch {
+            removeProductFromCartUseCase(id)
+        }
+    }
+
+    private fun addProductToCart(id: String) {
+        viewModelScope.launch {
+            addProductToCartUseCase(id)
         }
     }
 
@@ -193,6 +215,12 @@ class ImagesViewModel @Inject constructor(
             }
             is GalleryScreenEvent.OnImageClick -> {
                 onImageClick(event.index)
+            }
+            is GalleryScreenEvent.OnAddToCart -> {
+                addProductToCart(event.productId)
+            }
+            is GalleryScreenEvent.OnRemoveFromCart -> {
+                removeProductFromCart(event.productId)
             }
         }
     }

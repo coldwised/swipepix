@@ -1,6 +1,7 @@
 package com.coldwised.swipepix.data.repository
 
 import com.coldwised.swipepix.R
+import com.coldwised.swipepix.data.local.dao.CartProductsDao
 import com.coldwised.swipepix.data.remote.ShopServiceApi
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
 import com.coldwised.swipepix.data.remote.dto.ProductDto
@@ -16,7 +17,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class ShopRepositoryImpl @Inject constructor(
-    private val shopApi: ShopServiceApi
+    private val shopApi: ShopServiceApi,
+    private val dao: CartProductsDao,
 ): ShopRepository {
     override fun getCatalogCategories(): Flow<Resource<List<CategoryDto>>> {
         return flow {
@@ -42,14 +44,20 @@ class ShopRepositoryImpl @Inject constructor(
         return flow {
             emit(
                 safeApiCall {
+                    val dao = dao
                     shopApi.getProductsByCategory(categoryId).map {
-                        if(it.images.isEmpty()) {
-                            it.copy(
-                                images = listOf("https://media.istockphoto.com/id/924949200/vector/404-error-page-or-file-not-found-icon.jpg?s=170667a&w=0&k=20&c=gsR5TEhp1tfg-qj1DAYdghj9NfM0ldfNEMJUfAzHGtU=")
-                            )
-                        } else {
-                            it
+                        val images = it.images.let { images ->
+                            if(it.images.isEmpty()) {
+                                listOf("https://media.istockphoto.com/id/924949200/vector/404-error-page-or-file-not-found-icon.jpg?s=170667a&w=0&k=20&c=gsR5TEhp1tfg-qj1DAYdghj9NfM0ldfNEMJUfAzHGtU=")
+                            } else {
+                                images
+                            }
                         }
+                        val inCart = dao.hasItem(it.id)
+                        it.copy(
+                            inCart = inCart,
+                            images = images,
+                        )
                     }
                 }
             )

@@ -7,7 +7,7 @@ import com.coldwised.swipepix.data.local.entity.ProductEntity
 
 @Database(
     entities = [ProductEntity::class],
-    version = 3
+    version = 1
 )
 
 abstract class AppDatabase: RoomDatabase() {
