@@ -28,15 +28,18 @@ fun OfferDetails(
     product: ProductDto,
     animationType: AnimationType,
     modifier: Modifier,
+    onAddToCartButtonClick: () -> Unit,
 ) {
     val verticalScroll = rememberScrollState()
+    val inCart = product.inCart
     var fabExtended by remember {
-        mutableStateOf(animationType == AnimationType.EXPAND_ANIMATION)
+        mutableStateOf(animationType == AnimationType.EXPAND_ANIMATION && !inCart)
     }
-    LaunchedEffect(key1 = animationType) {
-        fabExtended = animationType == AnimationType.EXPAND_ANIMATION
+    LaunchedEffect(key1 = animationType, key2 = inCart) {
+        fabExtended = animationType == AnimationType.EXPAND_ANIMATION && !inCart
     }
-    LaunchedEffect(verticalScroll) {
+    LaunchedEffect(key1 = verticalScroll, key2 = inCart) {
+        if(inCart) return@LaunchedEffect
         var prev = 0
         snapshotFlow { verticalScroll.value }
             .collect {
@@ -191,7 +194,7 @@ fun OfferDetails(
                         style = MaterialTheme.typography.titleMedium
                     )
                 },
-                onClick = { /*TODO*/ }
+                onClick = onAddToCartButtonClick
             )
         }
     }

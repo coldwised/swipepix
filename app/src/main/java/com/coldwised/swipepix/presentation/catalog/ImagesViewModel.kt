@@ -61,7 +61,7 @@ class ImagesViewModel @Inject constructor(
                 changeCurrentScale(event.scale)
             }
             is ImageScreenEvent.OnAddToCart -> {
-                addProductToCart(event.productId)
+                onCartClick(event.productId)
             }
             is ImageScreenEvent.OnRemoveFromCart -> {
                 removeProductFromCart(event.productId)
@@ -70,13 +70,13 @@ class ImagesViewModel @Inject constructor(
     }
 
     private fun removeProductFromCart(id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             removeProductFromCartUseCase(id)
         }
     }
 
     private fun addProductToCart(id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             addProductToCartUseCase(id)
         }
     }
@@ -216,11 +216,32 @@ class ImagesViewModel @Inject constructor(
             is GalleryScreenEvent.OnImageClick -> {
                 onImageClick(event.index)
             }
-            is GalleryScreenEvent.OnAddToCart -> {
-                addProductToCart(event.productId)
+            is GalleryScreenEvent.OnCartClick -> {
+                onCartClick(event.productId)
             }
-            is GalleryScreenEvent.OnRemoveFromCart -> {
-                removeProductFromCart(event.productId)
+        }
+    }
+
+    private fun onCartClick(id: String) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    goodsList = it.goodsList?.map { product ->
+                        if(product.id == id) {
+                            val inCart = product.inCart
+                            if(inCart) {
+                                removeProductFromCart(id)
+                            } else {
+                                addProductToCart(id)
+                            }
+                            product.copy(
+                                inCart = !inCart
+                            )
+                        } else {
+                            product
+                        }
+                    }
+                )
             }
         }
     }

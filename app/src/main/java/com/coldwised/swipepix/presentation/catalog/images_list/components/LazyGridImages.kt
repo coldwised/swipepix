@@ -172,35 +172,15 @@ fun LazyGridImages(
                     maxLines = 3,
                     minLines = 3
                 )
-                var isInCart by rememberSaveable {
-                    mutableStateOf(false)
-                }
                 CustomOutlinedChip(
-                    selected = !isInCart,
+                    selected = product.inCart,
                     modifier = Modifier
                         .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
                         .fillMaxWidth()
                         .height(30.dp)
                     ,
-                    onClick = { isInCart = !isInCart }
-                ) {
-                    Text(
-                        text = if(!isInCart) stringResource(R.string.add_to_cart_text) else
-                            stringResource(R.string.remove_from_cart_text),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    if(isInCart) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
-                            painter = painterResource(id = R.drawable.ic_remove_shopping_cart_24)
-                            ,
-                            tint = MaterialTheme.colorScheme.primary,
-                            contentDescription = null
-                        )
-                    }
-                }
+                    onClick = { onGalleryScreenEvent(GalleryScreenEvent.OnCartClick(product.id)) }
+                )
             }
         }
     }
@@ -211,20 +191,33 @@ fun CustomOutlinedChip(
     selected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    content: @Composable (RowScope.() -> Unit),
 ) {
     OutlinedButton(
         contentPadding = PaddingValues(0.dp),
         onClick = onClick,
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
-            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
+            containerColor = if (!selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+            contentColor = if (!selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(9.dp),
         modifier = modifier,
         content = {
-            content()
+            Text(
+                text = if (!selected) stringResource(R.string.add_to_cart_text) else
+                    stringResource(R.string.remove_from_cart_text),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Medium
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            if (selected) {
+                Icon(
+                    modifier = Modifier.size(18.dp),
+                    painter = painterResource(id = R.drawable.ic_remove_shopping_cart_24),
+                    tint = MaterialTheme.colorScheme.primary,
+                    contentDescription = null
+                )
+            }
         }
     )
 }

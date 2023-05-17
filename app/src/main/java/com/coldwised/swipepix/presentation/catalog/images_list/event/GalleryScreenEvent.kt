@@ -9,7 +9,6 @@ sealed interface GalleryScreenEvent {
     data class OnSavePainterIntrinsicSize(val size: Size): GalleryScreenEvent
     data class OnSaveGridItemOffsetToScroll(val yOffset: Int): GalleryScreenEvent
     data class OnSaveCurrentGridItemOffset(val intOffset: IntOffset): GalleryScreenEvent
-    data class OnAddToCart(val productId: String): GalleryScreenEvent
-    data class OnRemoveFromCart(val productId: String): GalleryScreenEvent
+    data class OnCartClick(val productId: String): GalleryScreenEvent
     data class OnImageClick(val index: Int): GalleryScreenEvent
 }

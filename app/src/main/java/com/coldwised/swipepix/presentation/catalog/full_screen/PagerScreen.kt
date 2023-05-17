@@ -34,6 +34,7 @@ import com.coldwised.swipepix.presentation.catalog.full_screen.state.PagerScreen
 import com.coldwised.swipepix.presentation.catalog.full_screen.type.AnimationType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skydoves.orbital.Orbital
+import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -68,6 +69,7 @@ fun PagerScreen(
     val topBarVisible = pagerScreenState.topBarVisible
     val offer = products[pagerIndex]
     val imageUrl = offer.images[0]
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -141,6 +143,7 @@ fun PagerScreen(
                         product = offer,
                         animationType = animationType,
                         modifier = Modifier.fillMaxSize(),
+                        onAddToCartButtonClick = {}
                     )
                 }
             } else if(animationType == expandAnimationType) {
@@ -161,9 +164,7 @@ fun PagerScreen(
                     contentPadding = PaddingValues(0.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) { index ->
-                    val pagerOffer = remember {
-                        products[index]
-                    }
+                    val pagerOffer = products[index]
                     OfferDetails(
                         modifier = Modifier
                             .fillMaxSize()
@@ -219,6 +220,12 @@ fun PagerScreen(
                         },
                         product = pagerOffer,
                         animationType = animationType,
+                        onAddToCartButtonClick = {
+                            onImageScreenEvent(ImageScreenEvent.OnAddToCart(offer.id))
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar("Товар добавлен в корзину", duration = SnackbarDuration.Short)
+                            }
+                        }
                     )
                     // val overZoomConfig = OverZoomConfig(
                     //     minSnapScale = 1f,
