@@ -6,13 +6,13 @@ import javax.inject.Inject
 class RemoveProductFromCartUseCase @Inject constructor(
     private val cartProductsDao: CartProductsDao,
 ){
-    suspend operator fun invoke(id: String, amount: Int = 1) {
+    suspend operator fun invoke(id: String, deleteAll: Boolean = false) {
         val cartProductsDao = cartProductsDao
         val existingProduct = cartProductsDao.getProduct(id)
-        if(existingProduct != null && existingProduct.amount <= 1) {
+        if(existingProduct != null && existingProduct.amount <= 1 || deleteAll) {
             cartProductsDao.deleteProduct(id)
         } else if(existingProduct != null) {
-            cartProductsDao.updateProductAmount(id, existingProduct.amount - amount)
+            cartProductsDao.updateProductAmount(id, existingProduct.amount - 1)
         }
     }
 }

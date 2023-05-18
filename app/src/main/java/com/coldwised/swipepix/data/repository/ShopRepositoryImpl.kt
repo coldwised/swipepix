@@ -5,6 +5,7 @@ import com.coldwised.swipepix.data.local.dao.CartProductsDao
 import com.coldwised.swipepix.data.remote.ShopServiceApi
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
 import com.coldwised.swipepix.data.remote.dto.ProductDto
+import com.coldwised.swipepix.domain.model.CartProduct
 import com.coldwised.swipepix.domain.repository.ShopRepository
 import com.coldwised.swipepix.util.Resource
 import com.coldwised.swipepix.util.UiText
@@ -57,6 +58,31 @@ class ShopRepositoryImpl @Inject constructor(
                         it.copy(
                             inCart = inCart,
                             images = images,
+                        )
+                    }
+                }
+            )
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override fun getCartProducts(): Flow<Resource<List<CartProduct>>> {
+        return flow {
+            emit(
+                safeApiCall {
+                    dao.getAllProducts().map {
+                        val product = shopApi.getProductById(it.productId)
+                        CartProduct(
+                            id = product.id,
+                            price = product.price,
+                            name = product.name,
+                            amount = it.amount,
+                            image = product.images.let { images ->
+                                if(images.isEmpty()) {
+                                    "https://media.istockphoto.com/id/924949200/vector/404-error-page-or-file-not-found-icon.jpg?s=170667a&w=0&k=20&c=gsR5TEhp1tfg-qj1DAYdghj9NfM0ldfNEMJUfAzHGtU="
+                                } else {
+                                    images[0]
+                                }
+                            }
                         )
                     }
                 }

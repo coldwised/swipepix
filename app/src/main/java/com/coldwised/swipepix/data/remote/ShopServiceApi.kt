@@ -20,6 +20,11 @@ interface ShopServiceApi {
         @Query("categoryId") categoryId: String
     ): List<ProductDto>
 
+    @GET("/get_product_by_id")
+    suspend fun getProductById(
+        @Query("productId") productId: String
+    ): ProductDto
+
     companion object {
         const val BASE_URL = "http:/192.168.1.160:8080"
     }
