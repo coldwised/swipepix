@@ -36,7 +36,8 @@ internal fun CartScreen(
         isLoading = state.isLoading,
         error = state.error,
         onDecreaseProductAmount = viewModel::onDecreaseProductAmount,
-        onIncreaseProductAmount = viewModel::onIncreaseProductAmount
+        onIncreaseProductAmount = viewModel::onIncreaseProductAmount,
+        onDeleteProduct = viewModel::onIncreaseProductAmount,
     )
 }
 
@@ -46,11 +47,18 @@ private fun CartScreen(
     isLoading: Boolean,
     error: UiText?,
     onDecreaseProductAmount: (String) -> Unit,
-    onIncreaseProductAmount: (String) -> Unit
+    onIncreaseProductAmount: (String) -> Unit,
+    onDeleteProduct: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
             CartTopBar()
+        },
+        bottomBar = {
+            CheckoutLabel(
+                price = 41234f,
+                onCheckoutClick = {}
+            )
         }
     ) { innerPadding ->
         Box(
@@ -61,7 +69,8 @@ private fun CartScreen(
             ProductList(
                 products = products,
                 onDecreaseProductAmount = onDecreaseProductAmount,
-                onIncreaseProductAmount = onIncreaseProductAmount
+                onIncreaseProductAmount = onIncreaseProductAmount,
+                onDeleteProduct = onDeleteProduct,
             )
             if(isLoading) {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -74,8 +83,10 @@ private fun CartScreen(
 private fun ProductList(
     products: List<CartProduct>,
     onDecreaseProductAmount: (String) -> Unit,
-    onIncreaseProductAmount: (String) -> Unit
+    onIncreaseProductAmount: (String) -> Unit,
+    onDeleteProduct: (String) -> Unit,
 ) {
+    Divider()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -86,6 +97,7 @@ private fun ProductList(
                 product = product,
                 onDecreaseProductAmount = onDecreaseProductAmount,
                 onIncreaseProductAmount = onIncreaseProductAmount,
+                onDeleteProduct = onDeleteProduct,
             )
             Divider()
         }
@@ -93,10 +105,62 @@ private fun ProductList(
 }
 
 @Composable
+private fun CheckoutLabel(
+    price: Float,
+    onCheckoutClick: () -> Unit,
+) {
+    Column {
+        Divider(
+            color = Color.LightGray
+        )
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp, vertical = 16.dp)
+        ) {
+            Text(
+                text = "Итого",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.price_text, price).replace(',', ' '),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontSize = 23.sp
+                )
+                Button(
+                    modifier = Modifier
+                        .height(34.dp)
+                    ,
+                    shape = RoundedCornerShape(9.dp),
+                    onClick = onCheckoutClick
+                ) {
+                    Text(
+                        text = stringResource(R.string.checkout_button_text),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
+        }
+        Divider(
+            color = Color.LightGray
+        )
+    }
+}
+
+@Composable
 private fun ProductItem(
     product: CartProduct,
     onDecreaseProductAmount: (String) -> Unit,
-    onIncreaseProductAmount: (String) -> Unit
+    onIncreaseProductAmount: (String) -> Unit,
+    onDeleteProduct: (String) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -104,7 +168,6 @@ private fun ProductItem(
     ) {
         AsyncImage(
             modifier = Modifier
-                // .background(Color.White)
                 .weight(0.2f)
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(6.dp))
@@ -143,10 +206,7 @@ private fun ProductItem(
                     onMinusClick = { onDecreaseProductAmount(product.id) }
                 )
                 IconButton(
-//                    modifier = Modifier
-//                        .size(40.dp)
-//                            ,
-                    onClick = { /*TODO*/ }
+                    onClick = { onDeleteProduct(product.id) }
                 ) {
                     Icon(
                         modifier = Modifier
