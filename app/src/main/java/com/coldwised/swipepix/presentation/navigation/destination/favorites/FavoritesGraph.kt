@@ -16,7 +16,6 @@ fun NavGraphBuilder.favoritesGraph(
 	) {
 		favorites(
 			onThemeSettingsClick = navController::navigateToThemeSettings,
-			onNavigateBack = navController::navigateUp
 		)
 	}
 }

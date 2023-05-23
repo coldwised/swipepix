@@ -47,19 +47,21 @@ class ShopRepositoryImpl @Inject constructor(
         return flow {
             emit(
                 safeApiCall {
-                    val dao = cartDao
+                    val cartDao = cartDao
+                    val favoritesDao = favoritesDao
                     shopApi.getProductsByCategory(categoryId).map {
-                        val images = it.images.let { images ->
-                            if(it.images.isEmpty()) {
+                        val newImages = it.images.let { images ->
+                            images.ifEmpty {
                                 listOf("https://media.istockphoto.com/id/924949200/vector/404-error-page-or-file-not-found-icon.jpg?s=170667a&w=0&k=20&c=gsR5TEhp1tfg-qj1DAYdghj9NfM0ldfNEMJUfAzHGtU=")
-                            } else {
-                                images
                             }
                         }
-                        val inCart = dao.hasItem(it.id)
+                        val productId = it.id
+                        val inCart = cartDao.hasItem(productId)
+                        val favorite = favoritesDao.hasItem(productId)
                         it.copy(
                             inCart = inCart,
-                            images = images,
+                            images = newImages,
+                            favorite = favorite
                         )
                     }
                 }
@@ -71,18 +73,22 @@ class ShopRepositoryImpl @Inject constructor(
         return flow {
             emit(
                 safeApiCall {
-                    val dao = favoritesDao
+                    val favoritesDao = favoritesDao
+                    val cartDao = cartDao
                     val shopApi = shopApi
-                    dao.getAllProducts().map { entity ->
-                        val product = shopApi.getProductById(entity.productId)
+                    favoritesDao.getAllProducts().map { entity ->
+                        val productId = entity.productId
+                        val product = shopApi.getProductById(productId)
                         val newImages = product.images.let { images ->
                             images.ifEmpty {
                                 listOf("https://media.istockphoto.com/id/924949200/vector/404-error-page-or-file-not-found-icon.jpg?s=170667a&w=0&k=20&c=gsR5TEhp1tfg-qj1DAYdghj9NfM0ldfNEMJUfAzHGtU=")
                             }
                         }
-                        val inCart = dao.hasItem(entity.productId)
+                        val inCart = cartDao.hasItem(productId)
+                        val favorite = favoritesDao.hasItem(productId)
                         product.copy(
                             inCart = inCart,
+                            favorite = favorite,
                             images = newImages,
                         )
                     }

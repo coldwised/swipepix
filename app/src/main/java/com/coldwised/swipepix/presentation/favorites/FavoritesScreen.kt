@@ -20,15 +20,14 @@ import com.coldwised.swipepix.presentation.catalog.full_screen.PagerScreen
 import com.coldwised.swipepix.presentation.catalog.full_screen.event.ImageScreenEvent
 import com.coldwised.swipepix.presentation.catalog.full_screen.state.PagerScreenState
 import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorLabel
-import com.coldwised.swipepix.presentation.catalog.images_list.components.GalleryScreenTopBar
 import com.coldwised.swipepix.presentation.catalog.images_list.components.LazyGridImages
 import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
+import com.coldwised.swipepix.presentation.favorites.components.FavoriteTopBar
 import com.coldwised.swipepix.util.UiText
 
 @Composable
 internal fun FavoritesScreen(
     onThemeSettingsClick: () -> Unit,
-    onBackClick: () -> Unit,
     viewModel: FavoritesViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
@@ -43,7 +42,6 @@ internal fun FavoritesScreen(
         lazyGridState = state.lazyGridState,
         onImageScreenEvent = viewModel::onImageScreenEvent,
         onRefreshClick = viewModel::onStart,
-        onBackClick = onBackClick,
         onThemeSettingsClick = onThemeSettingsClick,
         onGalleryScreenEvent = viewModel::onGalleryScreenEvent,
     )
@@ -59,7 +57,6 @@ private fun GalleryScreen(
     lazyGridState: LazyGridState,
     onImageScreenEvent: (ImageScreenEvent) -> Unit,
     onRefreshClick: () -> Unit,
-    onBackClick: () -> Unit,
     onThemeSettingsClick: () -> Unit,
     onGalleryScreenEvent: (GalleryScreenEvent) -> Unit,
 ) {
@@ -72,8 +69,7 @@ private fun GalleryScreen(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            GalleryScreenTopBar(
-                onBackClick = onBackClick,
+            FavoriteTopBar(
                 onThemeSettingsClick = onThemeSettingsClick,
                 scrollBehavior = scrollBehavior
             )
@@ -87,7 +83,7 @@ private fun GalleryScreen(
         ) {
             products?.takeIf { it.isEmpty() }?.let {
                 Text(
-                    text = "Нет доступных товаров данной категории",
+                    text = "Нет доступных товаров",
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
                     textAlign = TextAlign.Center
