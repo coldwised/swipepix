@@ -10,6 +10,7 @@ sealed interface ImageScreenEvent {
     data class OnPagerCurrentImageChange(val painterIntrinsicSize: Size): ImageScreenEvent
     data class OnAddToCart(val productId: String): ImageScreenEvent
     data class OnRemoveFromCart(val productId: String): ImageScreenEvent
+    data class OnToggleFavorite(val productId: String): ImageScreenEvent
     object OnBackToGallery: ImageScreenEvent
     object OnBarsVisibilityChange: ImageScreenEvent
 }

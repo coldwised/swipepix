@@ -7,11 +7,16 @@ import com.coldwised.swipepix.presentation.favorites.FavoritesScreen
 
 const val FAVORITES_SCREEN_ROUTE = "favorites"
 fun NavGraphBuilder.favorites(
+	onThemeSettingsClick: () -> Unit,
+	onNavigateBack: () -> Unit,
 ) {
 	composable(
 		route = FAVORITES_SCREEN_ROUTE,
 	) {
-		FavoritesScreen()
+		FavoritesScreen(
+			onBackClick = onNavigateBack,
+			onThemeSettingsClick = onThemeSettingsClick
+		)
 	}
 }
 

@@ -6,6 +6,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import com.coldwised.swipepix.Constants
@@ -14,7 +16,8 @@ import com.coldwised.swipepix.Constants
 @Composable
 fun ImageScreenTopBar(
     isVisible: Boolean,
-    title: String,
+    favorite: Boolean,
+    onFavoriteClicked: () -> Unit,
     onBackClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
@@ -29,11 +32,16 @@ fun ImageScreenTopBar(
     ) {
         val iconsDefault = Icons.Default
         TopAppBar(
-            title = {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.bodySmall
+            title = {},
+            actions = {
+                IconButton(
+                    onClick = onFavoriteClicked
+                ) {
+                    Icon(
+                        contentDescription = null,
+                        imageVector = if(favorite) iconsDefault.Favorite else Icons.Outlined.Favorite
                     )
+                }
             },
             navigationIcon = {
                 IconButton(

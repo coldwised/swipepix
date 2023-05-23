@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.coldwised.swipepix.data.local.AppDatabase
 import com.coldwised.swipepix.data.local.dao.CartProductsDao
+import com.coldwised.swipepix.data.local.dao.FavoriteProductsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,5 +29,13 @@ object RoomModule {
         db: AppDatabase,
     ): CartProductsDao {
         return db.cartProductsDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteProductsDao(
+        db: AppDatabase,
+    ): FavoriteProductsDao {
+        return db.favoriteProductsDao
     }
 }

@@ -82,9 +82,12 @@ fun PagerScreen(
         topBar = {
             ImageScreenTopBar(
                 isVisible = topBarVisible,
-                title = pagerScreenState.topBarText,
+                favorite = offer.favorite,
                 onBackClicked = {
                     onImageScreenEvent(ImageScreenEvent.OnBackToGallery)
+                },
+                onFavoriteClicked = {
+                    onImageScreenEvent(ImageScreenEvent.OnToggleFavorite(offer.id))
                 },
                 scrollBehavior = scrollBehavior
             )

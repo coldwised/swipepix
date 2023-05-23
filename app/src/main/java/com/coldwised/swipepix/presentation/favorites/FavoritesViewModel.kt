@@ -1,4 +1,4 @@
-package com.coldwised.swipepix.presentation.catalog
+package com.coldwised.swipepix.presentation.favorites
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntOffset
@@ -20,13 +20,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ImagesViewModel @Inject constructor(
+class FavoritesViewModel @Inject constructor(
     private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
     private val getAppConfigurationStreamUseCase: GetAppConfigurationStreamUseCase,
     private val addProductToCartUseCase: AddProductToCartUseCase,
     private val removeProductFromCartUseCase: RemoveProductFromCartUseCase,
     private val addProductToFavorites: AddProductToFavorites,
     private val removeProductFromFavorites: RemoveProductFromFavorites,
+    private val getFavoritesUseCase: GetFavoritesUseCase,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(GalleryScreenState())
@@ -372,11 +373,11 @@ class ImagesViewModel @Inject constructor(
         }
     }
 
-    fun onStart(categoryId: String) {
-        loadImageUrlList(categoryId)
+    fun onStart() {
+        loadImageUrlList()
     }
 
-    private fun loadImageUrlList(categoryId: String) {
+    private fun loadImageUrlList() {
         viewModelScope.launch {
             val state = _state
             state.update {
@@ -385,7 +386,7 @@ class ImagesViewModel @Inject constructor(
                     error = null,
                 )
             }
-            getProductsByCategoryUseCase(categoryId).collect { result ->
+            getFavoritesUseCase().collect { result ->
                 when(result) {
                     is Resource.Success -> {
                         state.update {

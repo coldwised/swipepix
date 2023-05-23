@@ -3,6 +3,7 @@ package com.coldwised.swipepix.presentation.navigation.destination.favorites
 import androidx.navigation.*
 import com.coldwised.swipepix.presentation.navigation.destination.favorites.routes.FAVORITES_SCREEN_ROUTE
 import com.coldwised.swipepix.presentation.navigation.destination.favorites.routes.favorites
+import com.coldwised.swipepix.presentation.navigation.destination.navigateToThemeSettings
 
 const val FAVORITES_GRAPH_NAME = "favorites_graph"
 
@@ -13,7 +14,10 @@ fun NavGraphBuilder.favoritesGraph(
 		startDestination = FAVORITES_SCREEN_ROUTE,
 		route = FAVORITES_GRAPH_NAME
 	) {
-		favorites()
+		favorites(
+			onThemeSettingsClick = navController::navigateToThemeSettings,
+			onNavigateBack = navController::navigateUp
+		)
 	}
 }
 
