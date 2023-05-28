@@ -26,6 +26,7 @@ import com.coldwised.swipepix.util.UiText
 @Composable
 internal fun GalleryScreen(
     categoryId: String,
+    categoryName: String,
     onThemeSettingsClick: () -> Unit,
     onBackClick: () -> Unit,
     viewModel: ImagesViewModel = hiltViewModel(),
@@ -38,6 +39,7 @@ internal fun GalleryScreen(
         products = state.goodsList,
         pagerScreenState = state.pagerScreenState,
         isLoading  = state.isLoading,
+        categoryName = categoryName,
         error = state.error,
         lazyGridState = state.lazyGridState,
         onImageScreenEvent = viewModel::onImageScreenEvent,
@@ -51,6 +53,7 @@ internal fun GalleryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GalleryScreen(
+    categoryName: String,
     products: List<ProductDto>?,
     pagerScreenState: PagerScreenState,
     isLoading: Boolean,
@@ -72,6 +75,7 @@ private fun GalleryScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             GalleryScreenTopBar(
+                title = categoryName,
                 onBackClick = onBackClick,
                 onThemeSettingsClick = onThemeSettingsClick,
                 scrollBehavior = scrollBehavior

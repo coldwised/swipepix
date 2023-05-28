@@ -13,6 +13,8 @@ interface ShopRepository {
 
     fun getCartProducts(): Flow<Resource<List<CartProduct>>>
 
+    fun getProductsByQuery(query: String): Flow<Resource<List<ProductDto>>>
+
     fun getFavoritesProducts(): Flow<Resource<List<ProductDto>>>
 
     fun getProductsByCategory(categoryId: String): Flow<Resource<List<ProductDto>>>

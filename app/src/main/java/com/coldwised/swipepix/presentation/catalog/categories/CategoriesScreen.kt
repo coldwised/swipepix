@@ -16,20 +16,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
+import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.categories.component.CategoriesTopBar
 import com.coldwised.swipepix.util.UiText
 
 @Composable
 internal fun CategoriesScreen(
+	categoryId: String? = null,
+	categoryName: String? = null,
 	onCategoryClick: (CategoryDto) -> Unit,
 	onBackClick: () -> Unit,
 	onThemeSettingsClick: () -> Unit,
-	categoryId: String? = null,
 	viewModel: CategoriesViewModel = hiltViewModel()
 ) {
 	LaunchedEffect(key1 = true) {
@@ -40,30 +43,45 @@ internal fun CategoriesScreen(
 		onCategoryClick = onCategoryClick,
 		onThemeSettingsClick = onThemeSettingsClick,
 		onBackClick = onBackClick,
+		categoryName = categoryName,
+		searchQuery = state.searchQuery,
+		foundProducts = state.foundProducts,
 		backIconVisible = categoryId != null,
 		isLoading = state.isLoading,
 		error = state.error,
 		categories = state.categories.orEmpty(),
+		onSearchQueryChanged = viewModel::onSearchQueryChanged,
 	)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoriesScreen(
-	onThemeSettingsClick: () -> Unit,
-	onCategoryClick: (CategoryDto) -> Unit,
-	onBackClick: () -> Unit,
+	categoryName: String?,
+	searchQuery: String,
 	isLoading: Boolean,
 	backIconVisible: Boolean,
+	foundProducts: List<ProductDto>?,
 	error: UiText?,
 	categories: List<CategoryDto>,
+	onThemeSettingsClick: () -> Unit,
+	onSearchQueryChanged: (String) -> Unit,
+	onCategoryClick: (CategoryDto) -> Unit,
+	onBackClick: () -> Unit,
 ) {
+	val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 	Scaffold(
+		modifier = Modifier
+			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		topBar = {
 			CategoriesTopBar(
+				searchQuery = searchQuery,
+				title = categoryName,
 				onThemeSettingsClick = onThemeSettingsClick,
 				onBackClick = onBackClick,
 				backIconVisible = backIconVisible,
+				onSearchQueryChanged = onSearchQueryChanged,
+				scrollBehavior = scrollBehavior
 			)
 		}
 	) { innerPadding ->
@@ -75,6 +93,12 @@ private fun CategoriesScreen(
 			if(isLoading) {
 				CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
 			}
+			foundProducts?.let { products ->
+				FoundProducts(
+					products = products,
+					onItemClick = {}
+				)
+			}
 			if(!isLoading && error == null) {
 				CategoriesList(categories, onCategoryClick)
 			}
@@ -83,7 +107,32 @@ private fun CategoriesScreen(
 }
 
 @Composable
-fun CategoriesList(categories: List<CategoryDto>, onCategoryClick: (CategoryDto) -> Unit) {
+private fun FoundProducts(
+	products: List<ProductDto>,
+	onItemClick: (String) -> Unit,
+) {
+	LazyColumn(
+		modifier = Modifier
+			.fillMaxSize(),
+	) {
+		items(products) { product ->
+			ListItem(
+				modifier = Modifier
+					.clickable {
+						onItemClick(product.id)
+					},
+				headlineContent = {
+					Text(
+						text = product.name
+					)
+				}
+			)
+		}
+	}
+}
+
+@Composable
+private fun CategoriesList(categories: List<CategoryDto>, onCategoryClick: (CategoryDto) -> Unit) {
 	LazyColumn(
 		modifier = Modifier
 			.fillMaxSize(),

@@ -20,6 +20,7 @@ fun FavoriteTopBar(
         title = {
             Text(
                 text = stringResource(R.string.favorites_topbar_title),
+                style = MaterialTheme.typography.titleMedium,
             )
         },
         scrollBehavior = scrollBehavior,

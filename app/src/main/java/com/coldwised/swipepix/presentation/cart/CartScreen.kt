@@ -35,6 +35,7 @@ internal fun CartScreen(
         products = state.products.orEmpty(),
         isLoading = state.isLoading,
         error = state.error,
+        orderPrice = state.products.orEmpty().map { it.price }.sum(),
         onDecreaseProductAmount = viewModel::onDecreaseProductAmount,
         onIncreaseProductAmount = viewModel::onIncreaseProductAmount,
         onDeleteProduct = viewModel::onIncreaseProductAmount,
@@ -46,6 +47,7 @@ private fun CartScreen(
     products: List<CartProduct>,
     isLoading: Boolean,
     error: UiText?,
+    orderPrice: Float,
     onDecreaseProductAmount: (String) -> Unit,
     onIncreaseProductAmount: (String) -> Unit,
     onDeleteProduct: (String) -> Unit
@@ -56,7 +58,7 @@ private fun CartScreen(
         },
         bottomBar = {
             CheckoutLabel(
-                price = 41234f,
+                orderPrice = orderPrice,
                 onCheckoutClick = {}
             )
         }
@@ -106,13 +108,11 @@ private fun ProductList(
 
 @Composable
 private fun CheckoutLabel(
-    price: Float,
+    orderPrice: Float,
     onCheckoutClick: () -> Unit,
 ) {
     Column {
-        Divider(
-            color = Color.LightGray
-        )
+        Divider()
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
@@ -120,7 +120,7 @@ private fun CheckoutLabel(
                 .padding(horizontal = 40.dp, vertical = 16.dp)
         ) {
             Text(
-                text = "Итого",
+                text = stringResource(R.string.checkout_text),
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -131,7 +131,7 @@ private fun CheckoutLabel(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.price_text, price).replace(',', ' '),
+                    text = stringResource(id = R.string.price_text, orderPrice).replace(',', ' '),
                     style = MaterialTheme.typography.titleLarge,
                     fontSize = 23.sp
                 )
@@ -149,9 +149,7 @@ private fun CheckoutLabel(
                 }
             }
         }
-        Divider(
-            color = Color.LightGray
-        )
+        Divider()
     }
 }
 

@@ -123,6 +123,33 @@ class ShopRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    override fun getProductsByQuery(query: String): Flow<Resource<List<ProductDto>>> {
+        return flow {
+            emit(
+                safeApiCall {
+                    val cartDao = cartDao
+                    val favoritesDao = favoritesDao
+                    val products = shopApi.getProductByQuery(query)
+                    products.map {
+                        val newImages = it.images.let { images ->
+                            images.ifEmpty {
+                                listOf("https://media.istockphoto.com/id/924949200/vector/404-error-page-or-file-not-found-icon.jpg?s=170667a&w=0&k=20&c=gsR5TEhp1tfg-qj1DAYdghj9NfM0ldfNEMJUfAzHGtU=")
+                            }
+                        }
+                        val productId = it.id
+                        val inCart = cartDao.hasItem(productId)
+                        val favorite = favoritesDao.hasItem(productId)
+                        it.copy(
+                            inCart = inCart,
+                            images = newImages,
+                            favorite = favorite
+                        )
+                    }
+                }
+            )
+        }.flowOn(Dispatchers.IO)
+    }
+
     private inline fun <T> safeApiCall(apiCall: () -> T): Resource<T> {
         return try {
             val data = apiCall()

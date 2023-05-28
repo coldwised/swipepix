@@ -14,6 +14,7 @@ import com.coldwised.swipepix.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreenTopBar(
+    title: String,
     onBackClick: () -> Unit,
     onThemeSettingsClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
@@ -21,7 +22,7 @@ fun GalleryScreenTopBar(
     TopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.top_bar_title),
+                text = title,
             )
         },
         navigationIcon = {

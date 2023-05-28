@@ -3,8 +3,10 @@ package com.coldwised.swipepix.presentation.catalog.categories
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coldwised.swipepix.domain.use_case.GetCatalogCategoriesUseCase
+import com.coldwised.swipepix.domain.use_case.GetProductsByQueryUseCase
 import com.coldwised.swipepix.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val getCatalogCategoriesUseCase: GetCatalogCategoriesUseCase,
+    private val getProductsByQueryUseCase: GetProductsByQueryUseCase,
 ): ViewModel() {
     private val _state = MutableStateFlow(CategoriesScreenState())
     val state = _state.asStateFlow()
@@ -49,6 +52,42 @@ class CategoriesViewModel @Inject constructor(
                             it.copy(
                                 isLoading = false,
                                 error = result.message
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var searchJob: Job? = null
+    fun onSearchQueryChanged(query: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            val state = _state
+            state.update {
+                it.copy(
+                    isLoading = true,
+                    searchQuery = query
+                )
+            }
+            delay(500L)
+            getProductsByQueryUseCase(query).collect { result ->
+                when(result) {
+                    is Resource.Success -> {
+                        state.update {
+                            it.copy(
+                                foundProducts = result.data,
+                                isLoading = false,
+                            )
+                        }
+                    }
+                    is Resource.Error -> {
+                        state.update {
+                            it.copy(
+                                foundProducts = null,
+                                error = result.message,
+                                isLoading = false,
                             )
                         }
                     }
