@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -28,92 +29,139 @@ fun CategoriesTopBar(
 	searchQuery: String,
 	backIconVisible: Boolean,
 	onSearchQueryChanged: (String) -> Unit,
-	onThemeSettingsClick: () -> Unit,
+	onSearchShow: () -> Unit,
+	onSearchHide: () -> Unit,
 	onBackClick: () -> Unit,
 	scrollBehavior: TopAppBarScrollBehavior,
 ) {
-	Column(
-		modifier = Modifier
-			.statusBarsPadding()
-			.fillMaxWidth(),
-	) {
+	if(!backIconVisible) {
+		Column(
+			modifier = Modifier
+				.statusBarsPadding()
+				.fillMaxWidth(),
+		) {
+			CenterAlignedTopAppBar(
+				title = {
+					MyTextField(
+						searchQuery = searchQuery,
+						onSearchQueryChanged = onSearchQueryChanged,
+						onSearchShow = onSearchShow,
+						onSearchHide = onSearchHide
+					)
+				},
+				scrollBehavior = scrollBehavior,
+			)
+			Text(
+				modifier = Modifier.padding(start = 18.dp, top = 10.dp, bottom = 8.dp),
+				text = title ?: stringResource(R.string.categories_topbar_title),
+				style = MaterialTheme.typography.titleLarge,
+				fontSize = 20.sp,
+			)
+		}
+	} else {
 		CenterAlignedTopAppBar(
 			title = {
-				BasicTextField(
-					modifier = Modifier
-						.fillMaxWidth()
-						.height(40.dp),
-					value = searchQuery,
-					onValueChange = onSearchQueryChanged,
-					textStyle = TextStyle(
-						fontSize = 20.sp,
-						color = MaterialTheme.colorScheme.onSurfaceVariant,
-					),
-					cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
-					decorationBox = { innerTextField ->
-						OutlinedTextFieldDefaults.DecorationBox(
-							value = searchQuery,
-							innerTextField = innerTextField,
-							enabled = true,
-							singleLine = true,
-							visualTransformation = VisualTransformation.None,
-							interactionSource = MutableInteractionSource(),
-							placeholder = {
-								Text(
-									text = "Поиск"
-								)
-							},
-							leadingIcon = {
-								Icon(
-									imageVector = Icons.Default.Search,
-									contentDescription = null,
-									tint = MaterialTheme.colorScheme.onSurfaceVariant,
-								)
-							},
-							trailingIcon = {
-								if(searchQuery.isNotEmpty()) {
-									IconButton(
-										onClick = {/*TODO*/},
-									) {
-										Icon(
-											contentDescription = null,
-											tint = MaterialTheme.colorScheme.onSurfaceVariant,
-											imageVector = Icons.Default.Clear,
-										)
-									}
-								}
-							},
-							colors = OutlinedTextFieldDefaults.colors(),
-							contentPadding = PaddingValues(0.dp),
-							container = {
-								Box(
-									modifier = Modifier
-										.fillMaxWidth()
-										.clip(RoundedCornerShape(12.dp))
-										.background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)),
-								)
-							},
-						)
-					},
-					singleLine = true,
+				Text(
+					text = title ?: stringResource(R.string.categories_topbar_title),
+					style = MaterialTheme.typography.titleMedium
 				)
 			},
 			navigationIcon = {
-				if(backIconVisible) {
-					IconButton(onClick = onBackClick) {
-						Icon(
-							imageVector = Icons.Default.ArrowBack,
-							contentDescription = null
-						)
-					}
+				IconButton(onClick = onBackClick) {
+					Icon(
+						imageVector = Icons.Default.ArrowBack,
+						contentDescription = null
+					)
 				}
 			},
-			scrollBehavior = scrollBehavior,
-		)
-		Text(
-			modifier = Modifier.padding(start = 12.dp),
-			text = title ?: stringResource(R.string.categories_topbar_title),
-			style = MaterialTheme.typography.titleLarge,
+			actions = {
+				IconButton(onClick = onSearchShow) {
+					Icon(
+						imageVector = Icons.Default.Search,
+						contentDescription = null
+					)
+				}
+			}
 		)
 	}
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MyTextField(
+	searchQuery: String,
+	onSearchQueryChanged: (String) -> Unit,
+	onSearchShow: () -> Unit,
+	onSearchHide: () -> Unit,
+) {
+	BasicTextField(
+		modifier = Modifier
+			.padding(horizontal = 6.dp)
+			.fillMaxWidth()
+			.height(40.dp)
+			.onFocusChanged {
+				if(it.isFocused) {
+					onSearchShow()
+				} else {
+					onSearchHide()
+				}
+			},
+		value = searchQuery,
+		onValueChange = onSearchQueryChanged,
+		textStyle = TextStyle(
+			fontSize = 20.sp,
+			color = MaterialTheme.colorScheme.onSurfaceVariant,
+		),
+		cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
+		decorationBox = { innerTextField ->
+			OutlinedTextFieldDefaults.DecorationBox(
+				value = searchQuery,
+				innerTextField = innerTextField,
+				enabled = true,
+				singleLine = true,
+				visualTransformation = VisualTransformation.None,
+				interactionSource = MutableInteractionSource(),
+				placeholder = {
+					Text(
+						text = "Найти товар"
+					)
+				},
+				leadingIcon = {
+					Icon(
+						imageVector = Icons.Default.Search,
+						contentDescription = null,
+						tint = MaterialTheme.colorScheme.onSurfaceVariant,
+					)
+				},
+				trailingIcon = {
+					if(searchQuery.isNotEmpty()) {
+						IconButton(
+							onClick = {/*TODO*/},
+						) {
+							Icon(
+								contentDescription = null,
+								tint = MaterialTheme.colorScheme.onSurfaceVariant,
+								imageVector = Icons.Default.Clear,
+							)
+						}
+					}
+				},
+				colors = OutlinedTextFieldDefaults.colors(),
+				contentPadding = PaddingValues(0.dp),
+				container = {
+					Box(
+						modifier = Modifier
+							.fillMaxWidth()
+							.clip(RoundedCornerShape(12.dp))
+							.background(
+								MaterialTheme.colorScheme.surfaceColorAtElevation(
+									2.dp
+								)
+							),
+					)
+				},
+			)
+		},
+		singleLine = true,
+	)
 }

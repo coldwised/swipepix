@@ -77,7 +77,8 @@ private fun CategoriesScreen(
 			CategoriesTopBar(
 				searchQuery = searchQuery,
 				title = categoryName,
-				onThemeSettingsClick = onThemeSettingsClick,
+				onSearchHide = {},
+				onSearchShow = {},
 				onBackClick = onBackClick,
 				backIconVisible = backIconVisible,
 				onSearchQueryChanged = onSearchQueryChanged,
