@@ -32,7 +32,6 @@ internal fun CategoriesScreen(
 	categoryName: String? = null,
 	onCategoryClick: (CategoryDto) -> Unit,
 	onBackClick: () -> Unit,
-	onThemeSettingsClick: () -> Unit,
 	viewModel: CategoriesViewModel = hiltViewModel()
 ) {
 	LaunchedEffect(key1 = true) {
@@ -41,7 +40,6 @@ internal fun CategoriesScreen(
 	val state = viewModel.state.collectAsState().value
 	CategoriesScreen(
 		onCategoryClick = onCategoryClick,
-		onThemeSettingsClick = onThemeSettingsClick,
 		onBackClick = onBackClick,
 		categoryName = categoryName,
 		searchQuery = state.searchQuery,
@@ -51,6 +49,8 @@ internal fun CategoriesScreen(
 		error = state.error,
 		categories = state.categories.orEmpty(),
 		onSearchQueryChanged = viewModel::onSearchQueryChanged,
+		onSearchShow = viewModel::onSearchShow,
+		onSearchHide = viewModel::onSearchHide,
 	)
 }
 
@@ -64,7 +64,8 @@ private fun CategoriesScreen(
 	foundProducts: List<ProductDto>?,
 	error: UiText?,
 	categories: List<CategoryDto>,
-	onThemeSettingsClick: () -> Unit,
+	onSearchHide: () -> Unit,
+	onSearchShow: () -> Unit,
 	onSearchQueryChanged: (String) -> Unit,
 	onCategoryClick: (CategoryDto) -> Unit,
 	onBackClick: () -> Unit,
@@ -77,8 +78,8 @@ private fun CategoriesScreen(
 			CategoriesTopBar(
 				searchQuery = searchQuery,
 				title = categoryName,
-				onSearchHide = {},
-				onSearchShow = {},
+				onSearchHide = onSearchHide,
+				onSearchShow = onSearchShow,
 				onBackClick = onBackClick,
 				backIconVisible = backIconVisible,
 				onSearchQueryChanged = onSearchQueryChanged,

@@ -15,7 +15,6 @@ private const val CATEGORY_NAME_KEY = "category_name"
 const val CATEGORIES_SCREEN_ROUTE = "$BASE_ROUTE?$ID_KEY={$ID_KEY}?$CATEGORY_NAME_KEY={$CATEGORY_NAME_KEY}"
 
 fun NavGraphBuilder.categories(
-	onNavigateToThemeSettings: () -> Unit,
 	onNavigateToProducts: (CategoryDto) -> Unit,
 	onNavigateToCategories: (CategoryDto) -> Unit,
 	onNavigateBack: () -> Unit,
@@ -42,7 +41,6 @@ fun NavGraphBuilder.categories(
 					onNavigateToCategories(it)
 				}
 			},
-			onThemeSettingsClick = onNavigateToThemeSettings,
 			onBackClick = onNavigateBack
 		)
 	}

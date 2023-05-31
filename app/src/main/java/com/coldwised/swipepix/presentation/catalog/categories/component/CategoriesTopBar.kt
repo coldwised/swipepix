@@ -11,8 +11,14 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
@@ -40,9 +46,11 @@ fun CategoriesTopBar(
 				.statusBarsPadding()
 				.fillMaxWidth(),
 		) {
+			val focusRequester = remember { FocusRequester() }
 			CenterAlignedTopAppBar(
 				title = {
 					MyTextField(
+						focusRequester = focusRequester,
 						searchQuery = searchQuery,
 						onSearchQueryChanged = onSearchQueryChanged,
 						onSearchShow = onSearchShow,
@@ -59,36 +67,59 @@ fun CategoriesTopBar(
 			)
 		}
 	} else {
-		CenterAlignedTopAppBar(
-			title = {
-				Text(
-					text = title ?: stringResource(R.string.categories_topbar_title),
-					style = MaterialTheme.typography.titleMedium
-				)
-			},
-			navigationIcon = {
-				IconButton(onClick = onBackClick) {
-					Icon(
-						imageVector = Icons.Default.ArrowBack,
-						contentDescription = null
+		val focusRequester = remember { FocusRequester() }
+		var searchVisible by remember {
+			mutableStateOf(false)
+		}
+		if(!searchVisible) {
+			CenterAlignedTopAppBar(
+				title = {
+					Text(
+						text = title ?: stringResource(R.string.categories_topbar_title),
+						style = MaterialTheme.typography.titleMedium
 					)
+				},
+				navigationIcon = {
+					IconButton(onClick = onBackClick) {
+						Icon(
+							imageVector = Icons.Default.ArrowBack,
+							contentDescription = null
+						)
+					}
+				},
+				actions = {
+					IconButton(onClick = {
+						searchVisible = !searchVisible
+						focusRequester.requestFocus()
+					}) {
+						Icon(
+							imageVector = Icons.Default.Search,
+							contentDescription = null
+						)
+					}
 				}
-			},
-			actions = {
-				IconButton(onClick = onSearchShow) {
-					Icon(
-						imageVector = Icons.Default.Search,
-						contentDescription = null
+			)
+		} else {
+			CenterAlignedTopAppBar(
+				title = {
+					MyTextField(
+						focusRequester = focusRequester,
+						searchQuery = searchQuery,
+						onSearchQueryChanged = onSearchQueryChanged,
+						onSearchShow = onSearchShow,
+						onSearchHide = onSearchHide
 					)
-				}
-			}
-		)
+				},
+				scrollBehavior = scrollBehavior,
+			)
+		}
 	}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MyTextField(
+	focusRequester: FocusRequester,
 	searchQuery: String,
 	onSearchQueryChanged: (String) -> Unit,
 	onSearchShow: () -> Unit,
@@ -96,13 +127,17 @@ private fun MyTextField(
 ) {
 	BasicTextField(
 		modifier = Modifier
+			.focusRequester(focusRequester)
 			.padding(horizontal = 6.dp)
 			.fillMaxWidth()
 			.height(40.dp)
 			.onFocusChanged {
-				if(it.isFocused) {
+				if(it.isFocused)
+				{
 					onSearchShow()
-				} else {
+				}
+				else
+				{
 					onSearchHide()
 				}
 			},
@@ -153,11 +188,7 @@ private fun MyTextField(
 						modifier = Modifier
 							.fillMaxWidth()
 							.clip(RoundedCornerShape(12.dp))
-							.background(
-								MaterialTheme.colorScheme.surfaceColorAtElevation(
-									2.dp
-								)
-							),
+							.background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)),
 					)
 				},
 			)

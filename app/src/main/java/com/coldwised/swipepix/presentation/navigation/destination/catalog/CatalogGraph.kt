@@ -14,7 +14,6 @@ fun NavGraphBuilder.catalogGraph(
 		route = CATALOG_GRAPH_NAME
 	) {
 		categories(
-			onNavigateToThemeSettings = navController::navigateToThemeSettings,
 			onNavigateToProducts = navController::navigateToProducts,
 			onNavigateToCategories = navController::navigateToCategories,
 			onNavigateBack = navController::navigateUp,

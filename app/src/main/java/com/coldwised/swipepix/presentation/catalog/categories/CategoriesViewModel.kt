@@ -60,6 +60,22 @@ class CategoriesViewModel @Inject constructor(
         }
     }
 
+    fun onSearchShow() {
+        _state.update {
+            it.copy(
+                foundProducts = emptyList(),
+            )
+        }
+    }
+
+    fun onSearchHide() {
+        _state.update {
+            it.copy(
+                foundProducts = null,
+            )
+        }
+    }
+
     private var searchJob: Job? = null
     fun onSearchQueryChanged(query: String) {
         searchJob?.cancel()
