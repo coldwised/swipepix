@@ -10,17 +10,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -46,16 +43,39 @@ fun CategoriesTopBar(
 				.statusBarsPadding()
 				.fillMaxWidth(),
 		) {
+			var closeSearchIconVisible by remember {
+				mutableStateOf(false)
+			}
 			val focusRequester = remember { FocusRequester() }
-			CenterAlignedTopAppBar(
+			val focusManager = LocalFocusManager.current
+			TopAppBar(
 				title = {
 					MyTextField(
 						focusRequester = focusRequester,
 						searchQuery = searchQuery,
 						onSearchQueryChanged = onSearchQueryChanged,
-						onSearchShow = onSearchShow,
-						onSearchHide = onSearchHide
+						onSearchShow = {
+							onSearchShow()
+							closeSearchIconVisible = true
+						},
+						onSearchHide = {
+							onSearchHide()
+							closeSearchIconVisible = false
+						}
 					)
+				},
+				navigationIcon = {
+					if(closeSearchIconVisible) {
+						IconButton(onClick = {
+							focusManager.clearFocus()
+							closeSearchIconVisible = false
+						}) {
+							Icon(
+								imageVector = Icons.Default.ArrowBack,
+								contentDescription = null,
+							)
+						}
+					}
 				},
 				scrollBehavior = scrollBehavior,
 			)
@@ -90,7 +110,6 @@ fun CategoriesTopBar(
 				actions = {
 					IconButton(onClick = {
 						searchVisible = !searchVisible
-						focusRequester.requestFocus()
 					}) {
 						Icon(
 							imageVector = Icons.Default.Search,
@@ -100,7 +119,7 @@ fun CategoriesTopBar(
 				}
 			)
 		} else {
-			CenterAlignedTopAppBar(
+			TopAppBar(
 				title = {
 					MyTextField(
 						focusRequester = focusRequester,
@@ -111,7 +130,20 @@ fun CategoriesTopBar(
 					)
 				},
 				scrollBehavior = scrollBehavior,
+				navigationIcon = {
+					IconButton(onClick = {
+						searchVisible = !searchVisible
+					}) {
+						Icon(
+							imageVector = Icons.Default.ArrowBack,
+							contentDescription = null,
+						)
+					}
+				}
 			)
+			LaunchedEffect(key1 = true) {
+				focusRequester.requestFocus()
+			}
 		}
 	}
 }
@@ -125,20 +157,22 @@ private fun MyTextField(
 	onSearchShow: () -> Unit,
 	onSearchHide: () -> Unit,
 ) {
+	var focused by remember {
+		mutableStateOf(true)
+	}
 	BasicTextField(
 		modifier = Modifier
 			.focusRequester(focusRequester)
-			.padding(horizontal = 6.dp)
+			.padding(end = 16.dp)
 			.fillMaxWidth()
 			.height(40.dp)
 			.onFocusChanged {
-				if(it.isFocused)
-				{
+				focused = if (it.isFocused) {
 					onSearchShow()
-				}
-				else
-				{
+					true
+				} else {
 					onSearchHide()
+					false
 				}
 			},
 		value = searchQuery,
@@ -161,17 +195,19 @@ private fun MyTextField(
 						text = "Найти товар"
 					)
 				},
-				leadingIcon = {
-					Icon(
-						imageVector = Icons.Default.Search,
-						contentDescription = null,
-						tint = MaterialTheme.colorScheme.onSurfaceVariant,
-					)
-				},
+				leadingIcon = if(!focused) {
+					{
+						Icon(
+							imageVector = Icons.Default.Search,
+							contentDescription = null,
+							tint = MaterialTheme.colorScheme.onSurfaceVariant,
+						)
+					}
+				} else null,
 				trailingIcon = {
 					if(searchQuery.isNotEmpty()) {
 						IconButton(
-							onClick = {/*TODO*/},
+							onClick = { onSearchQueryChanged("") },
 						) {
 							Icon(
 								contentDescription = null,
@@ -182,13 +218,13 @@ private fun MyTextField(
 					}
 				},
 				colors = OutlinedTextFieldDefaults.colors(),
-				contentPadding = PaddingValues(0.dp),
+				contentPadding = PaddingValues(horizontal = 12.dp),
 				container = {
 					Box(
 						modifier = Modifier
 							.fillMaxWidth()
 							.clip(RoundedCornerShape(12.dp))
-							.background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)),
+							.background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
 					)
 				},
 			)
