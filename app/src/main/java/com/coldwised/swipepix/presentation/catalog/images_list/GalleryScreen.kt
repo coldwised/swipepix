@@ -26,26 +26,29 @@ import com.coldwised.swipepix.util.UiText
 @Composable
 internal fun GalleryScreen(
     categoryId: String,
-    categoryName: String,
-    onThemeSettingsClick: () -> Unit,
+    productIdList: List<String>?,
+    topBarTitle: String,
     onBackClick: () -> Unit,
     viewModel: ImagesViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
-        viewModel.onStart(categoryId)
+        if(productIdList == null) {
+            viewModel.onStart(categoryId)
+        } else {
+            viewModel.onStart(productIdList)
+        }
     }
     val state = viewModel.state.collectAsStateWithLifecycle().value
     GalleryScreen(
         products = state.goodsList,
         pagerScreenState = state.pagerScreenState,
         isLoading  = state.isLoading,
-        categoryName = categoryName,
+        topBarTitle = topBarTitle,
         error = state.error,
         lazyGridState = state.lazyGridState,
         onImageScreenEvent = viewModel::onImageScreenEvent,
         onRefreshClick = { viewModel.onStart(categoryId) },
         onBackClick = onBackClick,
-        onThemeSettingsClick = onThemeSettingsClick,
         onGalleryScreenEvent = viewModel::onGalleryScreenEvent,
     )
 }
@@ -53,7 +56,7 @@ internal fun GalleryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GalleryScreen(
-    categoryName: String,
+    topBarTitle: String,
     products: List<ProductDto>?,
     pagerScreenState: PagerScreenState,
     isLoading: Boolean,
@@ -62,7 +65,6 @@ private fun GalleryScreen(
     onImageScreenEvent: (ImageScreenEvent) -> Unit,
     onRefreshClick: () -> Unit,
     onBackClick: () -> Unit,
-    onThemeSettingsClick: () -> Unit,
     onGalleryScreenEvent: (GalleryScreenEvent) -> Unit,
 ) {
     var savedPaddingValues by remember {
@@ -75,9 +77,8 @@ private fun GalleryScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             GalleryScreenTopBar(
-                title = categoryName,
+                title = topBarTitle,
                 onBackClick = onBackClick,
-                onThemeSettingsClick = onThemeSettingsClick,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -90,7 +91,7 @@ private fun GalleryScreen(
         ) {
             products?.takeIf { it.isEmpty() }?.let {
                 Text(
-                    text = "Нет доступных товаров данной категории",
+                    text = "Нет доступных товаров",
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
                     textAlign = TextAlign.Center

@@ -19,7 +19,6 @@ fun NavGraphBuilder.catalogGraph(
 			onNavigateBack = navController::navigateUp,
 		)
 		products(
-			onThemeSettingsClick = navController::navigateToThemeSettings,
 			onNavigateBack = navController::navigateUp
 		)
 	}

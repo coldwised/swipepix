@@ -373,10 +373,20 @@ class ImagesViewModel @Inject constructor(
     }
 
     fun onStart(categoryId: String) {
-        loadImageUrlList(categoryId)
+        loadProducts(categoryId)
     }
 
-    private fun loadImageUrlList(categoryId: String) {
+    fun onStart(productIdList: List<String>) {
+        loadProductsById(productIdList)
+    }
+
+    private fun loadProductsById(productIdList: List<String>) {
+        viewModelScope.launch {
+
+        }
+    }
+
+    private fun loadProducts(categoryId: String) {
         viewModelScope.launch {
             val state = _state
             state.update {

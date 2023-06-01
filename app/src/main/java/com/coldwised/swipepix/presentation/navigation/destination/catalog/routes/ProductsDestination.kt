@@ -13,7 +13,6 @@ private const val ID_KEY = "id"
 private const val CATEGORY_NAME_KEY = "category_name"
 private const val BASE_ROUTE = "products"
 fun NavGraphBuilder.products(
-	onThemeSettingsClick: () -> Unit,
 	onNavigateBack: () -> Unit,
 ) {
 	composable(
@@ -29,10 +28,9 @@ fun NavGraphBuilder.products(
 		val id = Uri.decode(encodedId)
 		val categoryName = Uri.decode(encodedCategoryName)
 		GalleryScreen(
-			categoryName = categoryName,
+			topBarTitle = categoryName,
 			onBackClick = onNavigateBack,
 			categoryId = id,
-			onThemeSettingsClick = onThemeSettingsClick
 		)
 	}
 }

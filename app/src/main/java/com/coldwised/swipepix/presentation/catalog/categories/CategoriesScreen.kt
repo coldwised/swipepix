@@ -95,13 +95,12 @@ private fun CategoriesScreen(
 			if(isLoading) {
 				CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
 			}
-			foundProducts?.let { products ->
+			if(foundProducts != null) {
 				FoundProducts(
-					products = products,
+					products = foundProducts,
 					onItemClick = {}
 				)
-			}
-			if(!isLoading && error == null) {
+			} else if(!isLoading && error == null) {
 				CategoriesList(categories, onCategoryClick)
 			}
 		}
