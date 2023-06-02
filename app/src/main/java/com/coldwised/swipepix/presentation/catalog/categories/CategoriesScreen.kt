@@ -32,6 +32,7 @@ internal fun CategoriesScreen(
 	categoryName: String? = null,
 	onCategoryClick: (CategoryDto) -> Unit,
 	onBackClick: () -> Unit,
+	onSearchClick: (String) -> Unit,
 	viewModel: CategoriesViewModel = hiltViewModel()
 ) {
 	LaunchedEffect(key1 = true) {
@@ -51,6 +52,7 @@ internal fun CategoriesScreen(
 		onSearchQueryChanged = viewModel::onSearchQueryChanged,
 		onSearchShow = viewModel::onSearchShow,
 		onSearchHide = viewModel::onSearchHide,
+		onSearchClick = onSearchClick,
 	)
 }
 
@@ -69,6 +71,7 @@ private fun CategoriesScreen(
 	onSearchQueryChanged: (String) -> Unit,
 	onCategoryClick: (CategoryDto) -> Unit,
 	onBackClick: () -> Unit,
+	onSearchClick: (String) -> Unit,
 ) {
 	val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 	Scaffold(
@@ -83,6 +86,7 @@ private fun CategoriesScreen(
 				onBackClick = onBackClick,
 				backIconVisible = backIconVisible,
 				onSearchQueryChanged = onSearchQueryChanged,
+				onSearchClick = onSearchClick,
 				scrollBehavior = scrollBehavior
 			)
 		}
@@ -98,7 +102,7 @@ private fun CategoriesScreen(
 			if(foundProducts != null) {
 				FoundProducts(
 					products = foundProducts,
-					onItemClick = {}
+					onItemClick = onSearchClick,
 				)
 			} else if(!isLoading && error == null) {
 				CategoriesList(categories, onCategoryClick)
@@ -120,7 +124,7 @@ private fun FoundProducts(
 			ListItem(
 				modifier = Modifier
 					.clickable {
-						onItemClick(product.id)
+						onItemClick(product.name)
 					},
 				headlineContent = {
 					Text(

@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,10 +36,10 @@ internal fun CartScreen(
         products = state.products.orEmpty(),
         isLoading = state.isLoading,
         error = state.error,
-        orderPrice = state.products.orEmpty().map { it.price }.sum(),
+        orderPrice = state.products.orEmpty().let { cartProducts -> if(cartProducts.isEmpty()) null else cartProducts.map { it.price }.sum() },
         onDecreaseProductAmount = viewModel::onDecreaseProductAmount,
         onIncreaseProductAmount = viewModel::onIncreaseProductAmount,
-        onDeleteProduct = viewModel::onIncreaseProductAmount,
+        onDeleteProduct = viewModel::onDeleteProduct,
     )
 }
 
@@ -47,7 +48,7 @@ private fun CartScreen(
     products: List<CartProduct>,
     isLoading: Boolean,
     error: UiText?,
-    orderPrice: Float,
+    orderPrice: Float?,
     onDecreaseProductAmount: (String) -> Unit,
     onIncreaseProductAmount: (String) -> Unit,
     onDeleteProduct: (String) -> Unit
@@ -68,12 +69,21 @@ private fun CartScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            ProductList(
-                products = products,
-                onDecreaseProductAmount = onDecreaseProductAmount,
-                onIncreaseProductAmount = onIncreaseProductAmount,
-                onDeleteProduct = onDeleteProduct,
-            )
+            if(products.isEmpty()) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center).fillMaxWidth().padding(horizontal = 16.dp),
+                    text = stringResource(R.string.empty_cart_text),
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                )
+            } else if(!isLoading && error == null){
+                ProductList(
+                    products = products,
+                    onDecreaseProductAmount = onDecreaseProductAmount,
+                    onIncreaseProductAmount = onIncreaseProductAmount,
+                    onDeleteProduct = onDeleteProduct,
+                )
+            }
             if(isLoading) {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
@@ -108,9 +118,11 @@ private fun ProductList(
 
 @Composable
 private fun CheckoutLabel(
-    orderPrice: Float,
+    orderPrice: Float?,
     onCheckoutClick: () -> Unit,
 ) {
+    if(orderPrice == null)
+        return
     Column {
         Divider()
         Column(

@@ -27,6 +27,7 @@ class ImagesViewModel @Inject constructor(
     private val removeProductFromCartUseCase: RemoveProductFromCartUseCase,
     private val addProductToFavorites: AddProductToFavorites,
     private val removeProductFromFavorites: RemoveProductFromFavorites,
+    private val searchGetProductsByQueryUseCase: GetProductsByQueryUseCase,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(GalleryScreenState())
@@ -372,17 +373,45 @@ class ImagesViewModel @Inject constructor(
         }
     }
 
-    fun onStart(categoryId: String) {
-        loadProducts(categoryId)
+    fun onStart(categoryId: String?, searchQuery: String?) {
+        if(searchQuery != null) {
+            loadProductsById(searchQuery)
+        } else {
+            categoryId?.let {
+                loadProducts(it)
+            }
+        }
     }
 
-    fun onStart(productIdList: List<String>) {
-        loadProductsById(productIdList)
-    }
-
-    private fun loadProductsById(productIdList: List<String>) {
+    private fun loadProductsById(searchQuery: String) {
         viewModelScope.launch {
-
+            val state = _state
+            state.update {
+                it.copy(
+                    isLoading = true,
+                    error = null,
+                )
+            }
+            searchGetProductsByQueryUseCase(searchQuery).collect { result ->
+                when(result) {
+                    is Resource.Success -> {
+                        _state.update {
+                            it.copy(
+                                goodsList = result.data,
+                                isLoading = false,
+                            )
+                        }
+                    }
+                    is Resource.Error -> {
+                        _state.update {
+                            it.copy(
+                                error = result.message,
+                                isLoading = false,
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 

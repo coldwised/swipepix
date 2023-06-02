@@ -5,6 +5,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -20,6 +22,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,11 +35,12 @@ fun CategoriesTopBar(
 	title: String?,
 	searchQuery: String,
 	backIconVisible: Boolean,
+	scrollBehavior: TopAppBarScrollBehavior,
 	onSearchQueryChanged: (String) -> Unit,
 	onSearchShow: () -> Unit,
 	onSearchHide: () -> Unit,
 	onBackClick: () -> Unit,
-	scrollBehavior: TopAppBarScrollBehavior,
+	onSearchClick: (String) -> Unit,
 ) {
 	if(!backIconVisible) {
 		Column(
@@ -61,7 +66,8 @@ fun CategoriesTopBar(
 						onSearchHide = {
 							onSearchHide()
 							closeSearchIconVisible = false
-						}
+						},
+						onSearchClick = onSearchClick,
 					)
 				},
 				navigationIcon = {
@@ -126,7 +132,8 @@ fun CategoriesTopBar(
 						searchQuery = searchQuery,
 						onSearchQueryChanged = onSearchQueryChanged,
 						onSearchShow = onSearchShow,
-						onSearchHide = onSearchHide
+						onSearchHide = onSearchHide,
+						onSearchClick = onSearchClick,
 					)
 				},
 				scrollBehavior = scrollBehavior,
@@ -156,6 +163,7 @@ private fun MyTextField(
 	onSearchQueryChanged: (String) -> Unit,
 	onSearchShow: () -> Unit,
 	onSearchHide: () -> Unit,
+	onSearchClick: (String) -> Unit,
 ) {
 	var focused by remember {
 		mutableStateOf(true)
@@ -180,6 +188,12 @@ private fun MyTextField(
 		textStyle = TextStyle(
 			fontSize = 20.sp,
 			color = MaterialTheme.colorScheme.onSurfaceVariant,
+		),
+		keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, autoCorrect = true, imeAction = ImeAction.Search),
+		keyboardActions = KeyboardActions(
+			onSearch = {
+				onSearchClick(searchQuery)
+			}
 		),
 		cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
 		decorationBox = { innerTextField ->

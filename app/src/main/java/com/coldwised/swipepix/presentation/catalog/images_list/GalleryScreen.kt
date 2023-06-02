@@ -25,18 +25,14 @@ import com.coldwised.swipepix.util.UiText
 
 @Composable
 internal fun GalleryScreen(
-    categoryId: String,
-    productIdList: List<String>?,
+    categoryId: String?,
+    searchQuery: String?,
     topBarTitle: String,
     onBackClick: () -> Unit,
     viewModel: ImagesViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
-        if(productIdList == null) {
-            viewModel.onStart(categoryId)
-        } else {
-            viewModel.onStart(productIdList)
-        }
+        viewModel.onStart(categoryId, searchQuery)
     }
     val state = viewModel.state.collectAsStateWithLifecycle().value
     GalleryScreen(
@@ -47,7 +43,7 @@ internal fun GalleryScreen(
         error = state.error,
         lazyGridState = state.lazyGridState,
         onImageScreenEvent = viewModel::onImageScreenEvent,
-        onRefreshClick = { viewModel.onStart(categoryId) },
+        onRefreshClick = { viewModel.onStart(categoryId, searchQuery) },
         onBackClick = onBackClick,
         onGalleryScreenEvent = viewModel::onGalleryScreenEvent,
     )

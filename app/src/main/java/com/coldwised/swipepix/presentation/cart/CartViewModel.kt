@@ -33,11 +33,11 @@ class CartViewModel @Inject constructor(
                     if(product.id == id) {
                         removeFromCart(id)
                         if(product.amount <= 1) {
+                            newProducts.removeAt(i)
+                        } else {
                             newProducts[i] = product.copy(
                                 amount = product.amount - 1
                             )
-                        } else {
-                            newProducts.removeAt(i)
                         }
                     }
                 }
@@ -46,10 +46,6 @@ class CartViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    fun onDeleteProduct(id: String) {
-        removeFromCart(id, true)
     }
 
     fun onIncreaseProductAmount(id: String) {
@@ -70,6 +66,10 @@ class CartViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun onDeleteProduct(id: String) {
+        removeFromCart(id, true)
     }
 
     private fun removeFromCart(id: String, deleteAll: Boolean = false) {
