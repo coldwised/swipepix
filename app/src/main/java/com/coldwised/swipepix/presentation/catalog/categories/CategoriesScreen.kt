@@ -24,6 +24,7 @@ import coil.compose.AsyncImage
 import com.coldwised.swipepix.data.remote.dto.CategoryDto
 import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.categories.component.CategoriesTopBar
+import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorLabel
 import com.coldwised.swipepix.util.UiText
 
 @Composable
@@ -53,6 +54,7 @@ internal fun CategoriesScreen(
 		onSearchShow = viewModel::onSearchShow,
 		onSearchHide = viewModel::onSearchHide,
 		onSearchClick = onSearchClick,
+		onRefreshClick = { viewModel.loadCategories(categoryId) }
 	)
 }
 
@@ -72,6 +74,7 @@ private fun CategoriesScreen(
 	onCategoryClick: (CategoryDto) -> Unit,
 	onBackClick: () -> Unit,
 	onSearchClick: (String) -> Unit,
+	onRefreshClick: () -> Unit,
 ) {
 	val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 	Scaffold(
@@ -98,13 +101,22 @@ private fun CategoriesScreen(
 		) {
 			if(isLoading) {
 				CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-			}
-			if(foundProducts != null) {
+			} else if(error != null) {
+				ErrorLabel(
+					error = error,
+					modifier = Modifier
+						.fillMaxSize()
+						.padding(horizontal = 16.dp)
+						.background(MaterialTheme.colorScheme.background)
+					,
+					onRefreshClick = onRefreshClick
+				)
+			} else if(foundProducts != null){
 				FoundProducts(
 					products = foundProducts,
 					onItemClick = onSearchClick,
 				)
-			} else if(!isLoading && error == null) {
+			} else {
 				CategoriesList(categories, onCategoryClick)
 			}
 		}

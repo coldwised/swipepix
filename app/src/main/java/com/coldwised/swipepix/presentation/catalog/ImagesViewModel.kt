@@ -430,6 +430,7 @@ class ImagesViewModel @Inject constructor(
                         state.update {
                             it.copy(
                                 goodsList = result.data,
+                                isLoading = false,
                             )
                         }
                     }
@@ -437,14 +438,10 @@ class ImagesViewModel @Inject constructor(
                         state.update {
                             it.copy(
                                 error = result.message,
+                                isLoading = false,
                             )
                         }
                     }
-                }
-                state.update {
-                    it.copy(
-                        isLoading = false,
-                    )
                 }
             }
         }
