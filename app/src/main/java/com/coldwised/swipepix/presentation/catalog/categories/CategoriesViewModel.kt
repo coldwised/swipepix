@@ -24,6 +24,11 @@ class CategoriesViewModel @Inject constructor(
 
     fun loadCategories(parentId: String?) {
         val state = _state
+        state.update {
+            it.copy(
+                searchQuery = ""
+            )
+        }
         if(state.value.categories != null)
             return
         viewModelScope.launch {
@@ -72,13 +77,25 @@ class CategoriesViewModel @Inject constructor(
         _state.update {
             it.copy(
                 foundProducts = null,
-            )
+                searchQuery = "",
+                isLoading = false,
+             )
         }
     }
 
     private var searchJob: Job? = null
     fun onSearchQueryChanged(query: String) {
         searchJob?.cancel()
+        if(query.isEmpty()) {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    searchQuery = query,
+                    foundProducts = emptyList()
+                )
+            }
+            return
+        }
         searchJob = viewModelScope.launch {
             val state = _state
             state.update {

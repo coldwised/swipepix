@@ -23,7 +23,8 @@ fun NavGraphBuilder.catalogGraph(
 			onNavigateBack = navController::navigateUp,
 		)
 		products(
-			onNavigateBack = navController::navigateUp
+			onNavigateBack = navController::navigateUp,
+			onNavigateToProductsWithQuery = navController::navigateToProducts
 		)
 	}
 }

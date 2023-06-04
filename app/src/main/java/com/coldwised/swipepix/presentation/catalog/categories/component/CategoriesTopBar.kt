@@ -1,5 +1,6 @@
 package com.coldwised.swipepix.presentation.catalog.categories.component
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -53,6 +54,14 @@ fun CategoriesTopBar(
 			}
 			val focusRequester = remember { FocusRequester() }
 			val focusManager = LocalFocusManager.current
+			if(closeSearchIconVisible && focusRequester.captureFocus()) {
+				BackHandler(
+					onBack = {
+						focusManager.clearFocus(true)
+						closeSearchIconVisible = false
+					}
+				)
+			}
 			TopAppBar(
 				title = {
 					MyTextField(
@@ -73,7 +82,7 @@ fun CategoriesTopBar(
 				navigationIcon = {
 					if(closeSearchIconVisible) {
 						IconButton(onClick = {
-							focusManager.clearFocus()
+							focusManager.clearFocus(true)
 							closeSearchIconVisible = false
 						}) {
 							Icon(
@@ -83,14 +92,19 @@ fun CategoriesTopBar(
 						}
 					}
 				},
+				colors = TopAppBarDefaults.topAppBarColors(
+					scrolledContainerColor = MaterialTheme.colorScheme.surface
+				),
 				scrollBehavior = scrollBehavior,
 			)
-			Text(
-				modifier = Modifier.padding(start = 18.dp, top = 10.dp, bottom = 8.dp),
-				text = title ?: stringResource(R.string.categories_topbar_title),
-				style = MaterialTheme.typography.titleLarge,
-				fontSize = 20.sp,
-			)
+			if(!closeSearchIconVisible) {
+				Text(
+					modifier = Modifier.padding(start = 18.dp, top = 10.dp, bottom = 8.dp),
+					text = title ?: stringResource(R.string.categories_topbar_title),
+					style = MaterialTheme.typography.titleLarge,
+					fontSize = 20.sp,
+				)
+			}
 		}
 	} else {
 		val focusRequester = remember { FocusRequester() }
@@ -125,6 +139,11 @@ fun CategoriesTopBar(
 				}
 			)
 		} else {
+			BackHandler(
+				onBack = {
+					searchVisible = !searchVisible
+				}
+			)
 			TopAppBar(
 				title = {
 					MyTextField(
@@ -136,6 +155,9 @@ fun CategoriesTopBar(
 						onSearchClick = onSearchClick,
 					)
 				},
+				colors = TopAppBarDefaults.topAppBarColors(
+					scrolledContainerColor = MaterialTheme.colorScheme.surface
+				),
 				scrollBehavior = scrollBehavior,
 				navigationIcon = {
 					IconButton(onClick = {

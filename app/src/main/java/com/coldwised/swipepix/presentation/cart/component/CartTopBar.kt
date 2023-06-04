@@ -7,13 +7,16 @@ import com.coldwised.swipepix.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartTopBar() {
+fun CartTopBar(
+	scrollBehavior: TopAppBarScrollBehavior,
+) {
 	CenterAlignedTopAppBar(
 		title = {
 			Text(
 				text = stringResource(R.string.cart_topbar_title),
 				style = MaterialTheme.typography.titleMedium,
 			)
-		}
+		},
+		scrollBehavior = scrollBehavior
 	)
 }

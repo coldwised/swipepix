@@ -25,6 +25,7 @@ import com.coldwised.swipepix.data.remote.dto.CategoryDto
 import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.categories.component.CategoriesTopBar
 import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorLabel
+import com.coldwised.swipepix.presentation.component.FoundProducts
 import com.coldwised.swipepix.util.UiText
 
 @Composable
@@ -124,31 +125,6 @@ private fun CategoriesScreen(
 }
 
 @Composable
-private fun FoundProducts(
-	products: List<ProductDto>,
-	onItemClick: (String) -> Unit,
-) {
-	LazyColumn(
-		modifier = Modifier
-			.fillMaxSize(),
-	) {
-		items(products) { product ->
-			ListItem(
-				modifier = Modifier
-					.clickable {
-						onItemClick(product.name)
-					},
-				headlineContent = {
-					Text(
-						text = product.name
-					)
-				}
-			)
-		}
-	}
-}
-
-@Composable
 private fun CategoriesList(categories: List<CategoryDto>, onCategoryClick: (CategoryDto) -> Unit) {
 	LazyColumn(
 		modifier = Modifier
@@ -185,7 +161,7 @@ private fun CategoriesList(categories: List<CategoryDto>, onCategoryClick: (Cate
 						Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = null)
 					},
 				)
-				Divider(Modifier.padding(horizontal = 16.dp))
+				Divider(Modifier.padding(horizontal = 16.dp), thickness = 0.dp)
 			}
 		}
 	}

@@ -14,6 +14,7 @@ import com.coldwised.swipepix.util.Extension.convertPixelsToDp
 import com.coldwised.swipepix.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ class ImagesViewModel @Inject constructor(
     private val addProductToFavorites: AddProductToFavorites,
     private val removeProductFromFavorites: RemoveProductFromFavorites,
     private val searchGetProductsByQueryUseCase: GetProductsByQueryUseCase,
+    private val getProductsByQueryUseCase: GetProductsByQueryUseCase,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(GalleryScreenState())
@@ -69,6 +71,70 @@ class ImagesViewModel @Inject constructor(
             is ImageScreenEvent.OnToggleFavorite -> {
                 toggleFavorite(event.productId)
             }
+        }
+    }
+
+    private var searchJob: Job? = null
+    fun onSearchQueryChanged(query: String) {
+        searchJob?.cancel()
+        if(query.isEmpty()) {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    searchQuery = query,
+                    foundProducts = emptyList()
+                )
+            }
+            return
+        }
+        searchJob = viewModelScope.launch {
+            val state = _state
+            state.update {
+                it.copy(
+                    isLoading = true,
+                    searchQuery = query
+                )
+            }
+            delay(500L)
+            getProductsByQueryUseCase(query).collect { result ->
+                when(result) {
+                    is Resource.Success -> {
+                        state.update {
+                            it.copy(
+                                foundProducts = result.data,
+                                isLoading = false,
+                            )
+                        }
+                    }
+                    is Resource.Error -> {
+                        state.update {
+                            it.copy(
+                                foundProducts = null,
+                                error = result.message,
+                                isLoading = false,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun onSearchShow() {
+        _state.update {
+            it.copy(
+                foundProducts = emptyList(),
+            )
+        }
+    }
+
+    fun onSearchHide() {
+        _state.update {
+            it.copy(
+                foundProducts = null,
+                searchQuery = "",
+                isLoading = false,
+            )
         }
     }
 

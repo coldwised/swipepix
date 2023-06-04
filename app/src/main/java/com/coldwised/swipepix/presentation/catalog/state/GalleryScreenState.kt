@@ -9,6 +9,8 @@ data class GalleryScreenState(
     val isLoading: Boolean = false,
     val goodsList: List<ProductDto>? = null,
     val error: UiText? = null,
+    val searchQuery: String = "",
+    val foundProducts: List<ProductDto>? = null,
     val lazyGridState: LazyGridState = LazyGridState(firstVisibleItemIndex = 0, firstVisibleItemScrollOffset = 0),
     val itemOffsetToScroll: Int = 0,
     val pagerScreenState: PagerScreenState = PagerScreenState(),

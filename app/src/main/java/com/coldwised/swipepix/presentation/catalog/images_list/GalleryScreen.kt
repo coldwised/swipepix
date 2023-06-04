@@ -21,6 +21,7 @@ import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorL
 import com.coldwised.swipepix.presentation.catalog.images_list.components.GalleryScreenTopBar
 import com.coldwised.swipepix.presentation.catalog.images_list.components.LazyGridImages
 import com.coldwised.swipepix.presentation.catalog.images_list.event.GalleryScreenEvent
+import com.coldwised.swipepix.presentation.component.FoundProducts
 import com.coldwised.swipepix.util.UiText
 
 @Composable
@@ -29,6 +30,7 @@ internal fun GalleryScreen(
     searchQuery: String?,
     topBarTitle: String,
     onBackClick: () -> Unit,
+    onSearchClick: (String) -> Unit,
     viewModel: ImagesViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
@@ -42,10 +44,16 @@ internal fun GalleryScreen(
         topBarTitle = topBarTitle,
         error = state.error,
         lazyGridState = state.lazyGridState,
+        searchQuery = state.searchQuery,
+        foundProducts = state.foundProducts,
         onImageScreenEvent = viewModel::onImageScreenEvent,
         onRefreshClick = { viewModel.onStart(categoryId, searchQuery) },
         onBackClick = onBackClick,
         onGalleryScreenEvent = viewModel::onGalleryScreenEvent,
+        onSearchHide = viewModel::onSearchHide,
+        onSearchShow = viewModel::onSearchShow,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        onSearchClick = onSearchClick,
     )
 }
 
@@ -58,10 +66,16 @@ private fun GalleryScreen(
     isLoading: Boolean,
     error: UiText?,
     lazyGridState: LazyGridState,
+    foundProducts: List<ProductDto>?,
     onImageScreenEvent: (ImageScreenEvent) -> Unit,
     onRefreshClick: () -> Unit,
     onBackClick: () -> Unit,
     onGalleryScreenEvent: (GalleryScreenEvent) -> Unit,
+    searchQuery: String,
+    onSearchHide: () -> Unit,
+    onSearchShow: () -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onSearchClick: (String) -> Unit,
 ) {
     var savedPaddingValues by remember {
         mutableStateOf(PaddingValues(0.dp))
@@ -73,9 +87,14 @@ private fun GalleryScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             GalleryScreenTopBar(
+                searchQuery = searchQuery,
                 title = topBarTitle,
+                scrollBehavior = scrollBehavior,
+                onSearchQueryChanged = onSearchQueryChanged,
                 onBackClick = onBackClick,
-                scrollBehavior = scrollBehavior
+                onSearchClick = onSearchClick,
+                onSearchShow = onSearchShow,
+                onSearchHide = onSearchHide,
             )
         },
     ) { paddingValues ->
@@ -85,38 +104,38 @@ private fun GalleryScreen(
                 .padding(top = paddingValues.calculateTopPadding())
                 .fillMaxSize()
         ) {
-            products?.takeIf { it.isEmpty() }?.let {
-                Text(
-                    text = "Нет доступных товаров",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
-            }
-            LazyGridImages(
-                lazyGridState = lazyGridState,
-                goodsList = products.orEmpty(),
-                onGalleryScreenEvent = onGalleryScreenEvent
-            )
-        }
-        if(error != null) {
-            ErrorLabel(
-                error = error,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .background(MaterialTheme.colorScheme.background)
-                ,
-                onRefreshClick = onRefreshClick
-            )
-        }
-        if(isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-            ) {
+            if(isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else if(error != null) {
+                ErrorLabel(
+                    error = error,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .background(MaterialTheme.colorScheme.background)
+                    ,
+                    onRefreshClick = onRefreshClick
+                )
+            } else if(foundProducts != null) {
+                FoundProducts(
+                    products = foundProducts,
+                    onItemClick = onSearchClick,
+                )
+            } else if(products != null) {
+                if(products.isEmpty()) {
+                    Text(
+                        text = "Нет доступных товаров",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
+                        textAlign = TextAlign.Center
+                    )
+                } else {
+                    LazyGridImages(
+                        lazyGridState = lazyGridState,
+                        goodsList = products,
+                        onGalleryScreenEvent = onGalleryScreenEvent
+                    )
+                }
             }
         }
     }

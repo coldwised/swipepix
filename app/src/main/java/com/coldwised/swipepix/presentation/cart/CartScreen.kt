@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,7 @@ import com.coldwised.swipepix.presentation.cart.component.CartTopBar
 import com.coldwised.swipepix.util.UiText
 import com.coldwised.swipepix.R
 import com.coldwised.swipepix.domain.model.CartProduct
+import com.coldwised.swipepix.presentation.catalog.images_list.components.ErrorLabel
 
 @Composable
 internal fun CartScreen(
@@ -36,13 +38,14 @@ internal fun CartScreen(
         products = state.products.orEmpty(),
         isLoading = state.isLoading,
         error = state.error,
-        orderPrice = state.products.orEmpty().let { cartProducts -> if(cartProducts.isEmpty()) null else cartProducts.map { it.price }.sum() },
+        orderPrice = state.products.orEmpty().let { cartProducts -> if(cartProducts.isEmpty()) null else cartProducts.map { it.price * it.amount }.sum() },
         onDecreaseProductAmount = viewModel::onDecreaseProductAmount,
         onIncreaseProductAmount = viewModel::onIncreaseProductAmount,
         onDeleteProduct = viewModel::onDeleteProduct,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CartScreen(
     products: List<CartProduct>,
@@ -53,9 +56,13 @@ private fun CartScreen(
     onIncreaseProductAmount: (String) -> Unit,
     onDeleteProduct: (String) -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CartTopBar()
+            CartTopBar(
+                scrollBehavior = scrollBehavior
+            )
         },
         bottomBar = {
             CheckoutLabel(
@@ -69,23 +76,33 @@ private fun CartScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            if(products.isEmpty()) {
+            if(isLoading) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
+            } else if(error != null) {
+                ErrorLabel(error = error,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center)
+                        .padding(horizontal = 16.dp),
+                    onRefreshClick = {}
+                )
+            } else if(products.isEmpty()) {
                 Text(
-                    modifier = Modifier.align(Alignment.Center).fillMaxWidth().padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     text = stringResource(R.string.empty_cart_text),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
                 )
-            } else if(!isLoading && error == null){
+            } else {
                 ProductList(
                     products = products,
                     onDecreaseProductAmount = onDecreaseProductAmount,
                     onIncreaseProductAmount = onIncreaseProductAmount,
                     onDeleteProduct = onDeleteProduct,
                 )
-            }
-            if(isLoading) {
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
         }
     }
@@ -98,11 +115,10 @@ private fun ProductList(
     onIncreaseProductAmount: (String) -> Unit,
     onDeleteProduct: (String) -> Unit,
 ) {
-    Divider()
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         items(products) { product ->
             ProductItem(
@@ -111,7 +127,7 @@ private fun ProductList(
                 onIncreaseProductAmount = onIncreaseProductAmount,
                 onDeleteProduct = onDeleteProduct,
             )
-            Divider()
+            Divider(thickness = 0.dp)
         }
     }
 }
@@ -124,7 +140,7 @@ private fun CheckoutLabel(
     if(orderPrice == null)
         return
     Column {
-        Divider()
+        Divider(thickness = 0.dp)
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
@@ -161,7 +177,7 @@ private fun CheckoutLabel(
                 }
             }
         }
-        Divider()
+        Divider(thickness = 0.dp)
     }
 }
 

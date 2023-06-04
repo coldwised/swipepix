@@ -15,9 +15,10 @@ private const val TOP_BAR_TITLE_KEY = "top_bar_title"
 private const val BASE_ROUTE = "products"
 fun NavGraphBuilder.products(
 	onNavigateBack: () -> Unit,
+	onNavigateToProductsWithQuery: (String) -> Unit,
 ) {
 	composable(
-		route = "$BASE_ROUTE/{$TOP_BAR_TITLE_KEY}?$ID_KEY={$ID_KEY}?$SEARCH_QUERY_KEY={$SEARCH_QUERY_KEY}",
+		route = "$BASE_ROUTE/{$TOP_BAR_TITLE_KEY}?$ID_KEY={$ID_KEY}&$SEARCH_QUERY_KEY={$SEARCH_QUERY_KEY}",
 		arguments = listOf(
 			navArgument(TOP_BAR_TITLE_KEY) { type = NavType.StringType; nullable = false },
 			navArgument(ID_KEY) { type = NavType.StringType; nullable = true },
@@ -32,7 +33,8 @@ fun NavGraphBuilder.products(
 			topBarTitle = topBarTitle,
 			onBackClick = onNavigateBack,
 			categoryId = categoryId,
-			searchQuery = searchQuery
+			searchQuery = searchQuery,
+			onSearchClick = onNavigateToProductsWithQuery
 		)
 	}
 }
@@ -44,6 +46,9 @@ fun NavController.navigateToProducts(category: CategoryDto) {
 }
 
 fun NavController.navigateToProducts(searchQuery: String) {
+	if(searchQuery.isEmpty()) {
+		return
+	}
 	val encodedSearchQuery: String = Uri.encode(searchQuery)
 	navigate("$BASE_ROUTE/$encodedSearchQuery?$SEARCH_QUERY_KEY=$encodedSearchQuery")
 }

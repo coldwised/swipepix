@@ -31,10 +31,10 @@ class CartViewModel @Inject constructor(
                 for (i in newProducts.indices) {
                     val product = newProducts[i]
                     if(product.id == id) {
-                        removeFromCart(id)
                         if(product.amount <= 1) {
-                            newProducts.removeAt(i)
+                            onDeleteProduct(id)
                         } else {
+                            removeFromCart(id)
                             newProducts[i] = product.copy(
                                 amount = product.amount - 1
                             )
@@ -69,6 +69,13 @@ class CartViewModel @Inject constructor(
     }
 
     fun onDeleteProduct(id: String) {
+        _state.update {
+            it.copy(
+                products = it.products?.filter { product ->
+                    product.id != id
+                }
+            )
+        }
         removeFromCart(id, true)
     }
 
