@@ -11,10 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.coldwised.swipepix.R
 import com.coldwised.swipepix.data.remote.dto.ProductDto
 import com.coldwised.swipepix.presentation.catalog.full_screen.PagerScreen
 import com.coldwised.swipepix.presentation.catalog.full_screen.event.ImageScreenEvent
@@ -83,9 +85,11 @@ private fun GalleryScreen(
         ) {
             products?.takeIf { it.isEmpty() }?.let {
                 Text(
-                    text = "Нет доступных товаров",
+                    text = stringResource(id = R.string.products_not_found),
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .align(Alignment.Center),
                     textAlign = TextAlign.Center
                 )
             }

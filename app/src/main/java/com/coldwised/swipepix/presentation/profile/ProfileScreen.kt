@@ -63,7 +63,7 @@ fun ProfileScreen(
 					modifier = Modifier
 						.padding(16.dp),
 					colors = CardDefaults.cardColors(
-						contentColor = MaterialTheme.colorScheme.onSurface
+						contentColor = MaterialTheme.colorScheme.onSurface,
 					)
 				) {
 					Column(
