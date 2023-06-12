@@ -35,4 +35,8 @@
     <string name="checkout_text">Итого</string>
 	<string name="empty_cart_text">Корзина пуста</string>
     <string name="products_not_found">Нет доступных товаров</string>
+    <string name="about_app_text">О приложении</string>
+    <string name="auth_button_text">Войти или зарегистрироватся</string>
+    <string name="bonus_text">Получайте Бонусные рубли за покупки и персональные предложения</string>
+    <string name="bonus_title">Войдите в профиль</string>
 </resources>

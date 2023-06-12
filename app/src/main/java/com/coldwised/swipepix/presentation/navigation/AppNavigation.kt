@@ -23,6 +23,6 @@ fun AppNavigation(
 		themeSettings(
 			onBackClick = navController::navigateUp
 		)
-		profile()
+		profile(onNavigateToThemeSettings = navController::navigateToThemeSettings)
 	}
 }

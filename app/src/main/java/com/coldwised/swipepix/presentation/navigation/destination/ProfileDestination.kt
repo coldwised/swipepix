@@ -7,11 +7,15 @@ import com.coldwised.swipepix.presentation.profile.ProfileScreen
 
 const val PROFILE_SCREEN_ROUTE = "profile"
 
-fun NavGraphBuilder.profile() {
+fun NavGraphBuilder.profile(
+	onNavigateToThemeSettings: () -> Unit
+) {
 	composable(
 		route = PROFILE_SCREEN_ROUTE,
 	) {
-		ProfileScreen()
+		ProfileScreen(
+			onNavigateToThemeSettings = onNavigateToThemeSettings
+		)
 	}
 }
 

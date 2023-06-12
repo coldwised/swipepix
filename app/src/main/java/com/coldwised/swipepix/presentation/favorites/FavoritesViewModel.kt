@@ -21,11 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
     private val getAppConfigurationStreamUseCase: GetAppConfigurationStreamUseCase,
     private val addProductToCartUseCase: AddProductToCartUseCase,
     private val removeProductFromCartUseCase: RemoveProductFromCartUseCase,
-    private val addProductToFavorites: AddProductToFavorites,
     private val removeProductFromFavorites: RemoveProductFromFavorites,
     private val getFavoritesUseCase: GetFavoritesUseCase,
 ): ViewModel() {
@@ -74,32 +72,15 @@ class FavoritesViewModel @Inject constructor(
 
     private fun toggleFavorite(id: String) {
         val viewModelScope = viewModelScope
+        removeFromFavorites(id)
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    goodsList = it.goodsList?.map { product ->
-                        if(product.id == id) {
-                            val inFavorites = product.favorite
-                            if(inFavorites) {
-                                removeFromFavorites(id)
-                            } else {
-                                addToFavorites(id)
-                            }
-                            product.copy(
-                                favorite = !inFavorites
-                            )
-                        } else {
-                            product
-                        }
+                    goodsList = it.goodsList?.filter { product ->
+                        product.id == id
                     }.orEmpty()
                 )
             }
-        }
-    }
-
-    private fun addToFavorites(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            addProductToFavorites(id)
         }
     }
 

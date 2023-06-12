@@ -70,6 +70,7 @@ fun GalleryScreenTopBar(
             } else {
                 Text(
                     text = title,
+                    maxLines = 1
                 )
             }
         },

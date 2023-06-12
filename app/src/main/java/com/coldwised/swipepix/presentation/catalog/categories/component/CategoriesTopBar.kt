@@ -116,7 +116,8 @@ fun CategoriesTopBar(
 				title = {
 					Text(
 						text = title ?: stringResource(R.string.categories_topbar_title),
-						style = MaterialTheme.typography.titleMedium
+						style = MaterialTheme.typography.titleMedium,
+						maxLines = 1
 					)
 				},
 				navigationIcon = {
@@ -136,7 +137,7 @@ fun CategoriesTopBar(
 							contentDescription = null
 						)
 					}
-				}
+				},
 			)
 		} else {
 			BackHandler(
