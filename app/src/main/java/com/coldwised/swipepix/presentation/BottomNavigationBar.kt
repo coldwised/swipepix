@@ -1,10 +1,14 @@
 package com.coldwised.swipepix.presentation
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -31,16 +35,20 @@ fun BottomNavigationBar(
 			val selected = currentDestination?.hierarchy?.any {
 				it.route == item.route
 			} ?: false
+			val interactionSource = remember {
+				MutableInteractionSource()
+			}
+			val isPressed = interactionSource.collectIsPressedAsState().value
 			NavigationBarItem(
-				//interactionSource = NoRippleInteractionSource(),
 				selected = selected,
 				onClick = item.onClick,
 				colors = NavigationBarItemDefaults.colors(
+					indicatorColor = colorScheme.outlineVariant.copy(alpha = 0.1f),
 					selectedTextColor = colorScheme.primary,
 					selectedIconColor = colorScheme.primary,
 					//indicatorColor = colorScheme.tertiary,
-					unselectedTextColor = colorScheme.outline,
-					unselectedIconColor = colorScheme.outline,
+					unselectedTextColor = if(!isPressed) colorScheme.outline else colorScheme.primary,
+					unselectedIconColor = if(!isPressed) colorScheme.outline else colorScheme.primary,
 				),
 				icon = {
 					Icon(
@@ -52,8 +60,10 @@ fun BottomNavigationBar(
 					Text(
 						text = item.name,
 						fontSize = 13.sp,
+						fontWeight = if(selected) FontWeight.SemiBold else FontWeight.Medium
 					)
-				}
+				},
+				interactionSource = interactionSource
 			)
 		}
 	}

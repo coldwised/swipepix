@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.coldwised.swipepix.R
@@ -90,6 +91,7 @@ fun ProfileScreen(
 								color = MaterialTheme.colorScheme.tertiary,
 								text = stringResource(R.string.auth_button_text),
 								style = MaterialTheme.typography.titleMedium,
+								fontWeight = FontWeight.SemiBold
 							)
 						}
 					}
