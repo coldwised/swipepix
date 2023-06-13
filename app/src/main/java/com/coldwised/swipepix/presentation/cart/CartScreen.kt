@@ -239,7 +239,7 @@ private fun ProductItem(
                             .size(22.dp)
                         ,
                         imageVector = Icons.Outlined.Delete,
-                        contentDescription = null
+                        contentDescription = stringResource(R.string.delete_from_cart)
                     )
                 }
             }
@@ -271,7 +271,7 @@ private fun Counter(
                     .size(16.dp)
                 ,
                 painter = painterResource(id = R.drawable.ic_minus_24),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.decrease_one),
                 tint = MaterialTheme.colorScheme.primary
             )
         }
@@ -296,7 +296,7 @@ private fun Counter(
                     .size(16.dp)
                 ,
                 painter = painterResource(id = R.drawable.ic_plus_24),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.increase_one),
                 tint = MaterialTheme.colorScheme.primary
             )
         }

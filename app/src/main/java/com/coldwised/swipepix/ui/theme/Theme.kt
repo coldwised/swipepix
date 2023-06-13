@@ -96,3 +96,6 @@ val ColorScheme.emptyStarbarColor: Color
 
 val ColorScheme.productCardColor: Color
     @Composable get() = if(!isDarkTheme) Color(0xFFFFFFFF) else Color(0xFF20242B)
+
+val ColorScheme.bottomBarIndicator: Color
+    @Composable get() = if(isDarkTheme) md_theme_dark_outlineVariant else md_theme_light_secondaryContainer

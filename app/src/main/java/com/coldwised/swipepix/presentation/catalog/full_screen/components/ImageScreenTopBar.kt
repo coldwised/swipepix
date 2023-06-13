@@ -10,7 +10,9 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.coldwised.swipepix.Constants
+import com.coldwised.swipepix.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +40,7 @@ fun ImageScreenTopBar(
                     onClick = onFavoriteClicked
                 ) {
                     Icon(
-                        contentDescription = null,
+                        contentDescription = stringResource(if(!favorite) R.string.add_to_favorites else R.string.remove_from_favorites),
                         imageVector = if(favorite) iconsDefault.Favorite else Icons.Default.FavoriteBorder
                     )
                 }
@@ -48,7 +50,7 @@ fun ImageScreenTopBar(
                     onClick = onBackClicked
                 ) {
                     Icon(
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.back_hint_text),
                         imageVector = iconsDefault.ArrowBack
                     )
                 }

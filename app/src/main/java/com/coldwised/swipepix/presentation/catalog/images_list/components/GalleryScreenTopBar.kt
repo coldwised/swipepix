@@ -20,12 +20,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.coldwised.swipepix.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +88,7 @@ fun GalleryScreenTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null,
+                    contentDescription = stringResource(id = R.string.back_hint_text),
                 )
             }
         },
@@ -99,7 +101,7 @@ fun GalleryScreenTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = null,
+                        contentDescription = stringResource(id = R.string.open_search_mode),
                     )
                 }
             }
@@ -131,10 +133,13 @@ private fun MyTextField(
             .fillMaxWidth()
             .height(40.dp)
             .onFocusChanged {
-                focused = if (it.isFocused) {
+                focused = if(it.isFocused)
+                {
                     onSearchShow()
                     true
-                } else {
+                }
+                else
+                {
                     onSearchHide()
                     false
                 }
@@ -162,14 +167,14 @@ private fun MyTextField(
                 interactionSource = MutableInteractionSource(),
                 placeholder = {
                     Text(
-                        text = "Найти товар"
+                        text = stringResource(R.string.find_product_text)
                     )
                 },
                 leadingIcon = if(!focused) {
                     {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.open_search_mode),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
@@ -180,7 +185,7 @@ private fun MyTextField(
                             onClick = { onSearchQueryChanged("") },
                         ) {
                             Icon(
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.clear_icon_text),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 imageVector = Icons.Default.Clear,
                             )

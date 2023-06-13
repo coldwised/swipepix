@@ -39,4 +39,13 @@
     <string name="auth_button_text">Войти или зарегистрироватся</string>
     <string name="bonus_text">Получайте Бонусные рубли за покупки и персональные предложения</string>
     <string name="bonus_title">Войдите в профиль</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="remove_from_favorites">Удалить из избранного</string>
+    <string name="back_hint_text">Вернуться назад</string>
+    <string name="delete_from_cart">Удалить из корзины</string>
+    <string name="decrease_one">Уменьшить на 1</string>
+    <string name="increase_one">Увеличить на 1</string>
+    <string name="open_search_mode">Открыть поиск</string>
+    <string name="clear_icon_text">Очистить поиск</string>
+    <string name="find_product_text">Найти товар</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.coldwised.swipepix.domain.type.BottomNavItem
+import com.coldwised.swipepix.ui.theme.bottomBarIndicator
 
 @Composable
 fun BottomNavigationBar(
@@ -43,7 +44,7 @@ fun BottomNavigationBar(
 				selected = selected,
 				onClick = item.onClick,
 				colors = NavigationBarItemDefaults.colors(
-					indicatorColor = colorScheme.outlineVariant.copy(alpha = 0.1f),
+					indicatorColor = colorScheme.bottomBarIndicator,
 					selectedTextColor = colorScheme.primary,
 					selectedIconColor = colorScheme.primary,
 					//indicatorColor = colorScheme.tertiary,

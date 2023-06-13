@@ -87,7 +87,7 @@ fun CategoriesTopBar(
 						}) {
 							Icon(
 								imageVector = Icons.Default.ArrowBack,
-								contentDescription = null,
+								contentDescription = stringResource(id = R.string.back_hint_text),
 							)
 						}
 					}
@@ -124,7 +124,7 @@ fun CategoriesTopBar(
 					IconButton(onClick = onBackClick) {
 						Icon(
 							imageVector = Icons.Default.ArrowBack,
-							contentDescription = null
+							contentDescription = stringResource(id = R.string.back_hint_text)
 						)
 					}
 				},
@@ -134,7 +134,7 @@ fun CategoriesTopBar(
 					}) {
 						Icon(
 							imageVector = Icons.Default.Search,
-							contentDescription = null
+							contentDescription = stringResource(R.string.open_search_mode)
 						)
 					}
 				},
@@ -166,7 +166,7 @@ fun CategoriesTopBar(
 					}) {
 						Icon(
 							imageVector = Icons.Default.ArrowBack,
-							contentDescription = null,
+							contentDescription = stringResource(id = R.string.back_hint_text),
 						)
 					}
 				}
@@ -198,10 +198,13 @@ private fun MyTextField(
 			.fillMaxWidth()
 			.height(40.dp)
 			.onFocusChanged {
-				focused = if (it.isFocused) {
+				focused = if(it.isFocused)
+				{
 					onSearchShow()
 					true
-				} else {
+				}
+				else
+				{
 					onSearchHide()
 					false
 				}
@@ -236,7 +239,7 @@ private fun MyTextField(
 					{
 						Icon(
 							imageVector = Icons.Default.Search,
-							contentDescription = null,
+							contentDescription = stringResource(id = R.string.open_search_mode),
 							tint = MaterialTheme.colorScheme.onSurfaceVariant,
 						)
 					}
@@ -247,7 +250,7 @@ private fun MyTextField(
 							onClick = { onSearchQueryChanged("") },
 						) {
 							Icon(
-								contentDescription = null,
+								contentDescription = stringResource(R.string.clear_icon_text),
 								tint = MaterialTheme.colorScheme.onSurfaceVariant,
 								imageVector = Icons.Default.Clear,
 							)
