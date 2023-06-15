@@ -165,7 +165,7 @@ private fun CheckoutLabel(
                 )
                 Button(
                     modifier = Modifier
-                        .height(34.dp)
+                        .heightIn(min = 34.dp)
                     ,
                     shape = RoundedCornerShape(9.dp),
                     onClick = onCheckoutClick

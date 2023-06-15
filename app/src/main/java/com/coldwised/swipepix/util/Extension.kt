@@ -8,6 +8,8 @@ import android.util.DisplayMetrics
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.sp
 import com.coldwised.swipepix.domain.type.ThemeStyleType
 
 
@@ -110,4 +112,8 @@ object Extension {
             false
         }
     }
+
+    val Int.nonScaledSp
+        @Composable
+        get() = (this / LocalDensity.current.fontScale).sp
 }

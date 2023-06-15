@@ -36,7 +36,7 @@ fun FavoriteTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.more_text),
                     )
                 }
                 DropdownMenu(

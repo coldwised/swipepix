@@ -35,7 +35,7 @@ fun ThemeSettingsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowLeft,
-                            contentDescription = null
+                            contentDescription = stringResource(id = R.string.back_hint_text)
                         )
                     }
                 }

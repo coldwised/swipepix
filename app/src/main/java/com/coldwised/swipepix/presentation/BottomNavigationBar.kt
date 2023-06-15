@@ -16,6 +16,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.coldwised.swipepix.domain.type.BottomNavItem
 import com.coldwised.swipepix.ui.theme.bottomBarIndicator
+import com.coldwised.swipepix.util.Extension.nonScaledSp
 
 @Composable
 fun BottomNavigationBar(
@@ -26,10 +27,7 @@ fun BottomNavigationBar(
 	val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 	NavigationBar(
 		modifier = modifier
-			//.navigationBarsPadding()
-			//.height(78.dp)
 			.shadow(4.dp),
-		//windowInsets = WindowInsets(top = 0.dp, bottom = 0.dp),
 	) {
 		val colorScheme = MaterialTheme.colorScheme
 		items.forEach { item ->
@@ -47,7 +45,6 @@ fun BottomNavigationBar(
 					indicatorColor = colorScheme.bottomBarIndicator,
 					selectedTextColor = colorScheme.primary,
 					selectedIconColor = colorScheme.primary,
-					//indicatorColor = colorScheme.tertiary,
 					unselectedTextColor = if(!isPressed) colorScheme.outline else colorScheme.primary,
 					unselectedIconColor = if(!isPressed) colorScheme.outline else colorScheme.primary,
 				),
@@ -60,7 +57,7 @@ fun BottomNavigationBar(
 				label = {
 					Text(
 						text = item.name,
-						fontSize = 13.sp,
+						fontSize = 13.nonScaledSp,
 						fontWeight = if(selected) FontWeight.SemiBold else FontWeight.Medium
 					)
 				},

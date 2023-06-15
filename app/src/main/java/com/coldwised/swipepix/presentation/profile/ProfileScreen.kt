@@ -91,7 +91,8 @@ fun ProfileScreen(
 								color = MaterialTheme.colorScheme.tertiary,
 								text = stringResource(R.string.auth_button_text),
 								style = MaterialTheme.typography.titleMedium,
-								fontWeight = FontWeight.SemiBold
+								fontWeight = FontWeight.SemiBold,
+								textAlign = TextAlign.Center
 							)
 						}
 					}
