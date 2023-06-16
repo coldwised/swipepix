@@ -19,7 +19,7 @@ sealed interface UiText {
 
     class StringResource(
         @StringRes val resId: Int,
-        vararg val args: Any
+        private vararg val args: Any
     ): UiText {
         override fun asString(context: Context): String {
             return context.getString(resId, *args)

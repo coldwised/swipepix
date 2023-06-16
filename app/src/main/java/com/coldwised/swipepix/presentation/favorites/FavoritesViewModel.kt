@@ -77,7 +77,7 @@ class FavoritesViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     goodsList = it.goodsList?.filter { product ->
-                        product.id == id
+                        product.id != id
                     }.orEmpty()
                 )
             }
