@@ -22,15 +22,8 @@ fun NavGraphBuilder.profile(
 fun NavController.navigateToProfile() {
 	val route = PROFILE_SCREEN_ROUTE
 	navigate(route) {
-		val backQueue = backQueue
-		for(i in backQueue.indices) {
-			if(backQueue[i].destination.route == route) {
-				val entriesToDelete = backQueue.subList(i, backQueue.size)
-				val savedEntries = entriesToDelete.drop(2)
-				backQueue.removeAll(entriesToDelete)
-				backQueue.addAll(savedEntries)
-				break
-			}
+		popUpTo(route) {
+			inclusive = true
 		}
 	}
 }

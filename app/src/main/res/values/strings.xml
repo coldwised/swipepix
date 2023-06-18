@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SwipePix</string>
+    <string name="app_name">MC Trade</string>
     <string name="socket_connection_error">Could not establish connection</string>
     <string name="unknown_error">Unknown error</string>
     <string name="refresh_page_button_text">Повторить попытку</string>
